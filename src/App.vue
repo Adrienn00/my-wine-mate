@@ -1,11 +1,11 @@
 <template>
   <div id="app">
-    <router-view /> <!-- This renders the matched component -->
+    <router-view /> 
   </div>
 </template>
 
 <script setup>
-
+import BaseLayout from './layout/BaseLayout.vue';
 
 </script>
 
