@@ -1,8 +1,5 @@
 <template>
-  <div>
-    <h2>BaseLayout</h2>
-    <router-link to="/">Home</router-link> 
-    <router-link to="/about">About</router-link>
+  <div class="min-h-screen bg-black text-white">
     <router-view />
   </div>
 </template>
