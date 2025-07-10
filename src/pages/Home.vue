@@ -79,9 +79,10 @@
           >
             Nincs találat.
           </p>
-
-          <BaseButton variant="secondary" @click="searchWines"> Keresés </BaseButton>
-          <BaseButton variant="secondary"> Fotó alapján keresek </BaseButton>
+          <div class="flex flex-row justify-center space-x-10">
+            <BaseButton variant="secondary" @click="searchWines"> Keresés </BaseButton>
+            <BaseButton variant="secondary"> Fotó alapján keresek </BaseButton>
+          </div>
         </div>
         <div v-else class="text-left bg-gray-800 text-yellow-100 p-6 rounded">
           <h2 class="text-2xl font-semibold mb-2">{{ selectedWine.name }}</h2>
@@ -110,10 +111,10 @@ import { ref } from 'vue'
 import { computed } from 'vue'
 
 const query = ref()
-const selectedType = ref()
-const selectedStyle = ref()
-const selectedPrice = ref()
-const selectedFlavor = ref()
+const selectedType = ref('')
+const selectedStyle = ref('')
+const selectedPrice = ref('')
+const selectedFlavor = ref('')
 const results = ref([])
 const selectedWine = ref(null)
 const hasSearched = ref(false)
