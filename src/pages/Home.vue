@@ -110,7 +110,7 @@ import BaseButton from '../components/BaseButton.vue'
 import { ref } from 'vue'
 import { computed } from 'vue'
 
-const query = ref()
+const query = ref('')
 const selectedType = ref('')
 const selectedStyle = ref('')
 const selectedPrice = ref('')
@@ -170,7 +170,7 @@ function searchWines() {
   hasSearched.value = true
 
   if (!hasAnyFilter.value) {
-    results.value = []
+    results.value = [...wines]
     return
   }
 
