@@ -18,31 +18,28 @@
       />
 
       <div class="w-full text-right">
-        <router-link to="/forgotPassword" class="text-sm text-yellow-100 hover:underline">
-          Elfelejtetted a jelszavad?
-        </router-link>
+        <BaseButton to="/forgotPassword" variant="simple"> Elfelejtetted a jelszavad? </BaseButton>
       </div>
 
-      <BaseButton variant="secondary" type="submit" class="w-full mt-2">Bejelentkezés</BaseButton>
+      <BaseButton variant="secondary" type="submit" class="w-full mt-2"> Bejelentkezés </BaseButton>
 
-      <router-link to="/signup" class="text-sm text-yellow-100 hover:underline text-center mt-2">
+      <BaseButton to="/signup" variant="simple" class="mt-2 text-center text-sm">
         Regisztráció
-      </router-link>
+      </BaseButton>
     </form>
   </div>
 </template>
+
 <script setup>
 import { ref } from 'vue'
 import NavBar from '../components/NavBar.vue'
 import BaseButton from '../components/BaseButton.vue'
 import BaseInput from '../components/BaseInput.vue'
-
 const email = ref('')
 const password = ref('')
 const emailError = ref('')
 const passwordError = ref('')
-
-const login = () => {
+function login() {
   emailError.value = !email.value ? 'Add meg az emailed!' : ''
   passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
 }

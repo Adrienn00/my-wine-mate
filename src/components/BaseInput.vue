@@ -4,10 +4,11 @@
     <input
       :id="id"
       :type="type"
-      :value="modelValue"
-      @input="$emit('update:modelValue', $event.target.value)"
+      v-model="model"
       :class="[
-        'w-full py-2 px-3 border rounded bg-gray-800 text-white border-gray-600 focus:outline-none focus:ring focus:border-yellow-300',
+        'w-full py-2 px-3 border rounded bg-gray-800 text-white',
+        error ? 'border-red-600' : 'border-gray-600',
+        'focus:outline-none focus:ring focus:border-yellow-300',
       ]"
     />
     <p v-if="error" class="text-xs text-red-600 mt-1">{{ error }}</p>
@@ -15,15 +16,15 @@
 </template>
 
 <script setup>
-defineProps({
+const model = defineModel()
+
+const props = defineProps({
   id: String,
   label: String,
   type: {
     type: String,
+    default: 'text',
   },
-  modelValue: String,
   error: String,
 })
-
-defineEmits(['update:modelValue'])
 </script>
