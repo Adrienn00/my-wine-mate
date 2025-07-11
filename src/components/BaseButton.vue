@@ -14,16 +14,13 @@ const props = defineProps({
   },
 })
 
-const variantClass = computed(() => {
-  switch (props.variant) {
-    case 'primary':
-      return 'bg-red-900 hover:bg-red-800 text-white'
-    case 'secondary':
-      return 'bg-red-900 hover:bg-red-800 text-white'
-    case 'simple':
-      return 'w-full text-left'
-    default:
-      return ''
-  }
-})
+const baseClasses = 'rounded px-4 py-2 transition'
+
+const variantMap = {
+  primary: 'bg-red-900 hover:bg-red-800 text-white',
+  secondary: 'bg-red-900 hover:bg-red-800 text-white',
+  simple: 'hover:underline text-yellow-100',
+}
+
+const variantClass = computed(() => `${baseClasses} ${variantMap[props.variant] || ''}`)
 </script>

@@ -12,16 +12,18 @@
           class="hover:underline text-yellow-100"
           >Rólunk</router-link
         >
-        <router-link
-          to="/login"
-          class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
-          >Bejelentkezés</router-link
-        >
-        <router-link
-          to="/signup"
-          class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
-          >Regisztráció</router-link
-        >
+        <template v-if="route.path !== '/login' && route.path !== '/signup'">
+          <router-link
+            to="/login"
+            class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
+            >Bejelentkezés</router-link
+          >
+          <router-link
+            to="/signup"
+            class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
+            >Regisztráció</router-link
+          >
+        </template>
       </nav>
     </div>
   </header>
