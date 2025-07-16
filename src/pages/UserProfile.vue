@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { onMounted, ref, useTemplateRef } from 'vue'
 import BaseInput from '../components/BaseInput.vue'
 import BaseButton from '../components/BaseButton.vue'
 import avatar from '../assets/images/avatar.png'
@@ -55,7 +55,7 @@ const user = ref({
 })
 
 const saved = ref(false)
-const fileInput = ref(null)
+const inputRef = useTemplateRef('fileInput')
 
 const userList = ref([])
 
@@ -64,11 +64,9 @@ function saveChanges() {
   userList.value.push({ ...user.value })
   console.log('Felhasználók tömbje:', userList.value)
 }
-
 function triggerFileInput() {
-  fileInput.value.click()
+  inputRef.value.click()
 }
-
 function handleImageUpload(event) {
   const file = event.target.files[0]
   if (file) {

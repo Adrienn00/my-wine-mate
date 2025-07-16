@@ -113,7 +113,7 @@ const hasAnyFilter = computed(() => {
   )
 })
 
-const searchWines = () => {
+function searchWines() {
   hasSearched.value = true
   const wines = winesStore.getAllWines
 

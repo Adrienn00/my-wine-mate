@@ -8,9 +8,7 @@
           >Receptek</BaseButton
         >
         <BaseButton v-if="route.path !== '/about'" to="/about" variant="simple">Rólunk</BaseButton>
-        <template
-          v-if="route.path !== '/login' && route.path !== '/signup' && route.path !== '/user'"
-        >
+        <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
           <BaseButton to="/profile/user" variant="login">Profilom</BaseButton>
           <BaseButton to="/login" variant="login">Bejelentkezés</BaseButton>
           <BaseButton to="/signup" variant="login">Regisztráció</BaseButton>

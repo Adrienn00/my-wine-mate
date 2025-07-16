@@ -3,7 +3,7 @@
   <div class="min-h-screen bg">
     <main class="flex flex-1 justify-start px-6 py-8 max-w-6xl mx-auto w-full">
       <div
-        class="flex flex-col mt-6 px-6 text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full space-y-5"
+        class="flex flex-col mt-6 text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full space-y-5"
       >
         <h2 class="text-2xl text-yellow-200 mb-4 font-bold text-center">Kedvenc Boraid</h2>
         <div v-if="favorites.length">
