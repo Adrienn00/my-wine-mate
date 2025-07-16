@@ -1,6 +1,5 @@
 <template>
   <div class="bg">
-    <NavBar />
     <div
       class="min-h-screen max-w-6xl mx-auto px-6 py-16 text-yellow-100 flex flex-col lg:flex-row items-center gap-12"
     >
@@ -30,9 +29,6 @@
   </div>
 </template>
 
-<script setup>
-import NavBar from '../components/NavBar.vue'
-</script>
 <style scoped>
 .bg {
   background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');

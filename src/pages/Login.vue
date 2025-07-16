@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen w-full flex items-center justify-center bg">
     <form
       @submit.prevent="login"
@@ -32,9 +31,8 @@
 
 <script setup>
 import { ref } from 'vue'
-import NavBar from '../components/NavBar.vue'
-import BaseButton from '../components/BaseButton.vue'
-import BaseInput from '../components/BaseInput.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
 const email = ref('')
 const password = ref('')
 const emailError = ref('')

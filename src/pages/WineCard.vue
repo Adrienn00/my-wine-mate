@@ -1,7 +1,5 @@
 <template>
   <div class="min-h-screen bg flex flex-col">
-    <NavBar />
-
     <main class="flex flex-1 justify-start px-6 py-8 max-w-6xl mx-auto w-full">
       <div class="text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full">
         <h3 class="text-2xl font-semibold mb-2">{{ wine.name }}</h3>
@@ -14,7 +12,6 @@
           <WineRating :rating="averageRating" :notes="comments" />
           <AddRatingForm @submit="handleNewRating" />
         </div>
-
         <div class="flex space-x-5 mt-6">
           <BaseButton to="/" variant="secondary">Vissza a találatokhoz</BaseButton>
           <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
@@ -30,11 +27,10 @@
 <script setup>
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { useFavoritesStore } from '../stores/favoritesStore'
+import { useProfileStore } from '../stores/profileStore'
 import { useWinesStore } from '../stores/winesStore'
 
-import BaseButton from '../components/BaseButton.vue'
-import NavBar from '../components/NavBar.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
 import WineRating from '../components/WineRating.vue'
 import AddRatingForm from '../components/AddRatingForm.vue'
 
@@ -44,7 +40,7 @@ const props = defineProps({
 
 const route = useRoute()
 const winesStore = useWinesStore()
-const favoritesStore = useFavoritesStore()
+const favoritesStore = useProfileStore()
 
 const wine = computed(() => {
   if (props.wine) return props.wine

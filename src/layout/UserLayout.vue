@@ -1,13 +1,12 @@
 <template>
-  <NavBar />
   <div class="flex min-h-screen text-yellow-100 font-bold">
     <aside class="w-64 bg-gray-900 p-6 flex flex-col justify-between">
       <div>
         <h2 class="text-2xl font-bold mb-8">Profil</h2>
         <ul class="space-y-4">
-          <li><BaseButton variant="simpleRose">User info</BaseButton></li>
+          <li><BaseButton to="/profile" variant="simpleRose">Felhasználó</BaseButton></li>
           <li><BaseButton to="/favorite" variant="simpleRose">Kedvencek</BaseButton></li>
-          <li><BaseButton variant="simpleRose">Beállítások</BaseButton></li>
+          <li><BaseButton to="/preferences" variant="simpleRose">Bor preferenciák</BaseButton></li>
           <li><BaseButton variant="simpleRose">Értesítések</BaseButton></li>
         </ul>
       </div>
@@ -19,6 +18,5 @@
   </div>
 </template>
 <script setup>
-import NavBar from './NavBar.vue'
-import BaseButton from './BaseButton.vue'
+import BaseButton from '@/components/ui/BaseButton.vue'
 </script>

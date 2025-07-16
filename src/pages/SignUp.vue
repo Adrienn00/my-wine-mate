@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen w-full flex items-center justify-center bg">
     <form
       @submit.prevent="signup"
@@ -40,9 +39,8 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
-import NavBar from '../components/NavBar.vue'
-import BaseButton from '../components/BaseButton.vue'
-import BaseInput from '../components/BaseInput.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
 
 const router = useRouter()
 

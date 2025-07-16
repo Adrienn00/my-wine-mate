@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen bg text-white flex items-center justify-center px-4">
     <div class="w-full max-w-md bg-gray-900 p-8 rounded shadow-md">
       <h2 class="text-3xl font-light text-yellow-100 mb-6 text-center">
@@ -32,10 +31,9 @@
 </template>
 
 <script setup>
-import BaseButton from '../components/BaseButton.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
 import { ref } from 'vue'
-import NavBar from '../components/NavBar.vue'
-import BaseInput from '../components/BaseInput.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
 
 const email = ref('')
 

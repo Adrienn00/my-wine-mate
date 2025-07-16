@@ -1,6 +1,5 @@
 <template>
-  <UserLayout />
-  <div class="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-lg p-8">
+  <div class="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-lg p-8 border-2 text-yellow-100">
     <div class="flex flex-col items-center mb-8">
       <img
         :src="user.img"
@@ -39,10 +38,9 @@
 
 <script setup>
 import { ref, useTemplateRef } from 'vue'
-import BaseInput from '../components/BaseInput.vue'
-import BaseButton from '../components/BaseButton.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
 import avatar from '../assets/images/avatar.png'
-import UserLayout from '../components/UserLayout.vue'
 
 const user = ref({
   firstName: 'Keresztnév',
