@@ -1,8 +1,8 @@
 <template>
-  <div class="min-h-screen">
+  <div class="bg">
     <NavBar />
     <div
-      class="max-w-6xl mx-auto px-6 py-16 text-yellow-100 flex flex-col lg:flex-row items-center gap-12"
+      class="min-h-screen max-w-6xl mx-auto px-6 py-16 text-yellow-100 flex flex-col lg:flex-row items-center gap-12"
     >
       <div class="lg:w-1/2">
         <h1 class="text-4xl font-light mb-6">Rólunk</h1>
@@ -26,18 +26,16 @@
         </p>
         <p class="mt-6 italic text-sm text-gray-400">Köszönöm, hogy ellátogattál!</p>
       </div>
-      <div class="lg:w-1/2">
-        <img
-          :src="aboutimage"
-          alt="Borospalack"
-          class="w-full max-w-md mx-auto rounded shadow-lg"
-        />
-      </div>
     </div>
   </div>
 </template>
 
 <script setup>
 import NavBar from '../components/NavBar.vue'
-import aboutimage from '/home/adrienn/www/my-wine-mate/src/assets/images/aboutimage.jpeg'
 </script>
+<style scoped>
+.bg {
+  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-size: cover;
+}
+</style>

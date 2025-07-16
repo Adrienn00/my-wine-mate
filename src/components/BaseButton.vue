@@ -1,7 +1,7 @@
 <template>
-  <button :class="['px-6 py-2 rounded', variantClass]" v-bind="$attrs">
+  <component :is="to ? 'router-link' : 'button'" :to="to" v-bind="$attrs" :class="variantClass">
     <slot />
-  </button>
+  </component>
 </template>
 
 <script setup>
@@ -12,18 +12,22 @@ const props = defineProps({
     type: String,
     default: 'primary',
   },
+  to: {
+    type: String,
+    default: null,
+  },
 })
 
-const variantClass = computed(() => {
-  switch (props.variant) {
-    case 'primary':
-      return 'bg-red-900 hover:bg-red-800 text-white'
-    case 'secondary':
-      return 'bg-red-900 hover:bg-red-800 text-white'
-    case 'simple':
-      return 'w-full text-left'
-    default:
-      return ''
-  }
-})
+const baseClasses = 'rounded px-4 py-2 transition'
+
+const variantMap = {
+  primary: 'bg-gray-600 hover:bg-gray-500 rounded text-white',
+  secondary: 'bg-red-900 hover:bg-red-800 text-white',
+  login:
+    'hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2 px-6 rounded',
+  simple: 'hover:underline text-yellow-100',
+  simpleRose: 'text-left w-full hover:text-red-200',
+}
+
+const variantClass = computed(() => `${baseClasses} ${variantMap[props.variant] || ''}`)
 </script>

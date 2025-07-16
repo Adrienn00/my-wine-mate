@@ -1,32 +1,24 @@
 <template>
   <header class="bg-gray-800 p-4">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-playfair text-yellow-100">MyWineMate</h1>
-      <nav class="space-x-4">
-        <router-link v-if="route.path !== '/'" to="/" class="hover:underline text-yellow-100"
-          >Kezdőlap</router-link
+      <h1 class="text-2xl font-playfair text-yellow-100 font-bold">MyWineMate</h1>
+      <nav class="space-x-4 font-bold">
+        <BaseButton v-if="route.path !== '/'" to="/" variant="simple">Kezdőlap</BaseButton>
+        <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="simple"
+          >Receptek</BaseButton
         >
-        <router-link
-          v-if="route.path !== '/about'"
-          to="/about"
-          class="hover:underline text-yellow-100"
-          >Rólunk</router-link
-        >
-        <router-link
-          to="/login"
-          class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
-          >Bejelentkezés</router-link
-        >
-        <router-link
-          to="/signup"
-          class="hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2"
-          >Regisztráció</router-link
-        >
+        <BaseButton v-if="route.path !== '/about'" to="/about" variant="simple">Rólunk</BaseButton>
+        <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
+          <BaseButton to="/profile/user" variant="login">Profilom</BaseButton>
+          <BaseButton to="/login" variant="login">Bejelentkezés</BaseButton>
+          <BaseButton to="/signup" variant="login">Regisztráció</BaseButton>
+        </template>
       </nav>
     </div>
   </header>
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
+import BaseButton from './BaseButton.vue'
 const route = useRoute()
 </script>

@@ -1,8 +1,8 @@
 <template>
   <div class="min-h-screen bg-black text-white">
     <router-view />
-    <BaseFooter />
   </div>
+  <BaseFooter />
 </template>
 
 <script setup>
