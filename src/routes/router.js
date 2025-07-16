@@ -12,6 +12,8 @@ import AddNewWine from '../pages/AddNewWine.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import FavoriteList from '../pages/FavoriteList.vue'
 import WineCard from '../pages/WineCard.vue'
+import UserLayout from '../layout/UserLayout.vue'
+import WinePreferences from '../pages/WinePreferences.vue'
 
 const routes = [
   {
@@ -32,8 +34,15 @@ const routes = [
         name: 'wine-details',
         component: WineCard,
       },
-      { path: '/profile/user', component: UserProfile },
-      { path: '/profile/favorite', component: FavoriteList },
+      {
+        path: '/profile',
+        component: UserLayout,
+        children: [
+          { path: '/profile', component: UserProfile },
+          { path: '/favorite', component: FavoriteList },
+          { path: '/preferences', component: WinePreferences },
+        ],
+      },
     ],
   },
 ]

@@ -9,7 +9,7 @@
         >
         <BaseButton v-if="route.path !== '/about'" to="/about" variant="simple">Rólunk</BaseButton>
         <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
-          <BaseButton to="/profile/user" variant="login">Profilom</BaseButton>
+          <BaseButton to="/profile" variant="login">Profilom</BaseButton>
           <BaseButton to="/login" variant="login">Bejelentkezés</BaseButton>
           <BaseButton to="/signup" variant="login">Regisztráció</BaseButton>
         </template>
@@ -19,6 +19,6 @@
 </template>
 <script setup>
 import { useRoute } from 'vue-router'
-import BaseButton from './BaseButton.vue'
+import BaseButton from './ui/BaseButton.vue'
 const route = useRoute()
 </script>

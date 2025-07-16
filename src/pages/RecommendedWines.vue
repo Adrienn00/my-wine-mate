@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen bg">
     <div class="p-6">
       <h2 class="text-2xl font-semibold text-yellow-100 mb-6 text-center">
@@ -31,7 +30,6 @@
 </template>
 
 <script setup>
-import NavBar from '../components/NavBar.vue'
 import { computed } from 'vue'
 
 const wines = [

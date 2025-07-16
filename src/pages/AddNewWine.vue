@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen bg">
     <div class="flex items-center justify-between max-w-6xl mx-auto px-4 py-12">
       <div class="flex flex-col gap-y-5 w-100">
@@ -56,9 +55,8 @@
   </div>
 </template>
 <script setup>
-import BaseButton from '../components/BaseButton.vue'
-import BaseInput from '../components/BaseInput.vue'
-import NavBar from '../components/NavBar.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
 import { ref } from 'vue'
 
 const wine = ref({
