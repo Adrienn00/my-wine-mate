@@ -24,7 +24,6 @@
           <BaseInput
             id="grape"
             v-model="wine.grape"
-            list="grape-options"
             placeholder="Add meg a szőlő fajtáját..."
             datalistId="grape-options"
             :datalist="['Vörös', 'Fehér', 'Rozé']"
@@ -32,7 +31,6 @@
           <BaseInput
             id="style"
             v-model="wine.style"
-            list="style-options"
             placeholder="Add meg a bor típusát..."
             datalistId="style-options"
             :datalist="['Száraz', 'Félszáraz', 'Édes', 'Félédes']"
@@ -40,7 +38,6 @@
           <BaseInput
             id="price"
             v-model="wine.price"
-            list="price-options"
             placeholder="Add meg  bor árát..."
             datalistId="price-options"
             :datalist="['20-50', '50-80', '80-130', '>130']"
@@ -48,7 +45,6 @@
           <BaseInput
             id="flavor"
             v-model="wine.flavor"
-            list="flavor-options"
             placeholder="Add meg a bor ízvilágát..."
             datalistId="flavour-options"
             :datalist="['Gyümölcsös', 'Fűszeres', 'Virágos', 'Földes']"
