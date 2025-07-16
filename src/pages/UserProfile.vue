@@ -38,7 +38,7 @@
 </template>
 
 <script setup>
-import { onMounted, ref, useTemplateRef } from 'vue'
+import { ref, useTemplateRef } from 'vue'
 import BaseInput from '../components/BaseInput.vue'
 import BaseButton from '../components/BaseButton.vue'
 import avatar from '../assets/images/avatar.png'

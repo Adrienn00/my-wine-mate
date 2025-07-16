@@ -12,11 +12,10 @@
       <form @submit.prevent="handleSubmit">
         <div class="mb-4">
           <label for="email" class="block text-sm mb-1">E-mail cím</label>
-          <input
+          <BaseInput
             v-model="email"
             type="email"
             id="email"
-            class="w-full py-2 px-3 border rounded bg-gray-800 text-white border-gray-600 focus:outline-none focus:ring focus:border-yellow-300"
             placeholder="pelda@email.com"
             required
           />
@@ -36,6 +35,7 @@
 import BaseButton from '../components/BaseButton.vue'
 import { ref } from 'vue'
 import NavBar from '../components/NavBar.vue'
+import BaseInput from '../components/BaseInput.vue'
 
 const email = ref('')
 

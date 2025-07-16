@@ -7,16 +7,17 @@
           <h1 class="text-3xl md:text-5xl font-light mb-6 leading-snug text-yellow-100">
             Találd meg a hozzád illő bort
           </h1>
-          <input
+          <BaseInput
+            id="query"
             v-model="query"
-            type="text"
-            placeholder="Bor neve..."
-            class="w-full px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300 mb-6"
+            placeholder="Bor neve.."
+            type="text
+"
           />
           <div class="flex flex-wrap justify-center gap-4 my-6">
             <select
               v-model="selectedType"
-              class="bg-gray-900 border border-gray-700 px-4 py-2 rounded"
+              class="bg-gray-800 border border-gray-700 px-4 py-2 rounded"
             >
               <option value="">Szőlőfajta</option>
               <option>Vörös</option>
@@ -26,7 +27,7 @@
 
             <select
               v-model="selectedStyle"
-              class="bg-gray-900 border border-gray-700 px-4 py-2 rounded"
+              class="bg-gray-800 border border-gray-700 px-4 py-2 rounded"
             >
               <option value="">Stílus</option>
               <option>Száraz</option>
@@ -37,7 +38,7 @@
 
             <select
               v-model="selectedPrice"
-              class="bg-gray-900 border border-gray-700 px-4 py-2 rounded"
+              class="bg-gray-800 border border-gray-700 px-4 py-2 rounded"
             >
               <option value="">Ár</option>
               <option>20-50</option>
@@ -48,7 +49,7 @@
 
             <select
               v-model="selectedFlavor"
-              class="bg-gray-900 border border-gray-700 px-4 py-2 rounded"
+              class="bg-gray-800 border border-gray-700 px-4 py-2 rounded"
             >
               <option value="">Ízvilág</option>
               <option>Gyümölcsös</option>
@@ -92,6 +93,7 @@ import { useWinesStore } from '../stores/winesStore'
 import { useRouter } from 'vue-router'
 import NavBar from '../components/NavBar.vue'
 import BaseButton from '../components/BaseButton.vue'
+import BaseInput from '../components/BaseInput.vue'
 
 const winesStore = useWinesStore()
 const router = useRouter()

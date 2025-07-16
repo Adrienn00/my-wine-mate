@@ -7,70 +7,52 @@
           Adj hozzá új bort
         </h1>
         <div class="flex flex-col gap-y-5">
-          <input
+          <BaseInput
             id="wineName"
             v-model="wine.name"
-            list="name-options"
-            placeholder="Add meg a bor nevét..."
-            class="px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300"
+            placeholder="Add meg a bor nevet"
+            datalistId="name-options"
+            :datalist="[
+              'Merlot',
+              'Chardonnay',
+              'Cabernet Sauvignion',
+              'Tokaji Aszú',
+              'Kékfrankos Rosé',
+            ]"
           />
-          <datalist id="name-options">
-            <option value="Cabernet Sauvignon" />
-            <option value="Merlot" />
-            <option value="Chardonnay" />
-            <option value="Pinot Noir" />
-          </datalist>
-          <input
+
+          <BaseInput
             id="grape"
             v-model="wine.grape"
             list="grape-options"
             placeholder="Add meg a szőlő fajtáját..."
-            class="px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300"
+            datalistId="grape-options"
+            :datalist="['Vörös', 'Fehér', 'Rozé']"
           />
-          <datalist id="grape-options">
-            <option value="Vörös" />
-            <option value="Fehér" />
-            <option value="Rozé" />
-          </datalist>
-          <input
+          <BaseInput
             id="style"
             v-model="wine.style"
             list="style-options"
             placeholder="Add meg a bor típusát..."
-            class="px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300"
+            datalistId="style-options"
+            :datalist="['Száraz', 'Félszáraz', 'Édes', 'Félédes']"
           />
-          <datalist id="style-options">
-            <option value="Száraz" />
-            <option value="Félszáraz" />
-            <option value="Édes" />
-            <option value="Félédes"></option>
-          </datalist>
-          <input
+          <BaseInput
             id="price"
             v-model="wine.price"
             list="price-options"
             placeholder="Add meg  bor árát..."
-            class="px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300"
+            datalistId="price-options"
+            :datalist="['20-50', '50-80', '80-130', '>130']"
           />
-          <datalist id="price-options">
-            <option value="20-50" />
-            <option value="50-80" />
-            <option value="80-130" />
-            <option value=">130" />
-          </datalist>
-          <input
+          <BaseInput
             id="flavor"
             v-model="wine.flavor"
             list="flavor-options"
             placeholder="Add meg a bor ízvilágát..."
-            class="px-4 py-2 border rounded bg-gray-900 text-white border-gray-700 focus:outline-none focus:ring focus:border-yellow-300"
+            datalistId="flavour-options"
+            :datalist="['Gyümölcsös', 'Fűszeres', 'Virágos', 'Földes']"
           />
-          <datalist id="flavor-options">
-            <option value="Gyümölcsös" />
-            <option value="Fűszeres" />
-            <option value="Virágos" />
-            <option value="Földes" />
-          </datalist>
           <BaseButton variant="secondary" @click="submitWine">Bor hozzáadása</BaseButton>
         </div>
       </div>
@@ -79,6 +61,7 @@
 </template>
 <script setup>
 import BaseButton from '../components/BaseButton.vue'
+import BaseInput from '../components/BaseInput.vue'
 import NavBar from '../components/NavBar.vue'
 import { ref } from 'vue'
 
