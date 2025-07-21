@@ -115,7 +115,7 @@ const hasAnyFilter = computed(() => {
 
 function searchWines() {
   hasSearched.value = true
-  const wines = winesStore.getAllWines
+  const wines = winesStore.getAllWines()
 
   results.value = wines.filter((wine) => {
     const matchesName = query.value

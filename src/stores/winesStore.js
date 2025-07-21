@@ -56,8 +56,9 @@ export const useWinesStore = defineStore('wines', () => {
       wine.ratings.push({ rating, comment })
     }
   }
-
-  const getAllWines = computed(() => wines.value)
+  function getAllWines() {
+    return wines.value
+  }
 
   return { wines, addRating, getAllWines }
 })

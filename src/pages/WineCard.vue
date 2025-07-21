@@ -40,14 +40,14 @@ const props = defineProps({
 
 const route = useRoute()
 const winesStore = useWinesStore()
-const favoritesStore = useProfileStore()
+const profileStore = useProfileStore()
 
 const wine = computed(() => {
   if (props.wine) return props.wine
-  return winesStore.getAllWines.find((w) => w.name === route.params.name)
+  return winesStore.getAllWines().find((w) => w.name === route.params.name)
 })
 
-const isFavorite = computed(() => favoritesStore.isFavorite(wine.value))
+const isFavorite = computed(() => profileStore.isFavorite(wine.value))
 
 const averageRating = computed(() => {
   const ratings = wine.value?.ratings || []
@@ -67,9 +67,9 @@ function handleNewRating({ rating, comment }) {
 
 function toggleFavorite() {
   if (isFavorite.value) {
-    favoritesStore.removeFavorite(wine.value)
+    profileStore.removeFavorite(wine.value)
   } else {
-    favoritesStore.addFavorite(wine.value)
+    profileStore.addFavorite(wine.value)
   }
 }
 </script>

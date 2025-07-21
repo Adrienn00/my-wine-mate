@@ -24,10 +24,10 @@ export const useProfileStore = defineStore('profile', () => {
     wineTypes: [],
     flavourProfile: [],
     regions: [],
-    alcoholLevel: '',
+    alcoholLevels: '',
     foodPreferences: [],
-    wineYear: '',
-    priceRange: '',
+    wineYears: '',
+    priceRanges: '',
   })
 
   const favorites = ref([])
@@ -46,5 +46,5 @@ export const useProfileStore = defineStore('profile', () => {
     return favorites.value.some((w) => w.id === wine.id)
   }
 
-  return { favorites, addFavorite, removeFavorite, isFavorite, user, wineType }
+  return { favorites, addFavorite, removeFavorite, isFavorite, user, wineType, selectedPreferences }
 })

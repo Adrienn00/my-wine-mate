@@ -7,7 +7,7 @@
           <li><BaseButton to="/profile" variant="simpleRose">Felhasználó</BaseButton></li>
           <li><BaseButton to="/favorite" variant="simpleRose">Kedvencek</BaseButton></li>
           <li><BaseButton to="/preferences" variant="simpleRose">Bor preferenciák</BaseButton></li>
-          <li><BaseButton variant="simpleRose">Értesítések</BaseButton></li>
+          <li><BaseButton to="/recommended" variant="simpleRose">Ajánlások</BaseButton></li>
         </ul>
       </div>
       <BaseButton variant="login">Kijelentkezés</BaseButton>

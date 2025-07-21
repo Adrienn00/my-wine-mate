@@ -15,22 +15,6 @@ import { defineProps, defineEmits } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
-const props = defineProps({
-  modelValue: {
-    type: Array,
-  },
-  options: {
-    type: Array,
-  },
-  placeholder: {
-    type: String,
-  },
-  multiple: {
-    type: Boolean,
-    default: true,
-  },
-})
-
 const emit = defineEmits(['update:modelValue'])
 const model = defineModel()
 </script>

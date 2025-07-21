@@ -27,7 +27,6 @@ const routes = [
       { path: '/forgotPassword', component: ForgotPassword },
       { path: '/foodPairing', component: FoodPairing },
       { path: '/recipes', component: Recipes },
-      { path: '/recommended', component: RecommendedWines },
       { path: '/addWine', component: AddNewWine },
       {
         path: '/wine/:name',
@@ -41,6 +40,7 @@ const routes = [
           { path: '/profile', component: UserProfile },
           { path: '/favorite', component: FavoriteList },
           { path: '/preferences', component: WinePreferences },
+          { path: '/recommended', component: RecommendedWines },
         ],
       },
     ],
