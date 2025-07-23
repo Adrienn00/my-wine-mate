@@ -29,6 +29,7 @@ const variantMap = {
   simpleRose: 'text-left w-full hover:text-red-200',
   adminFunctions:
     'w-full text-center font-bold italic border-2 text-yellow-100 bg-gray-900 rounded-xl shadow-md p-4',
+  homepage: 'text-2xl font-playfair text-yellow-100 font-bold',
 }
 
 const variantClass = computed(() => `${baseClasses} ${variantMap[props.variant] || ''}`)
