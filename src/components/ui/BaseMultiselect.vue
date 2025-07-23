@@ -11,11 +11,9 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmits } from 'vue'
 import Multiselect from 'vue-multiselect'
 import 'vue-multiselect/dist/vue-multiselect.min.css'
 
-const emit = defineEmits(['update:modelValue'])
 const model = defineModel()
 </script>
 <style scoped>
