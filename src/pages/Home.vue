@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen bg">
     <div class="flex items-center justify-center max-w-6xl mx-auto px-4 py-12">
       <div class="flex flex-col gap-y-5 w-1/2">
@@ -91,9 +90,8 @@
 import { ref, computed } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useRouter } from 'vue-router'
-import NavBar from '../components/NavBar.vue'
-import BaseButton from '../components/BaseButton.vue'
-import BaseInput from '../components/BaseInput.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
+import BaseInput from '../components/ui/BaseInput.vue'
 
 const winesStore = useWinesStore()
 const router = useRouter()
@@ -117,7 +115,7 @@ const hasAnyFilter = computed(() => {
 
 function searchWines() {
   hasSearched.value = true
-  const wines = winesStore.getAllWines
+  const wines = winesStore.getAllWines()
 
   results.value = wines.filter((wine) => {
     const matchesName = query.value

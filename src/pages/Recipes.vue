@@ -1,5 +1,4 @@
 <template>
-  <NavBar />
   <div class="min-h-screen bg text-white p-4">
     <ul v-if="!selectedRecipe">
       <li
@@ -29,8 +28,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import NavBar from '../components/NavBar.vue'
-import BaseButton from '../components/BaseButton.vue'
+import BaseButton from '../components/ui/BaseButton.vue'
 
 const recipes = [
   {

@@ -24,7 +24,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import BaseButton from './BaseButton.vue'
+import BaseButton from './ui/BaseButton.vue'
 
 const emit = defineEmits(['submit'])
 const selectedRating = ref(0)
