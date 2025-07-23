@@ -131,7 +131,7 @@ function searchWines() {
 }
 
 const goToDetails = (wineName) => {
-  router.push({ name: 'wine-details', params: { name: wineName } })
+  router.push({ name: 'wine-details', params: { name: wineName }, query: { from: 'home' } })
 }
 </script>
 

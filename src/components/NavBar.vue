@@ -1,7 +1,7 @@
 <template>
   <header class="bg-gray-800 p-4">
     <div class="max-w-6xl mx-auto flex justify-between items-center">
-      <h1 class="text-2xl font-playfair text-yellow-100 font-bold">MyWineMate</h1>
+      <BaseButton to="/" variant="homepage">MyWineMate</BaseButton>
       <nav class="space-x-4 font-bold">
         <BaseButton v-if="route.path !== '/'" to="/" variant="simple">Kezdőlap</BaseButton>
         <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="simple"

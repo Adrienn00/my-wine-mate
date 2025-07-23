@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-screen bg flex flex-col">
-    <main class="flex flex-1 justify-start px-6 py-8 max-w-6xl mx-auto w-full">
+    <main class="flex justify-start px-6 py-8 max-w-6xl mx-auto w-full">
       <div class="text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full">
         <h3 class="text-2xl font-semibold mb-2">{{ wine.name }}</h3>
         <p><strong>Szőlőfajta: </strong>{{ wine.type }}</p>
@@ -13,7 +13,7 @@
           <AddRatingForm @submit="handleNewRating" />
         </div>
         <div class="flex space-x-5 mt-6">
-          <BaseButton to="/" variant="secondary">Vissza a találatokhoz</BaseButton>
+          <BaseButton :to="backLink" variant="secondary">Vissza</BaseButton>
           <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
           <BaseButton variant="secondary" @click="toggleFavorite">
             {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
@@ -72,6 +72,15 @@ function toggleFavorite() {
     profileStore.addFavorite(wine.value)
   }
 }
+const backLink = computed(() => {
+  const from = route.query.from
+  const map = {
+    home: '/',
+    favorites: '/favorite',
+    recommended: '/recommended',
+  }
+  return map[from]
+})
 </script>
 
 <style scoped>
