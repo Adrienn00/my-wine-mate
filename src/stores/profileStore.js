@@ -4,12 +4,13 @@ import { useWinesStore } from './winesStore'
 
 export const useProfileStore = defineStore('profile', () => {
   const user = ref({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    location: '',
-    postalCode: '',
+    firstName: 'Keresztnév',
+    lastName: 'Vezetéknév',
+    email: 'borimado@example.com',
+    phone: '071234567',
+    location: 'Székelyudvarhely',
+    postalCode: '535600',
+    img: '',
   })
 
   const wineType = ref({
@@ -88,6 +89,11 @@ export const useProfileStore = defineStore('profile', () => {
     const prefs = selectedPreferences.value
     return wines.filter((wine) => wineMatchesPreferences(wine, prefs, keyMap))
   })
+
+  function setUser(newUser) {
+    user.value = { ...user.value, ...newUser }
+  }
+
   return {
     favoriteWines,
     favoriteRecipes,
@@ -101,5 +107,6 @@ export const useProfileStore = defineStore('profile', () => {
     isFavoriteRecipe,
     isFavoriteWine,
     recommendedWines,
+    setUser,
   }
 })
