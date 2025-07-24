@@ -11,6 +11,7 @@ export const useWinesStore = defineStore('wines', () => {
       price: '80-130',
       flavor: 'Fűszeres',
       ratings: [],
+      is_confirmed: true,
     },
     {
       id: 1,
@@ -20,6 +21,7 @@ export const useWinesStore = defineStore('wines', () => {
       price: '50-80',
       flavor: 'Gyümölcsös',
       ratings: [],
+      is_confirmed: true,
     },
     {
       id: 2,
@@ -29,6 +31,7 @@ export const useWinesStore = defineStore('wines', () => {
       price: '>130',
       flavor: 'Egyéb',
       ratings: [],
+      is_confirmed: true,
     },
     {
       id: 3,
@@ -38,6 +41,7 @@ export const useWinesStore = defineStore('wines', () => {
       price: '20-50',
       flavor: 'Virágos',
       ratings: [],
+      is_confirmed: true,
     },
     {
       id: 4,
@@ -47,9 +51,10 @@ export const useWinesStore = defineStore('wines', () => {
       price: '50-80',
       flavor: 'Földes',
       ratings: [],
+      is_confirmed: true,
     },
   ])
-
+  const nextId = ref(5)
   function addRating(wineName, rating, comment) {
     const wine = wines.value.find((w) => w.name === wineName)
     if (wine) {
@@ -60,5 +65,36 @@ export const useWinesStore = defineStore('wines', () => {
     return wines.value
   }
 
-  return { wines, addRating, getAllWines }
+  function addNewWine(wine) {
+    const newWine = {
+      id: nextId.value++,
+      ...wine,
+      ratings: [],
+      is_confirmed: false,
+    }
+    wines.value.push(newWine)
+  }
+
+  function approveWine(id) {
+    const wine = wines.value.find((w) => w.id === id)
+    if (wine) wine.is_confirmed = true
+  }
+
+  function rejectWine(id) {
+    wines.value = wines.value.find((w) => w.id !== id)
+  }
+
+  const confirmedWines = computed(() => wines.value.filter((w) => w.is_confirmed))
+  const pendingWines = computed(() => wines.value.filter((w) => !w.is_confirmed))
+
+  return {
+    wines,
+    addRating,
+    addNewWine,
+    approveWine,
+    rejectWine,
+    getAllWines,
+    confirmedWines,
+    pendingWines,
+  }
 })

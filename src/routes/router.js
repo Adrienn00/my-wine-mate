@@ -14,6 +14,8 @@ import FavoriteList from '../pages/FavoriteList.vue'
 import WineCard from '../pages/WineCard.vue'
 import UserLayout from '../layout/UserLayout.vue'
 import WinePreferences from '../pages/WinePreferences.vue'
+import Admin from '../pages/Admin.vue'
+import PendingWines from '../pages/PendingWines.vue'
 
 const routes = [
   {
@@ -29,7 +31,7 @@ const routes = [
       { path: '/recipes', component: Recipes },
       { path: '/addWine', component: AddNewWine },
       {
-        path: '/wine/:name',
+        path: '/wine/:id',
         name: 'wine-details',
         component: WineCard,
       },
@@ -41,6 +43,8 @@ const routes = [
           { path: '/favorite', component: FavoriteList },
           { path: '/preferences', component: WinePreferences },
           { path: '/recommended', component: RecommendedWines },
+          { path: '/admin', component: Admin },
+          { path: '/admin/pending', component: PendingWines },
         ],
       },
     ],

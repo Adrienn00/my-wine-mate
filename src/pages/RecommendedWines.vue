@@ -26,7 +26,7 @@
 </template>
 
 <script setup>
-import { computed, ref } from 'vue'
+import { computed } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useProfileStore } from '../stores/profileStore'
 const profileStore = useProfileStore()
@@ -42,7 +42,7 @@ const recommendedWines = computed(() => {
       prefs.flavourProfile.length === 0 || prefs.flavourProfile.includes(wine.flavor)
 
     const matchesPrice =
-      prefs.priceRange === '' || wine.price.includes(prefs.priceRange.replace(' Ron', ''))
+      prefs.priceRanges === '' || wine.price.includes(prefs.priceRanges.replace(' Ron', ''))
     return matchesType && matchesStyle && matchesPrice
   })
 })

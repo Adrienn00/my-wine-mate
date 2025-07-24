@@ -44,7 +44,9 @@ const profileStore = useProfileStore()
 
 const wine = computed(() => {
   if (props.wine) return props.wine
-  return winesStore.getAllWines().find((w) => w.name === route.params.name)
+
+  const id = Number(route.params.id)
+  return winesStore.getAllWines().find((w) => w.id === id)
 })
 
 const isFavorite = computed(() => profileStore.isFavorite(wine.value))
