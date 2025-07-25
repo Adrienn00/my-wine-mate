@@ -54,7 +54,7 @@ export const useWinesStore = defineStore('wines', () => {
       is_confirmed: true,
     },
   ])
-  const nextId = ref(5)
+  const nextId = ref(wines.value.length)
   function addRating(wineName, rating, comment) {
     const wine = wines.value.find((w) => w.name === wineName)
     if (wine) {

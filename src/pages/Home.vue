@@ -132,8 +132,7 @@ function searchWines() {
     )
   })
 }
-
-const goToDetails = (wineId) => {
+function goToDetails(wineId) {
   router.push({ name: 'wine-details', params: { id: wineId } })
 }
 </script>

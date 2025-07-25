@@ -41,12 +41,12 @@ const props = defineProps({
 const route = useRoute()
 const winesStore = useWinesStore()
 const profileStore = useProfileStore()
-
+const getWines = winesStore.getAllWines()
 const wine = computed(() => {
   if (props.wine) return props.wine
 
   const id = Number(route.params.id)
-  return winesStore.getAllWines().find((w) => w.id === id)
+  return getWines.find((w) => w.id === id)
 })
 
 const isFavorite = computed(() => profileStore.isFavorite(wine.value))
