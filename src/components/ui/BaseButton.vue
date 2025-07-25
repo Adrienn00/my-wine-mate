@@ -27,6 +27,7 @@ const variantMap = {
     'hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2 px-6 rounded',
   simple: 'hover:underline text-yellow-100',
   simpleRose: 'text-left w-full hover:text-red-200',
+  homepage: 'text-2xl font-playfair text-yellow-100 font-bold',
 }
 
 const variantClass = computed(() => `${baseClasses} ${variantMap[props.variant] || ''}`)

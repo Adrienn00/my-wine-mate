@@ -7,42 +7,54 @@
     <BaseMultiselect
       v-model="selectedPreferences.wineTypes"
       :options="wineTypeOptions"
+      :multiple="true"
       placeholder="Válaszd ki a kedvenc típusaid"
     />
-
+    <BaseMultiselect
+      v-model="selectedPreferences.style"
+      :options="wineStyleOptions"
+      :multiple="true"
+      placeholder="Válaszd ki a kedvelt"
+    />
     <BaseMultiselect
       v-model="selectedPreferences.flavourProfile"
       :options="flavourProfileOptions"
+      :multiple="true"
       placeholder="Válaszd ki a kedvelt izprofiljaid"
     />
 
     <BaseMultiselect
       v-model="selectedPreferences.regions"
       :options="regionsOptions"
+      :multiple="true"
       placeholder="Válaszd ki a regio(ka)t"
     />
 
     <BaseMultiselect
-      v-model="selectedPreferences.priceRange"
+      v-model="selectedPreferences.priceRanges"
       :options="priceRangesOptions"
+      :multiple="true"
       placeholder="Válaszd ki az arakat"
     />
 
     <BaseMultiselect
       v-model="selectedPreferences.alcoholLevel"
       :options="alcoholLevelsOptions"
+      :multiple="true"
       placeholder="Válaszd ki az alkoholtartalmat"
     />
 
     <BaseMultiselect
       v-model="selectedPreferences.foodPreferences"
       :options="foodTypePreferences"
+      :multiple="true"
       placeholder="Válaszd ki az etkezesi tipusod"
     />
 
     <BaseMultiselect
       v-model="selectedPreferences.wineYear"
       :options="yearPreferences"
+      :multiple="true"
       placeholder="Válaszd ki a bor evet"
     />
     <BaseButton variant="login">Mentes</BaseButton>
@@ -56,6 +68,7 @@ import BaseButton from '../components/ui/BaseButton.vue'
 const profileStore = useProfileStore()
 
 const wineTypeOptions = profileStore.wineType.wineTypes
+const wineStyleOptions = profileStore.wineType.style
 const flavourProfileOptions = profileStore.wineType.flavourProfile
 const regionsOptions = profileStore.wineType.regions
 const priceRangesOptions = profileStore.wineType.priceRanges
