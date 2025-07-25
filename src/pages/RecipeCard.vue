@@ -2,19 +2,19 @@
   <div class="min-h-screen bg flex flex-col">
     <main class="flex flex-1 justify-start px-6 py-8 max-w-6xl mx-auto w-full">
       <div class="text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full">
-        <h3 class="text-2xl font-semibold mb-2">{{ wine.name }}</h3>
-        <p><strong>Szőlőfajta: </strong>{{ wine.type }}</p>
-        <p><strong>Stílus:</strong> {{ wine.style }}</p>
-        <p><strong>Ár: </strong>{{ wine.price }}</p>
-        <p><strong>Ízvilág: </strong>{{ wine.flavor }}</p>
+        <h3 class="text-2xl font-semibold mb-2">{{ recipe.name }}</h3>
+        <p>{{ recipe.ingredients }}</p>
+
+        <p class="mb-4"><strong>Leírás:</strong> {{ recipe.description }}</p>
 
         <div class="mt-6 space-y-4">
           <RatingDisplay :rating="averageRating" :notes="comments" />
           <AddRatingForm @submit="handleNewRating" />
         </div>
+
         <div class="flex space-x-5 mt-6">
-          <BaseButton to="/" variant="secondary">Vissza a találatokhoz</BaseButton>
-          <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
+          <BaseButton to="/recipes" variant="secondary">Vissza a receptekhez</BaseButton>
+          <BaseButton to="/foodpairing" variant="secondary">Bor ajánló</BaseButton>
           <BaseButton variant="secondary" @click="toggleFavorite">
             {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
           </BaseButton>
@@ -28,57 +28,58 @@
 import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProfileStore } from '../stores/profileStore'
-import { useWinesStore } from '../stores/winesStore'
+import { useRecipesStore } from '../stores/recipesStore'
 
 import BaseButton from '../components/ui/BaseButton.vue'
 import RatingDisplay from '../components/RatingDisplay.vue'
 import AddRatingForm from '../components/AddRatingForm.vue'
 
 const props = defineProps({
-  wine: Object,
+  recipe: Object,
 })
 
 const route = useRoute()
-const winesStore = useWinesStore()
+const recipesStore = useRecipesStore()
 const profileStore = useProfileStore()
-const getWines = winesStore.getAllWines()
-const wine = computed(() => {
-  if (props.wine) return props.wine
+const allRecipes = recipesStore.recipes
+
+const recipe = computed(() => {
+  if (props.recipe) return props.recipe
 
   const id = Number(route.params.id)
-  return getWines.find((w) => w.id === id)
+  return allRecipes.find((r) => r.id === id)
 })
 
-const isFavorite = computed(() => profileStore.isFavoriteWine(wine.value))
+const isFavorite = computed(() => profileStore.isFavoriteRecipe(recipe.value))
 
 const averageRating = computed(() => {
-  const ratings = wine.value?.ratings || []
+  const ratings = recipe.value?.ratings || []
   if (!ratings.length) return 0
   const total = ratings.reduce((sum, r) => sum + r.rating, 0)
   return (total / ratings.length).toFixed(1)
 })
 
 const comments = computed(() => {
-  const ratings = wine.value?.ratings || []
+  const ratings = recipe.value?.ratings || []
   return ratings.map((r) => r.comment).filter(Boolean)
 })
 
 function handleNewRating({ rating, comment }) {
-  winesStore.addRating(wine.value.name, rating, comment)
+  recipesStore.addRating(recipe.value.name, rating, comment)
 }
 
 function toggleFavorite() {
   if (isFavorite.value) {
-    profileStore.removeFavoriteWine(wine.value)
+    profileStore.removeFavoriteRecipe(recipe.value)
   } else {
-    profileStore.addFavoriteWine(wine.value)
+    profileStore.addFavoriteRecipe(recipe.value)
   }
 }
 </script>
 
 <style scoped>
 .bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-image: url('/src/assets/images/bgfood.jpg');
   background-size: cover;
 }
 </style>

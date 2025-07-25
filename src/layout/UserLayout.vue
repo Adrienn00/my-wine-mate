@@ -8,6 +8,7 @@
           <li><BaseButton to="/favorite" variant="simpleRose">Kedvencek</BaseButton></li>
           <li><BaseButton to="/preferences" variant="simpleRose">Bor preferenciák</BaseButton></li>
           <li><BaseButton to="/recommended" variant="simpleRose">Ajánlások</BaseButton></li>
+          <li><BaseButton to="/admin" variant="simpleRose">Admin</BaseButton></li>
         </ul>
       </div>
       <BaseButton variant="login">Kijelentkezés</BaseButton>

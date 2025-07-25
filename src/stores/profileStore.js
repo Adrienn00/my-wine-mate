@@ -30,21 +30,46 @@ export const useProfileStore = defineStore('profile', () => {
     priceRanges: '',
   })
 
-  const favorites = ref([])
-
-  function addFavorite(wine) {
-    if (!favorites.value.find((w) => w.id === wine.id)) {
-      favorites.value.push(wine)
+  const favoriteWines = ref([])
+  const favoriteRecipes = ref([])
+  function addFavoriteWine(wine) {
+    if (!favoriteWines.value.find((w) => w.id === wine.id)) {
+      favoriteWines.value.push(wine)
     }
   }
 
-  function removeFavorite(wine) {
-    favorites.value = favorites.value.filter((w) => w.id !== wine.id)
+  function removeFavoriteWine(wine) {
+    favoriteWines.value = favoriteWines.value.filter((w) => w.id !== wine.id)
   }
 
-  function isFavorite(wine) {
-    return favorites.value.some((w) => w.id === wine.id)
+  function addFavoriteRecipe(recipe) {
+    if (!favoriteRecipes.value.find((r) => r.id === recipe.id)) {
+      favoriteRecipes.value.push(recipe)
+    }
   }
 
-  return { favorites, addFavorite, removeFavorite, isFavorite, user, wineType, selectedPreferences }
+  function removeFavoriteRecipe(recipe) {
+    favoriteRecipes.value = favoriteRecipes.value.filter((r) => r.id !== recipe.id)
+  }
+
+  function isFavoriteWine(wine) {
+    return favoriteWines.value.some((w) => w.id === wine.id)
+  }
+  function isFavoriteRecipe(recipe) {
+    return favoriteRecipes.value.some((r) => r.id === recipe.id)
+  }
+
+  return {
+    favoriteWines,
+    favoriteRecipes,
+    addFavoriteRecipe,
+    addFavoriteWine,
+    removeFavoriteRecipe,
+    removeFavoriteWine,
+    user,
+    wineType,
+    selectedPreferences,
+    isFavoriteRecipe,
+    isFavoriteWine,
+  }
 })

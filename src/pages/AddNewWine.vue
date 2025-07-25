@@ -21,8 +21,8 @@
           />
 
           <BaseInput
-            id="grape"
-            v-model="wine.grape"
+            id="type"
+            v-model="wine.type"
             placeholder="Add meg a szőlő fajtáját..."
             datalistId="grape-options"
             :datalist="['Vörös', 'Fehér', 'Rozé']"
@@ -58,31 +58,32 @@
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 import { ref } from 'vue'
+import { useWinesStore } from '../stores/winesStore'
 
+const winesStore = useWinesStore()
 const wine = ref({
   name: '',
-  grape: '',
+  type: '',
   style: '',
   price: '',
   flavor: '',
 })
 
-const wineList = ref([])
-
 function submitWine() {
-  for (const [key, value] of Object.entries(wine.value)) {
-    if (!value.trim()) {
-      alert(`A(z) "${key}" mező kitöltése kötelező!`)
-      return
+  if (Object.values(wine.value).every((v) => v.trim() !== '')) {
+    winesStore.addNewWine({ ...wine.value })
+
+    wine.value = {
+      name: '',
+      type: '',
+      style: '',
+      price: '',
+      flavor: '',
     }
+    alert('Sikeresen elküldve')
+  } else {
+    alert('Kérlek, tölts ki minden mezőt!')
   }
-  wineList.value.push({ ...wine.value })
-
-  Object.keys(wine.value).forEach((key) => {
-    wine.value[key] = ''
-  })
-
-  console.log('Borok:', wineList.value)
 }
 </script>
 <style scoped>
