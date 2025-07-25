@@ -3,20 +3,22 @@
     <div v-if="!isEditing">
       <div class="flex flex-col items-center mb-8">
         <img
-          :src="user.img"
+          :src="profileStore.user.img"
           alt="Profilkép"
           class="w-32 h-32 rounded-full border-4 border-rose-500 mb-5"
         />
-        <h3 class="text-2xl font-bold">{{ user.firstName }} {{ user.lastName }}</h3>
+        <h3 class="text-2xl font-bold">
+          {{ profileStore.user.firstName }} {{ profileStore.user.lastName }}
+        </h3>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <p><strong>Keresztnév:</strong> {{ user.firstName }}</p>
-        <p><strong>Vezetéknév:</strong> {{ user.lastName }}</p>
-        <p><strong>Email cím:</strong> {{ user.email }}</p>
-        <p><strong>Telefonszám:</strong> {{ user.phone }}</p>
-        <p><strong>Lokáció:</strong> {{ user.location }}</p>
-        <p><strong>Irányítószám:</strong> {{ user.postalCode }}</p>
+        <p><strong>Keresztnév:</strong> {{ profileStore.user.firstName }}</p>
+        <p><strong>Vezetéknév:</strong> {{ profileStore.user.lastName }}</p>
+        <p><strong>Email cím:</strong> {{ profileStore.user.email }}</p>
+        <p><strong>Telefonszám:</strong> {{ profileStore.user.phone }}</p>
+        <p><strong>Lokáció:</strong> {{ profileStore.user.location }}</p>
+        <p><strong>Irányítószám:</strong> {{ profileStore.user.postalCode }}</p>
       </div>
 
       <div class="mt-8 text-center">
@@ -27,7 +29,7 @@
     <div v-else>
       <div class="flex flex-col items-center mb-8">
         <img
-          :src="user.img"
+          :src="profileStore.user.img"
           alt="Profilkép"
           class="w-32 h-32 rounded-full border-4 border-rose-500 mb-5 cursor-pointer hover:opacity-80 transition"
           @click="triggerFileInput"
@@ -39,16 +41,38 @@
           @change="handleImageUpload"
           class="hidden"
         />
-        <h3 class="text-2xl font-bold">{{ user.firstName }} {{ user.lastName }}</h3>
+        <h3 class="text-2xl font-bold">
+          {{ profileStore.user.firstName }} {{ profileStore.user.lastName }}
+        </h3>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <BaseInput id="firstName" label="Keresztnév" type="text" v-model="user.firstName" />
-        <BaseInput id="lastName" label="Vezetéknév" type="text" v-model="user.lastName" />
-        <BaseInput id="email" label="Email cím" type="email" v-model="user.email" />
-        <BaseInput id="phoneNumber" label="Telefonszám" type="text" v-model="user.phone" />
-        <BaseInput id="location" label="Lokáció" type="text" v-model="user.location" />
-        <BaseInput id="postalCode" label="Irányítószám" type="text" v-model="user.postalCode" />
+        <BaseInput
+          id="firstName"
+          label="Keresztnév"
+          type="text"
+          v-model="profileStore.user.firstName"
+        />
+        <BaseInput
+          id="lastName"
+          label="Vezetéknév"
+          type="text"
+          v-model="profileStore.user.lastName"
+        />
+        <BaseInput id="email" label="Email cím" type="email" v-model="profileStore.user.email" />
+        <BaseInput
+          id="phoneNumber"
+          label="Telefonszám"
+          type="text"
+          v-model="profileStore.user.phone"
+        />
+        <BaseInput id="location" label="Lokáció" type="text" v-model="profileStore.user.location" />
+        <BaseInput
+          id="postalCode"
+          label="Irányítószám"
+          type="text"
+          v-model="profileStore.user.postalCode"
+        />
       </div>
 
       <div class="mt-8 text-center">
@@ -67,17 +91,17 @@ import avatar from '../assets/images/avatar.png'
 
 const profileStore = useProfileStore()
 
-if (!profileStore.user.img) {
-  profileStore.user.img = avatar
-}
-
-const user = ref({ ...profileStore.user })
+onMounted(() => {
+  if (!profileStore.user.img) {
+    profileStore.user.img = avatar
+  }
+})
 
 const isEditing = ref(false)
 const inputRef = useTemplateRef('fileInput')
 
 function saveChanges() {
-  profileStore.setUser(user.value)
+  profileStore.setUser(profileStore.user.value)
   isEditing.value = false
 }
 
@@ -90,7 +114,7 @@ function handleImageUpload(event) {
   if (file) {
     const reader = new FileReader()
     reader.onload = (e) => {
-      user.value.img = e.target.result
+      profileStore.user.value.img = e.target.result
     }
     reader.readAsDataURL(file)
   }

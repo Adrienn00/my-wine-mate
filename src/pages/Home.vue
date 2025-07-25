@@ -129,8 +129,7 @@ function searchWines() {
     return matchesName && matchesType && matchesStyle && matchesPrice && matchesFlavor
   })
 }
-
-const goToDetails = (wineName) => {
+function goToDetails(wineName) {
   router.push({ name: 'wine-details', params: { name: wineName }, query: { from: 'home' } })
 }
 </script>
