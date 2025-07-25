@@ -45,16 +45,15 @@
 </template>
 
 <script setup>
-import { ref, reactive, computed } from 'vue'
-import { useWinesStore } from '../stores/winesStore'
-import BaseInput from '../components/ui/BaseInput.vue'
-import BaseButton from '../components/ui/BaseButton.vue'
-
+import { ref, computed } from 'vue'
+import { useWinesStore } from '../../stores/winesStore'
+import BaseInput from '../ui/BaseInput.vue'
+import BaseButton from '../ui/BaseButton.vue'
 const winesStore = useWinesStore()
 const pendingWines = computed(() => winesStore.pendingWines)
 
 const editId = ref(null)
-const editWine = reactive({
+const editWine = ref({
   name: '',
   type: '',
   style: '',
@@ -68,17 +67,17 @@ function approveWine(id) {
 
 function startEdit(wine) {
   editId.value = wine.id
-  Object.assign(editWine, wine)
+  Object.assign(editWine.value, wine)
 }
 
 function saveEdit(id) {
   const wine = winesStore.wines.find((w) => w.id === id)
   if (wine) {
-    wine.name = editWine.name
-    wine.type = editWine.type
-    wine.style = editWine.style
-    wine.price = editWine.price
-    wine.flavor = editWine.flavor
+    wine.name = editWine.value.name
+    wine.type = editWine.value.type
+    wine.style = editWine.value.style
+    wine.price = editWine.value.price
+    wine.flavor = editWine.value.flavor
   }
   editId.value = null
 }

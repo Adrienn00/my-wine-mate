@@ -70,7 +70,7 @@ export const useWinesStore = defineStore('wines', () => {
       id: nextId.value++,
       ...wine,
       ratings: [],
-      is_confirmed: false,
+      is_confirmed: wine.is_confirmed ?? false,
     }
     wines.value.push(newWine)
   }
@@ -87,6 +87,20 @@ export const useWinesStore = defineStore('wines', () => {
   const confirmedWines = computed(() => wines.value.filter((w) => w.is_confirmed))
   const pendingWines = computed(() => wines.value.filter((w) => !w.is_confirmed))
 
+  function updateWine(updatedWine) {
+    const index = wines.value.findIndex((w) => w.id === updatedWine.id)
+    if (index !== -1) {
+      wines.value[index] = { ...updatedWine, is_confirmed: true }
+    }
+  }
+
+  function deleteWine(id) {
+    const index = wines.value.findIndex((w) => w.id === id)
+    if (index !== -1) {
+      wines.value.splice(index, 1)
+    }
+  }
+
   return {
     wines,
     addRating,
@@ -96,5 +110,7 @@ export const useWinesStore = defineStore('wines', () => {
     getAllWines,
     confirmedWines,
     pendingWines,
+    updateWine,
+    deleteWine,
   }
 })

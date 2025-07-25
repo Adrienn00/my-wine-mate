@@ -14,8 +14,11 @@ import FavoriteList from '../pages/FavoriteList.vue'
 import WineCard from '../pages/WineCard.vue'
 import UserLayout from '../layout/UserLayout.vue'
 import WinePreferences from '../pages/WinePreferences.vue'
-import Admin from '../pages/Admin.vue'
-import PendingWines from '../pages/PendingWines.vue'
+import Admin from '../components/admin/Admin.vue'
+import AdminDatabaseManager from '../components/admin/AdminDatabaseManager.vue'
+import RecipeCard from '../pages/RecipeCard.vue'
+import AddNewRecipe from '../pages/AddNewRecipe.vue'
+import PendingItemsTabs from '../components/admin/PendingItemsTabs.vue'
 
 const routes = [
   {
@@ -29,6 +32,8 @@ const routes = [
       { path: '/forgotPassword', component: ForgotPassword },
       { path: '/foodPairing', component: FoodPairing },
       { path: '/recipes', component: Recipes },
+      { path: '/recipe/:id', name: 'recipe-details', component: RecipeCard },
+      { path: '/addRecipe', component: AddNewRecipe },
       { path: '/addWine', component: AddNewWine },
       {
         path: '/wine/:id',
@@ -44,7 +49,8 @@ const routes = [
           { path: '/preferences', component: WinePreferences },
           { path: '/recommended', component: RecommendedWines },
           { path: '/admin', component: Admin },
-          { path: '/admin/pending', component: PendingWines },
+          { path: '/admin/pending', component: PendingItemsTabs },
+          { path: '/admin/manager', component: AdminDatabaseManager },
         ],
       },
     ],

@@ -7,7 +7,7 @@
 
   <div class="flex flex-col items-center gap-6 max-w-md mx-auto">
     <BaseButton variant="adminFunctions" to="/admin/pending">Jóváhagyás / Szerkesztés</BaseButton>
-    <BaseButton variant="adminFunctions">Adatbázis-kezelés</BaseButton>
+    <BaseButton variant="adminFunctions" to="/admin/manager">Adatbázis-kezelés</BaseButton>
     <BaseButton variant="adminFunctions">Jogosultságkezelés</BaseButton>
     <BaseButton variant="adminFunctions">OCR rendszer-kezelés</BaseButton>
     <BaseButton variant="adminFunctions">MI kezelés</BaseButton>
