@@ -11,7 +11,7 @@
         :key="index"
         class="bg-gray-800 text-white p-4 rounded-lg shadow-md border border-gray-400"
       >
-        <BaseButton :to="`/wine/${wine.name}?from=recommended`" variant="simple">{{
+        <BaseButton :to="`/wine/${wine.id}?from=recommended`" variant="simple">{{
           wine.name
         }}</BaseButton>
       </div>
@@ -30,6 +30,7 @@ import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 
 const profileStore = useProfileStore()
+const winesStore = useWinesStore()
 
 const recommendedWines = computed(() => {
   return winesStore.wines.filter((wine) => {
@@ -40,8 +41,7 @@ const recommendedWines = computed(() => {
     const matchesStyle =
       prefs.flavourProfile.length === 0 || prefs.flavourProfile.includes(wine.flavor)
 
-    const matchesPrice =
-      prefs.priceRanges === '' || wine.price.includes(prefs.priceRanges.replace(' Ron', ''))
+    const matchesPrice = prefs.priceRanges === '' || wine.price.includes(prefs.priceRanges)
     return matchesType && matchesStyle && matchesPrice
   })
 })

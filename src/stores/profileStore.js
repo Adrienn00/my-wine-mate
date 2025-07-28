@@ -43,7 +43,7 @@ export const useProfileStore = defineStore('profile', () => {
     wineYears: 'year',
     priceRanges: 'price',
   }
-  const favorites = ref([])
+  const favoriteWines = ref([])
   const wineStore = useWinesStore()
   const favoriteRecipes = ref([])
   function addFavoriteWine(wine) {
