@@ -37,6 +37,7 @@
           <div class="flex flex-col space-y-3">
             <BaseButton variant="secondary" @click="startEdit(wine)"> Szerkesztés </BaseButton>
             <BaseButton variant="secondary" @click="approveWine(wine.id)"> Jóváhagyás </BaseButton>
+            <BaseButton variant="secondary" @click="rejectWine(wine.id)">Elutasitas</BaseButton>
           </div>
         </div>
       </li>
@@ -61,8 +62,11 @@ const editWine = ref({
   flavor: '',
 })
 
-function approveWine(id) {
-  winesStore.approveWine(id)
+async function approveWine(id) {
+  await winesStore.approveWine(id)
+}
+async function rejectWine(id) {
+  await winesStore.deleteWine(id)
 }
 
 function startEdit(wine) {

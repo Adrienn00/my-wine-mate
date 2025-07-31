@@ -1,103 +1,116 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
 
 export const useWinesStore = defineStore('wines', () => {
-  const wines = ref([
-    {
-      id: 0,
-      name: 'Cabernet Sauvignon',
-      type: 'Vörös',
-      style: 'Száraz',
-      price: '80-130',
-      flavor: 'Fűszeres',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 1,
-      name: 'Chardonnay',
-      type: 'Fehér',
-      style: 'Félszáraz',
-      price: '50-80',
-      flavor: 'Gyümölcsös',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 2,
-      name: 'Tokaji Aszú',
-      type: 'Fehér',
-      style: 'Édes',
-      price: '>130',
-      flavor: 'Egyéb',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 3,
-      name: 'Kékfrankos Rosé',
-      type: 'Rozé',
-      style: 'Száraz',
-      price: '20-50',
-      flavor: 'Virágos',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 4,
-      name: 'Merlot',
-      type: 'Vörös',
-      style: 'Félédes',
-      price: '50-80',
-      flavor: 'Földes',
-      ratings: [],
-      is_confirmed: true,
-    },
-  ])
-  const nextId = ref(wines.value.length)
-  function addRating(wineName, rating, comment) {
-    const wine = wines.value.find((w) => w.name === wineName)
-    if (wine) {
-      wine.ratings.push({ rating, comment })
-    }
-  }
-  function getAllWines() {
-    return wines.value
-  }
-
-  function addNewWine(wine) {
-    const newWine = {
-      id: nextId.value++,
-      ...wine,
-      ratings: [],
-      is_confirmed: wine.is_confirmed ?? false,
-    }
-    wines.value.push(newWine)
-  }
-
-  function approveWine(id) {
-    const wine = wines.value.find((w) => w.id === id)
-    if (wine) wine.is_confirmed = true
-  }
-
-  function rejectWine(id) {
-    wines.value = wines.value.find((w) => w.id !== id)
-  }
-
+  const wines = ref([])
   const confirmedWines = computed(() => wines.value.filter((w) => w.is_confirmed))
   const pendingWines = computed(() => wines.value.filter((w) => !w.is_confirmed))
 
-  function updateWine(updatedWine) {
-    const index = wines.value.findIndex((w) => w.id === updatedWine.id)
-    if (index !== -1) {
-      wines.value[index] = { ...updatedWine, is_confirmed: true }
+  async function addRating(wineName, rating, comment) {
+    try {
+      const response = await fetch('http://localhost:3000/api/wines/rating', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ wineName, rating, comment }),
+      })
+      if (!response.ok) throw new Error('Sikertelen ertekeles hozzaadasa')
+      const updatedWine = await response.json()
+      const index = wines.value.findIndex((w) => w.name === wineName)
+      if (index !== -1) {
+        wines.value[index] = updatedWine
+      }
+
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
     }
   }
 
-  function deleteWine(id) {
-    const index = wines.value.findIndex((w) => w.id === id)
-    if (index !== -1) {
-      wines.value.splice(index, 1)
+  async function getAllWines() {
+    try {
+      const response = await fetch('http://localhost:3000/api/wines')
+      const data = await response.json()
+      wines.value = data
+      return wines.value
+    } catch (error) {
+      console.error('Hiba a borok lekerdezesekor: ', error)
+      return []
+    }
+  }
+
+  async function addNewWine(wineData) {
+    try {
+      const response = await fetch('http://localhost:3000/api/wines', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(wineData),
+      })
+      if (!response.ok) throw new Error('Sikertelen hozzáadás')
+
+      const newWine = await response.json()
+      wines.value.push(newWine)
+
+      return newWine
+    } catch (error) {
+      console.error('Hiba bor hozzáadásakor:', error)
+      return null
+    }
+  }
+
+  async function approveWine(id) {
+    try {
+      const response = await fetch(`http://localhost:3000/api/wines/approve/${id}`, {
+        method: 'PUT',
+      })
+      if (!response.ok) throw new Error('Sikertelen jovahagyas')
+      const updatedWine = await response.json()
+      const index = wines.value.findIndex((w) => w.id === id)
+      if (index !== -1) {
+        wines.value[index] = updatedWine
+      }
+
+      return updatedWine
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
+
+  async function updateWine(updatedWine) {
+    try {
+      const response = await fetch(`http://localhost:3000/api/wines/${updatedWine.id}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(updatedWine),
+      })
+      if (!response.ok) throw new Error('Sikertelen frissites')
+      const updated = await response.json()
+      const index = wines.value.findIndex((w) => w.id === updated.id)
+      if (index !== -1) {
+        wines.value[index] = updated
+      }
+      return updated
+    } catch (error) {
+      console.error('Hiba bor frissitesekor:', error)
+      return null
+    }
+  }
+
+  async function deleteWine(id) {
+    try {
+      const response = await fetch(`http://localhost:3000/api/wines/${id}`, {
+        method: 'DELETE',
+      })
+      if (!response.ok) throw new Error('Sikertelen torles')
+      const index = wines.value.findIndex((w) => w.id === id)
+      if (index !== -1) {
+        wines.value.splice(index, 1)
+      }
+      return true
+    } catch (error) {
+      console.error(error)
+      return false
     }
   }
 
@@ -106,7 +119,6 @@ export const useWinesStore = defineStore('wines', () => {
     addRating,
     addNewWine,
     approveWine,
-    rejectWine,
     getAllWines,
     confirmedWines,
     pendingWines,

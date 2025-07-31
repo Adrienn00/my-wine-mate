@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg flex flex-col">
+  <div v-if="wine" class="min-h-screen bg flex flex-col">
     <main class="flex justify-start px-6 py-8 max-w-6xl mx-auto w-full">
       <div class="text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-md w-full">
         <h3 class="text-2xl font-semibold mb-2">{{ wine.name }}</h3>
@@ -25,7 +25,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useRoute } from 'vue-router'
 import { useProfileStore } from '../stores/profileStore'
 import { useWinesStore } from '../stores/winesStore'
@@ -41,12 +41,11 @@ const props = defineProps({
 const route = useRoute()
 const winesStore = useWinesStore()
 const profileStore = useProfileStore()
-const getWines = winesStore.getAllWines()
 const wine = computed(() => {
   if (props.wine) return props.wine
 
   const id = Number(route.params.id)
-  return getWines.find((w) => w.id === id)
+  return winesStore.wines.find((w) => w.id === id)
 })
 
 const isFavorite = computed(() => profileStore.isFavoriteWine(wine.value))
@@ -63,8 +62,15 @@ const comments = computed(() => {
   return ratings.map((r) => r.comment).filter(Boolean)
 })
 
-function handleNewRating({ rating, comment }) {
-  winesStore.addRating(wine.value.name, rating, comment)
+onMounted(() => {
+  winesStore.getAllWines()
+})
+async function handleNewRating({ rating, comment }) {
+  try {
+    await winesStore.addRating(wine.value.name, rating, comment)
+  } catch (error) {
+    console.error(error)
+  }
 }
 
 function toggleFavorite() {

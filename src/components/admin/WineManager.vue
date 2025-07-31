@@ -48,7 +48,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useWinesStore } from '@/stores/winesStore'
 import BaseInput from '../ui/BaseInput.vue'
 import BaseButton from '../ui/BaseButton.vue'
@@ -56,6 +56,7 @@ import BaseButton from '../ui/BaseButton.vue'
 const winesStore = useWinesStore()
 
 const isEditing = ref(false)
+const allWines = computed(() => winesStore.wines)
 
 const editWine = ref({
   name: '',
@@ -65,7 +66,9 @@ const editWine = ref({
   flavor: '',
 })
 
-const allWines = computed(() => winesStore.wines)
+onMounted(() => {
+  winesStore.getAllWines()
+})
 
 function startAdd() {
   isEditing.value = true
@@ -87,7 +90,7 @@ function cancelEdit() {
   isEditing.value = false
 }
 
-function submitEdit() {
+async function submitEdit() {
   const { name, type, style, price, flavor } = editWine.value
 
   if (
@@ -102,17 +105,17 @@ function submitEdit() {
   }
 
   if (editWine.value.id != null) {
-    winesStore.updateWine(editWine.value)
+    await winesStore.updateWine(editWine.value)
   } else {
-    winesStore.addNewWine({ ...editWine.value, is_confirmed: true })
+    await winesStore.addNewWine({ ...editWine.value, is_confirmed: true })
   }
 
   isEditing.value = false
 }
 
-function deleteWine(id) {
+async function deleteWine(id) {
   if (confirm('Biztosan törlöd ezt a bort?')) {
-    winesStore.deleteWine(id)
+    await winesStore.deleteWine(id)
   }
 }
 </script>
