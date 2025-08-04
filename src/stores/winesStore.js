@@ -1,5 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref } from 'vue'
+import client from '../components/httpService/client'
 
 export const useWinesStore = defineStore('wines', () => {
   const wines = ref([])
@@ -8,13 +9,7 @@ export const useWinesStore = defineStore('wines', () => {
 
   async function addRating(wineName, rating, comment) {
     try {
-      const response = await fetch('http://localhost:3000/api/wines/rating', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ wineName, rating, comment }),
-      })
-      if (!response.ok) throw new Error('Sikertelen ertekeles hozzaadasa')
-      const updatedWine = await response.json()
+      const updatedWine = await client.post('wines/rating', { wineName, rating, comment })
       const index = wines.value.findIndex((w) => w.name === wineName)
       if (index !== -1) {
         wines.value[index] = updatedWine
@@ -29,42 +24,29 @@ export const useWinesStore = defineStore('wines', () => {
 
   async function getAllWines() {
     try {
-      const response = await fetch('http://localhost:3000/api/wines')
-      const data = await response.json()
-      wines.value = data
+      wines.value = await client.get('wines')
       return wines.value
     } catch (error) {
-      console.error('Hiba a borok lekerdezesekor: ', error)
+      console.error('An error occurred while fetching wines', error)
       return []
     }
   }
 
   async function addNewWine(wineData) {
     try {
-      const response = await fetch('http://localhost:3000/api/wines', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(wineData),
-      })
-      if (!response.ok) throw new Error('Sikertelen hozzáadás')
-
-      const newWine = await response.json()
+      const newWine = await client.post('wines', wineData)
       wines.value.push(newWine)
 
       return newWine
     } catch (error) {
-      console.error('Hiba bor hozzáadásakor:', error)
+      console.error('Error while adding wine', error)
       return null
     }
   }
 
   async function approveWine(id) {
     try {
-      const response = await fetch(`http://localhost:3000/api/wines/approve/${id}`, {
-        method: 'PUT',
-      })
-      if (!response.ok) throw new Error('Sikertelen jovahagyas')
-      const updatedWine = await response.json()
+      const updatedWine = await client.put(`wines/approve/${id}`)
       const index = wines.value.findIndex((w) => w.id === id)
       if (index !== -1) {
         wines.value[index] = updatedWine
@@ -79,30 +61,21 @@ export const useWinesStore = defineStore('wines', () => {
 
   async function updateWine(updatedWine) {
     try {
-      const response = await fetch(`http://localhost:3000/api/wines/${updatedWine.id}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(updatedWine),
-      })
-      if (!response.ok) throw new Error('Sikertelen frissites')
-      const updated = await response.json()
+      const updated = await client.put(`wines/${updatedWine.id}`)
       const index = wines.value.findIndex((w) => w.id === updated.id)
       if (index !== -1) {
         wines.value[index] = updated
       }
       return updated
     } catch (error) {
-      console.error('Hiba bor frissitesekor:', error)
+      console.error('Error while updating wine', error)
       return null
     }
   }
 
   async function deleteWine(id) {
     try {
-      const response = await fetch(`http://localhost:3000/api/wines/${id}`, {
-        method: 'DELETE',
-      })
-      if (!response.ok) throw new Error('Sikertelen torles')
+      await client.delete(`wines/${id}`)
       const index = wines.value.findIndex((w) => w.id === id)
       if (index !== -1) {
         wines.value.splice(index, 1)

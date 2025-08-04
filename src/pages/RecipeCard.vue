@@ -68,7 +68,7 @@ async function handleNewRating({ rating, comment }) {
   try {
     await recipesStore.addRating(recipe.value.name, rating, comment)
   } catch (error) {
-    console.error('Nem sikerult ertekelest hozzadni', error)
+    console.error('Review error', error)
   }
 }
 
