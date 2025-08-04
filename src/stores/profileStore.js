@@ -1,36 +1,50 @@
 import { defineStore } from 'pinia'
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
+import { useWinesStore } from './winesStore'
 
 export const useProfileStore = defineStore('profile', () => {
   const user = ref({
-    firstName: '',
-    lastName: '',
-    email: '',
-    phoneNumber: '',
-    location: '',
-    postalCode: '',
+    firstName: 'Keresztnév',
+    lastName: 'Vezetéknév',
+    email: 'borimado@example.com',
+    phone: '071234567',
+    location: 'Székelyudvarhely',
+    postalCode: '535600',
+    img: '',
   })
 
   const wineType = ref({
-    wineTypes: ['Vörös', 'Fehér', 'Rosé', 'Pezsgő'],
-    flavourProfile: ['Száraz', 'Félédes', 'Gyümölcsös', 'Fűszeres'],
+    wineTypes: ['Vörös', 'Fehér', 'Rozé', 'Pezsgő'],
+    style: ['Száraz', 'Félszáraz', 'Félédes', 'Édes'],
+    flavourProfile: ['Virágos', 'Földes', 'Gyümölcsös', 'Fűszeres', 'Egyéb'],
     regions: ['Tokaj', 'Villány', 'Eger', 'Sopron'],
     alcoholLevels: ['Alacsony', 'Közepes', 'Magas'],
     foodPreferences: ['Vegetáriánus', 'Vegán', 'Hal', 'Desszert', 'Húsos'],
     wineYears: [2023, 2022, 2021, 2020, 2019],
-    priceRanges: ['0-50 Ron', '50-80 Ron', '80-130 Ron', '>130 Ron'],
+    priceRanges: ['0-50', '50-80', '80-130', '>130'],
   })
   const selectedPreferences = ref({
     wineTypes: [],
+    style: [],
     flavourProfile: [],
     regions: [],
-    alcoholLevels: '',
+    alcoholLevels: [],
     foodPreferences: [],
     wineYears: '',
-    priceRanges: '',
+    priceRanges: [],
   })
-
+  const keyMap = {
+    wineTypes: 'type',
+    style: 'style',
+    flavourProfile: 'flavor',
+    regions: 'region',
+    alcoholLevels: 'alcohol',
+    foodPreferences: 'food',
+    wineYears: 'year',
+    priceRanges: 'price',
+  }
   const favoriteWines = ref([])
+  const wineStore = useWinesStore()
   const favoriteRecipes = ref([])
   function addFavoriteWine(wine) {
     if (!favoriteWines.value.find((w) => w.id === wine.id)) {
@@ -58,6 +72,27 @@ export const useProfileStore = defineStore('profile', () => {
   function isFavoriteRecipe(recipe) {
     return favoriteRecipes.value.some((r) => r.id === recipe.id)
   }
+  function wineMatchesPreferences(wine, prefs, keyMap) {
+    return Object.entries(prefs).every(([prefKey, selected]) => {
+      const wineKey = keyMap[prefKey]
+      if (!wineKey || !selected || (Array.isArray(selected) && selected.length === 0)) return true
+
+      if (Array.isArray(selected)) {
+        return selected.includes(wine[wineKey])
+      }
+
+      return wine[wineKey] === selected
+    })
+  }
+  const recommendedWines = computed(() => {
+    const wines = wineStore.wines
+    const prefs = selectedPreferences.value
+    return wines.filter((wine) => wineMatchesPreferences(wine, prefs, keyMap))
+  })
+
+  function setUser(newUser) {
+    user.value = { ...user.value, ...newUser }
+  }
 
   return {
     favoriteWines,
@@ -71,5 +106,7 @@ export const useProfileStore = defineStore('profile', () => {
     selectedPreferences,
     isFavoriteRecipe,
     isFavoriteWine,
+    recommendedWines,
+    setUser,
   }
 })

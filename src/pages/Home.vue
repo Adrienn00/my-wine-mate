@@ -133,7 +133,7 @@ function searchWines() {
   })
 }
 function goToDetails(wineId) {
-  router.push({ name: 'wine-details', params: { id: wineId } })
+  router.push({ name: 'wine-details', params: { id: wineId }, query: { from: 'home' } })
 }
 </script>
 

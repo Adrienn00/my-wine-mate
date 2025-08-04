@@ -11,11 +11,9 @@
         :key="index"
         class="bg-gray-800 text-white p-4 rounded-lg shadow-md border border-gray-400"
       >
-        <h3 class="text-xl font-bold mb-1">{{ wine.name }}</h3>
-        <p><span class="font-medium">Stílus:</span> {{ wine.style }}</p>
-        <p><span class="font-medium">Szőlőfajta:</span> {{ wine.type }}</p>
-        <p><span class="font-medium">Ízprofil:</span> {{ wine.flavor }}</p>
-        <p><span class="font-medium">Ár:</span>{{ wine.price }}</p>
+        <BaseButton :to="`/wine/${wine.id}?from=recommended`" variant="simple">{{
+          wine.name
+        }}</BaseButton>
       </div>
     </div>
 
@@ -29,6 +27,8 @@
 import { computed } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useProfileStore } from '../stores/profileStore'
+import BaseButton from '../components/ui/BaseButton.vue'
+
 const profileStore = useProfileStore()
 const winesStore = useWinesStore()
 
@@ -41,12 +41,12 @@ const recommendedWines = computed(() => {
     const matchesStyle =
       prefs.flavourProfile.length === 0 || prefs.flavourProfile.includes(wine.flavor)
 
-    const matchesPrice =
-      prefs.priceRanges === '' || wine.price.includes(prefs.priceRanges.replace(' Ron', ''))
+    const matchesPrice = prefs.priceRanges === '' || wine.price.includes(prefs.priceRanges)
     return matchesType && matchesStyle && matchesPrice
   })
 })
 </script>
+
 <style scoped>
 .bg {
   background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
