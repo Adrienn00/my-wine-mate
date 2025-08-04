@@ -14,11 +14,8 @@ export const useWinesStore = defineStore('wines', () => {
       if (index !== -1) {
         wines.value[index] = updatedWine
       }
-
-      return true
     } catch (error) {
       console.error(error)
-      return false
     }
   }
 
@@ -80,10 +77,8 @@ export const useWinesStore = defineStore('wines', () => {
       if (index !== -1) {
         wines.value.splice(index, 1)
       }
-      return true
     } catch (error) {
       console.error(error)
-      return false
     }
   }
 
