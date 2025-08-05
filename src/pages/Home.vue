@@ -113,10 +113,10 @@ const hasAnyFilter = computed(() => {
   )
 })
 
-function searchWines() {
+async function searchWines() {
   hasSearched.value = true
-  const wines = winesStore.getAllWines()
 
+  const wines = await winesStore.getAllWines()
   results.value = wines.filter((wine) => {
     const isConfirmed = wine.is_confirmed === true
     const matchesName = query.value

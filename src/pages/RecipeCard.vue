@@ -64,8 +64,12 @@ const comments = computed(() => {
   return ratings.map((r) => r.comment).filter(Boolean)
 })
 
-function handleNewRating({ rating, comment }) {
-  recipesStore.addRating(recipe.value.name, rating, comment)
+async function handleNewRating({ rating, comment }) {
+  try {
+    await recipesStore.addRating(recipe.value.name, rating, comment)
+  } catch (error) {
+    console.error('Review error', error)
+  }
 }
 
 function toggleFavorite() {

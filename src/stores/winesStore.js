@@ -1,103 +1,84 @@
 import { defineStore } from 'pinia'
-import { ref, computed } from 'vue'
+import { computed, ref } from 'vue'
+import client from '../components/httpService/client'
 
 export const useWinesStore = defineStore('wines', () => {
-  const wines = ref([
-    {
-      id: 0,
-      name: 'Cabernet Sauvignon',
-      type: 'Vörös',
-      style: 'Száraz',
-      price: '80-130',
-      flavor: 'Fűszeres',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 1,
-      name: 'Chardonnay',
-      type: 'Fehér',
-      style: 'Félszáraz',
-      price: '50-80',
-      flavor: 'Gyümölcsös',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 2,
-      name: 'Tokaji Aszú',
-      type: 'Fehér',
-      style: 'Édes',
-      price: '>130',
-      flavor: 'Egyéb',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 3,
-      name: 'Kékfrankos Rosé',
-      type: 'Rozé',
-      style: 'Száraz',
-      price: '20-50',
-      flavor: 'Virágos',
-      ratings: [],
-      is_confirmed: true,
-    },
-    {
-      id: 4,
-      name: 'Merlot',
-      type: 'Vörös',
-      style: 'Félédes',
-      price: '50-80',
-      flavor: 'Földes',
-      ratings: [],
-      is_confirmed: true,
-    },
-  ])
-  const nextId = ref(wines.value.length)
-  function addRating(wineName, rating, comment) {
-    const wine = wines.value.find((w) => w.name === wineName)
-    if (wine) {
-      wine.ratings.push({ rating, comment })
-    }
-  }
-  function getAllWines() {
-    return wines.value
-  }
-
-  function addNewWine(wine) {
-    const newWine = {
-      id: nextId.value++,
-      ...wine,
-      ratings: [],
-      is_confirmed: wine.is_confirmed ?? false,
-    }
-    wines.value.push(newWine)
-  }
-
-  function approveWine(id) {
-    const wine = wines.value.find((w) => w.id === id)
-    if (wine) wine.is_confirmed = true
-  }
-
-  function rejectWine(id) {
-    wines.value = wines.value.find((w) => w.id !== id)
-  }
-
+  const wines = ref([])
   const confirmedWines = computed(() => wines.value.filter((w) => w.is_confirmed))
   const pendingWines = computed(() => wines.value.filter((w) => !w.is_confirmed))
 
-  function updateWine(updatedWine) {
-    const index = wines.value.findIndex((w) => w.id === updatedWine.id)
-    if (index !== -1) {
-      wines.value[index] = { ...updatedWine, is_confirmed: true }
+  async function addRating(wineName, rating, comment) {
+    try {
+      const updatedWine = await client.post('wines/rating', { wineName, rating, comment })
+      const index = wines.value.findIndex((w) => w.name === wineName)
+      if (index !== -1) {
+        wines.value[index] = updatedWine
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
-  function deleteWine(id) {
-    const index = wines.value.findIndex((w) => w.id === id)
-    if (index !== -1) {
-      wines.value.splice(index, 1)
+  async function getAllWines() {
+    try {
+      wines.value = await client.get('wines')
+      return wines.value
+    } catch (error) {
+      console.error('An error occurred while fetching wines', error)
+      return []
+    }
+  }
+
+  async function addNewWine(wineData) {
+    try {
+      const newWine = await client.post('wines', wineData)
+      wines.value.push(newWine)
+
+      return newWine
+    } catch (error) {
+      console.error('Error while adding wine', error)
+      return null
+    }
+  }
+
+  async function approveWine(id) {
+    try {
+      const updatedWine = await client.put(`wines/approve/${id}`)
+      const index = wines.value.findIndex((w) => w.id === id)
+      if (index !== -1) {
+        wines.value[index] = updatedWine
+      }
+
+      return updatedWine
+    } catch (error) {
+      console.error(error)
+      return null
+    }
+  }
+
+  async function updateWine(updatedWine) {
+    try {
+      const updated = await client.put(`wines/${updatedWine.id}`)
+      const index = wines.value.findIndex((w) => w.id === updated.id)
+      if (index !== -1) {
+        wines.value[index] = updated
+      }
+      return updated
+    } catch (error) {
+      console.error('Error while updating wine', error)
+      return null
+    }
+  }
+
+  async function deleteWine(id) {
+    try {
+      await client.delete(`wines/${id}`)
+      const index = wines.value.findIndex((w) => w.id === id)
+      if (index !== -1) {
+        wines.value.splice(index, 1)
+      }
+    } catch (error) {
+      console.error(error)
     }
   }
 
@@ -106,7 +87,6 @@ export const useWinesStore = defineStore('wines', () => {
     addRating,
     addNewWine,
     approveWine,
-    rejectWine,
     getAllWines,
     confirmedWines,
     pendingWines,

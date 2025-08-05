@@ -24,11 +24,16 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 
+onMounted(() => {
+  if (winesStore.wines.length === 0) {
+    winesStore.getAllWines()
+  }
+})
 const profileStore = useProfileStore()
 const winesStore = useWinesStore()
 
