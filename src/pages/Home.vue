@@ -67,9 +67,9 @@
           <div v-if="results.length" class="space-y-2">
             <div
               v-for="wine in results"
-              :key="wine.id"
+              :key="wine._id"
               class="px-4 py-2 border-b border-gray-700 last:border-b-0 hover:bg-gray-700 cursor-pointer"
-              @click="goToDetails(wine.id)"
+              @click="goToDetails(wine._id)"
             >
               {{ wine.name }}
             </div>
@@ -124,14 +124,17 @@ async function searchWines() {
       : true
     const matchesType = selectedType.value ? wine.type === selectedType.value : true
     const matchesStyle = selectedStyle.value ? wine.style === selectedStyle.value : true
-    const matchesPrice = selectedPrice.value ? wine.price === selectedPrice.value : true
-    const matchesFlavor = selectedFlavor.value ? wine.flavor === selectedFlavor.value : true
+    const matchesPrice = selectedPrice.value ? wine.priceRange === selectedPrice.value : true
+    const matchesFlavor = selectedFlavor.value
+      ? wine.flavorProfiles.includes(selectedFlavor.value)
+      : true
 
     return (
       isConfirmed && matchesName && matchesType && matchesStyle && matchesPrice && matchesFlavor
     )
   })
 }
+
 function goToDetails(wineId) {
   router.push({ name: 'wine-details', params: { id: wineId }, query: { from: 'home' } })
 }
