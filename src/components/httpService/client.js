@@ -4,6 +4,9 @@ const client = {
   async request(path, options = {}) {
     const response = await fetch(`${API_BASE}/${path}`, options)
     if (!response.ok) throw new Error(`HTTP error: ${response.status}`)
+    if (response.status === 204) {
+      return null
+    }
     return response.json()
   },
 
@@ -19,11 +22,14 @@ const client = {
     })
   },
   put(path, data) {
-    return this.request(path, {
+    const options = {
       method: 'PUT',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data),
-    })
+    }
+    if (data !== undefined) {
+      options.body = JSON.stringify(data)
+    }
+    return this.request(path, options)
   },
   delete(path) {
     return this.request(path, { method: 'DELETE' })

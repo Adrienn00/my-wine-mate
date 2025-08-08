@@ -22,8 +22,8 @@
 
       <div v-if="activeTab === 'wines'">
         <div v-if="favoriteWines.length">
-          <div v-for="wine in favoriteWines" :key="wine.id" class="mb-2 text-center">
-            <BaseButton :to="`/wine/${wine.id}`" variant="simple">
+          <div v-for="wine in favoriteWines" :key="wine._id" class="mb-2 text-center">
+            <BaseButton :to="`/wine/${wine._id}?from=favorites`" variant="simple">
               {{ wine.name }}
             </BaseButton>
           </div>
