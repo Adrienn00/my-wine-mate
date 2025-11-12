@@ -5,6 +5,7 @@
       class="w-full max-w-md flex flex-col gap-y-4 px-6 py-12 bg-gray-900 rounded-xl shadow-lg"
     >
       <h1 class="text-yellow-100 font-bold text-2xl text-center mb-4">Regisztráció</h1>
+
       <BaseInput
         id="email"
         label="Add meg az e-mailed!"
@@ -39,10 +40,12 @@
 <script setup>
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 
 const router = useRouter()
+const auth = useAuthStore()
 
 const email = ref('')
 const password = ref('')
@@ -51,13 +54,38 @@ const emailError = ref('')
 const passwordError = ref('')
 const repeatedPasswordError = ref('')
 
-function signup() {
+async function signup() {
+  // Alap validálás
   emailError.value = !email.value ? 'Add meg az emailed!' : ''
   passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
   repeatedPasswordError.value =
     password.value && password.value !== repeatedPassword.value ? 'A két jelszó nem egyezik!' : ''
+
+  // Ha van bármilyen hiba, ne küldjük el
+  if (emailError.value || passwordError.value || repeatedPasswordError.value) {
+    console.warn('⚠️ Hibás adatok, nem küldjük el a kérést.')
+    return
+  }
+
+  console.log('📨 Regisztráció indul a backend felé:', {
+    email: email.value,
+    password: password.value,
+  })
+
+  try {
+    await auth.register({
+      username: email.value.split('@')[0], // ideiglenes username
+      email: email.value,
+      password: password.value,
+    })
+    console.log('✅ Sikeres regisztráció:', auth.user)
+    router.push('/login') // vagy mehet automatikusan bejelentkezés után pl. '/'
+  } catch (err) {
+    console.error('❌ Regisztrációs hiba:', err.message)
+  }
 }
 </script>
+
 <style scoped>
 .bg {
   background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
