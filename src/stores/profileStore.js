@@ -1,16 +1,22 @@
 import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
-import { useWinesStore } from './winesStore'
+import client from '../components/httpService/client'
+import { useAuthStore } from './authStore'
 
 export const useProfileStore = defineStore('profile', () => {
-  const user = ref({
-    firstName: 'Keresztnév',
-    lastName: 'Vezetéknév',
-    email: 'borimado@example.com',
-    phone: '071234567',
-    location: 'Székelyudvarhely',
-    postalCode: '535600',
-    img: '',
+  const auth = useAuthStore()
+
+  const favoriteWines = ref([])
+  const favoriteRecipes = ref([])
+  const selectedPreferences = ref({
+    wineTypes: [],
+    style: [],
+    flavourProfile: [],
+    regions: [],
+    alcoholLevels: [],
+    foodPreferences: [],
+    wineYears: '',
+    priceRanges: [],
   })
 
   const wineType = ref({
@@ -23,90 +29,142 @@ export const useProfileStore = defineStore('profile', () => {
     wineYears: [2023, 2022, 2021, 2020, 2019],
     priceRanges: ['0-50', '50-80', '80-130', '>130'],
   })
-  const selectedPreferences = ref({
-    wineTypes: [],
-    style: [],
-    flavourProfile: [],
-    regions: [],
-    alcoholLevels: [],
-    foodPreferences: [],
-    wineYears: '',
-    priceRanges: [],
-  })
-  const keyMap = {
-    wineTypes: 'type',
-    style: 'style',
-    flavourProfile: 'flavor',
-    regions: 'region',
-    alcoholLevels: 'alcohol',
-    foodPreferences: 'food',
-    wineYears: 'year',
-    priceRanges: 'price',
-  }
-  const favoriteWines = ref([])
-  const wineStore = useWinesStore()
-  const favoriteRecipes = ref([])
-  function addFavoriteWine(wine) {
-    if (!favoriteWines.value.find((w) => w.id === wine.id)) {
-      favoriteWines.value.push(wine)
-    }
-  }
 
-  function removeFavoriteWine(wine) {
-    favoriteWines.value = favoriteWines.value.filter((w) => w.id !== wine.id)
-  }
+  const loading = ref(false)
+  const error = ref(null)
 
-  function addFavoriteRecipe(recipe) {
-    if (!favoriteRecipes.value.find((r) => r.id === recipe.id)) {
-      favoriteRecipes.value.push(recipe)
-    }
-  }
+  const API_BASE = 'users'
 
-  function removeFavoriteRecipe(recipe) {
-    favoriteRecipes.value = favoriteRecipes.value.filter((r) => r.id !== recipe.id)
-  }
+  // --- Helper függvény ---
+  const toId = (x) => (x && (x._id || x.id)) || x
 
-  function isFavoriteWine(wine) {
-    return favoriteWines.value.some((w) => w.id === wine.id)
-  }
-  function isFavoriteRecipe(recipe) {
-    return favoriteRecipes.value.some((r) => r.id === recipe.id)
-  }
-  function wineMatchesPreferences(wine, prefs, keyMap) {
-    return Object.entries(prefs).every(([prefKey, selected]) => {
-      const wineKey = keyMap[prefKey]
-      if (!wineKey || !selected || (Array.isArray(selected) && selected.length === 0)) return true
+  // --- PROFIL BETÖLTÉS ---
+  async function fetchProfile() {
+    if (!auth.token) return null
+    loading.value = true
+    try {
+      const data = await client.get(`${API_BASE}/profile`)
+      auth.user = data
+      favoriteWines.value = data.favoriteWines || []
+      favoriteRecipes.value = data.favoriteRecipes || []
 
-      if (Array.isArray(selected)) {
-        return selected.includes(wine[wineKey])
+      const prefs = data.preferences || {}
+      selectedPreferences.value = {
+        wineTypes: prefs.wineTypes || [],
+        style: prefs.style || [],
+        flavourProfile: prefs.flavourProfile || [],
+        regions: prefs.origin?.region ? [prefs.origin.region] : [],
+        alcoholLevels: prefs.alcoholLevels || [],
+        foodPreferences: prefs.foodPreferences || [],
+        wineYears: prefs.wineYears || '',
+        priceRanges: prefs.priceRanges || [],
       }
-
-      return wine[wineKey] === selected
-    })
+      return data
+    } catch (err) {
+      console.error('Error fetching profile:', err)
+      error.value = err.message
+      return null
+    } finally {
+      loading.value = false
+    }
   }
-  const recommendedWines = computed(() => {
-    const wines = wineStore.wines
-    const prefs = selectedPreferences.value
-    return wines.filter((wine) => wineMatchesPreferences(wine, prefs, keyMap))
-  })
 
-  function setUser(newUser) {
-    user.value = { ...user.value, ...newUser }
+  // --- PROFIL FRISSÍTÉS ---
+  async function updateProfile(updatedData) {
+    try {
+      const updated = await client.put(`${API_BASE}/profile`, updatedData)
+      auth.user = updated
+      return updated
+    } catch (err) {
+      console.error('Error updating profile:', err)
+      error.value = err.message
+      return null
+    }
   }
+
+  // --- KEDVENC BOROK ---
+  async function addFavoriteWine(wine) {
+    try {
+      const res = await client.post(`${API_BASE}/favorite/wines`, {
+        wineId: toId(wine),
+      })
+      favoriteWines.value = res
+      return res
+    } catch (err) {
+      console.error('Error adding favorite wine:', err)
+      error.value = err.message
+    }
+  }
+
+  async function removeFavoriteWine(wine) {
+    try {
+      const res = await client.delete(`${API_BASE}/favorite/wines/${toId(wine)}`)
+      favoriteWines.value = res
+      return res
+    } catch (err) {
+      console.error('Error removing favorite wine:', err)
+      error.value = err.message
+    }
+  }
+
+  // --- KEDVENC RECEPTEK ---
+  async function addFavoriteRecipe(recipe) {
+    try {
+      const res = await client.post(`${API_BASE}/favorite/recipes`, {
+        recipeId: toId(recipe),
+      })
+      favoriteRecipes.value = res
+      return res
+    } catch (err) {
+      console.error('Error adding favorite recipe:', err)
+      error.value = err.message
+    }
+  }
+
+  async function removeFavoriteRecipe(recipe) {
+    try {
+      const res = await client.delete(`${API_BASE}/favorite/recipes/${toId(recipe)}`)
+      favoriteRecipes.value = res
+      return res
+    } catch (err) {
+      console.error('Error removing favorite recipe:', err)
+      error.value = err.message
+    }
+  }
+
+  // --- HELPER FUNKCIÓK ---
+  function isFavoriteWine(wine) {
+    const id = toId(wine)
+    return favoriteWines.value.some((w) => toId(w).toString() === id.toString())
+  }
+
+  function isFavoriteRecipe(recipe) {
+    const id = toId(recipe)
+    return favoriteRecipes.value.some((r) => toId(r).toString() === id.toString())
+  }
+
+  const hasProfile = computed(() => !!auth.user)
+  const fullName = computed(() =>
+    auth.user ? `${auth.user.firstName || ''} ${auth.user.lastName || ''}`.trim() : ''
+  )
 
   return {
+    loading,
+    error,
     favoriteWines,
     favoriteRecipes,
-    addFavoriteRecipe,
-    addFavoriteWine,
-    removeFavoriteRecipe,
-    removeFavoriteWine,
-    user,
-    wineType,
     selectedPreferences,
-    isFavoriteRecipe,
+    wineType,
+    hasProfile,
+    fullName,
+
+    fetchProfile,
+    updateProfile,
+    addFavoriteWine,
+    removeFavoriteWine,
+    addFavoriteRecipe,
+    removeFavoriteRecipe,
     isFavoriteWine,
-    recommendedWines,
-    setUser,
+    isFavoriteRecipe,
   }
 })
