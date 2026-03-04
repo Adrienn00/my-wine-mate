@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
+import { useAuthStore } from '@/stores/authStore'
 import BaseLayout from '../layout/BaseLayout.vue'
 import Home from '../pages/Home.vue'
 import About from '../pages/About.vue'
@@ -60,6 +61,15 @@ const routes = [
 const router = createRouter({
   history: createWebHistory(),
   routes,
+})
+router.beforeEach((to, from, next) => {
+  const authStore = useAuthStore()
+
+  if (to.path.startsWith('/admin') && !authStore.user?.isAdmin) {
+    return next('/')
+  }
+
+  next()
 })
 
 export default router

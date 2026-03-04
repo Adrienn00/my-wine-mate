@@ -8,16 +8,25 @@
           <li><BaseButton to="/favorite" variant="simpleRose">Kedvencek</BaseButton></li>
           <li><BaseButton to="/preferences" variant="simpleRose">Bor preferenciák</BaseButton></li>
           <li><BaseButton to="/recommended" variant="simpleRose">Ajánlások</BaseButton></li>
-          <li><BaseButton to="/admin" variant="simpleRose">Admin</BaseButton></li>
+
+          <li v-if="authStore.user?.isAdmin">
+            <BaseButton to="/admin" variant="simpleRose">Admin</BaseButton>
+          </li>
         </ul>
       </div>
+
       <BaseButton variant="login">Kijelentkezés</BaseButton>
     </aside>
+
     <main class="flex-1 p-10 bg-red-900">
       <router-view />
     </main>
   </div>
 </template>
+
 <script setup>
 import BaseButton from '@/components/ui/BaseButton.vue'
+import { useAuthStore } from '@/stores/authStore'
+
+const authStore = useAuthStore()
 </script>
