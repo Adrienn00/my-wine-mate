@@ -49,10 +49,14 @@
 import { ref, computed } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import { onMounted } from 'vue'
 
 const profileStore = useProfileStore()
 const activeTab = ref('wines')
 
 const favoriteWines = computed(() => profileStore.favoriteWines)
 const favoriteRecipes = computed(() => profileStore.favoriteRecipes)
+onMounted(async () => {
+  await profileStore.fetchProfile()
+})
 </script>

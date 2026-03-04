@@ -8,29 +8,11 @@ export const useWinesStore = defineStore('wines', () => {
   const pendingWines = computed(() => wines.value.filter((w) => w && w.is_confirmed === false))
   const confirmedWines = computed(() => wines.value.filter((w) => w && w.is_confirmed === true))
 
-  async function getSelectedWine(id) {
-    try {
-      const selectedWine = response.data.find((wine) => wine._id === id)
-      if (selectedWine) {
-        wines.value = selectedWine
-        return selectedWine
-      } else {
-        console.warn('Wine not found with id:', id)
-        wines.value = null
-        return null
-      }
-    } catch (error) {
-      console.error('An error occurred while fetching wines:', error)
-      wines.value = null
-      return null
-    }
-  }
-
   async function getAllWines() {
     try {
       const response = await client.get('wines')
-      wines.value = response
-      return response
+      wines.value = Array.isArray(response) ? response : (response?.data ?? [])
+      return wines.value
     } catch (error) {
       console.error('An error occurred while fetching wines:', error)
       wines.value = []
@@ -38,19 +20,29 @@ export const useWinesStore = defineStore('wines', () => {
     }
   }
 
+  // EGY bor lekérése a backenden (ne a wines tömbből keresgélj)
+  async function getSelectedWine(id) {
+    try {
+      const response = await client.get(`wines/${id}`)
+      return response
+    } catch (error) {
+      console.error('An error occurred while fetching the selected wine:', error)
+      return null
+    }
+  }
+
   async function addRating(id, rating, comment) {
     try {
-      const response = await client.post(`wines/${id}/rating`, {
-        rating,
-        comment,
-      })
+      const response = await client.post(`wines/${id}/rating`, { rating, comment })
+
+      // frissítsük a listában is, ha benne van
       const index = wines.value.findIndex((w) => w._id === response._id)
-      if (index !== -1) {
-        wines.value[index] = response
-      }
+      if (index !== -1) wines.value[index] = response
+
       return response
     } catch (error) {
       console.error('Error while adding rating:', error)
+      return null
     }
   }
 
@@ -67,13 +59,9 @@ export const useWinesStore = defineStore('wines', () => {
 
   async function approveWine(id) {
     try {
-      const updatedWine = await client.put(`wines/${id}`, {
-        is_confirmed: true,
-      })
+      const updatedWine = await client.put(`wines/${id}`, { is_confirmed: true })
       const index = wines.value.findIndex((w) => w._id === id)
-      if (index !== -1) {
-        wines.value[index] = updatedWine
-      }
+      if (index !== -1) wines.value[index] = updatedWine
       return updatedWine
     } catch (error) {
       console.error('Error while approving wine:', error)
@@ -85,9 +73,7 @@ export const useWinesStore = defineStore('wines', () => {
     try {
       const updated = await client.put(`wines/${updatedWine._id}`, updatedWine)
       const index = wines.value.findIndex((w) => w._id === updated._id)
-      if (index !== -1) {
-        wines.value[index] = updated
-      }
+      if (index !== -1) wines.value[index] = updated
       return updated
     } catch (error) {
       console.error('Error while updating wine:', error)
@@ -99,11 +85,11 @@ export const useWinesStore = defineStore('wines', () => {
     try {
       await client.delete(`wines/${id}`)
       const index = wines.value.findIndex((w) => w._id === id)
-      if (index !== -1) {
-        wines.value.splice(index, 1)
-      }
+      if (index !== -1) wines.value.splice(index, 1)
+      return true
     } catch (error) {
       console.error('Error while deleting wine:', error)
+      return false
     }
   }
 
@@ -112,11 +98,11 @@ export const useWinesStore = defineStore('wines', () => {
     confirmedWines,
     pendingWines,
     getAllWines,
+    getSelectedWine,
     addRating,
     addNewWine,
     approveWine,
     updateWine,
     deleteWine,
-    getSelectedWine,
   }
 })

@@ -53,7 +53,7 @@ export const useProfileStore = defineStore('profile', () => {
         wineTypes: prefs.wineTypes || [],
         style: prefs.style || [],
         flavourProfile: prefs.flavourProfile || [],
-        regions: prefs.origin?.region ? [prefs.origin.region] : [],
+        regions: prefs.regions || [],
         alcoholLevels: prefs.alcoholLevels || [],
         foodPreferences: prefs.foodPreferences || [],
         wineYears: prefs.wineYears || '',
@@ -71,9 +71,24 @@ export const useProfileStore = defineStore('profile', () => {
 
   // --- PROFIL FRISSÍTÉS ---
   async function updateProfile(updatedData) {
+    console.log('UPDATE PROFILE payload:', updatedData)
     try {
       const updated = await client.put(`${API_BASE}/profile`, updatedData)
       auth.user = updated
+
+      // SZINKRONIZÁLJUK a selectedPreferences-t is
+      const prefs = updated.preferences || {}
+      selectedPreferences.value = {
+        wineTypes: prefs.wineTypes || [],
+        style: prefs.style || [],
+        flavourProfile: prefs.flavourProfile || [],
+        regions: prefs.regions || [],
+        alcoholLevels: prefs.alcoholLevels || [],
+        foodPreferences: prefs.foodPreferences || [],
+        wineYears: prefs.wineYears || '',
+        priceRanges: prefs.priceRanges || [],
+      }
+
       return updated
     } catch (err) {
       console.error('Error updating profile:', err)
