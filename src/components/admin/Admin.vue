@@ -11,7 +11,7 @@
     <BaseButton variant="adminFunctions" to="/admin/roles"> Jogosultságkezelés </BaseButton>
     <BaseButton variant="adminFunctions">OCR rendszer-kezelés</BaseButton>
     <BaseButton variant="adminFunctions">MI kezelés</BaseButton>
-    <BaseButton variant="adminFunctions">Rendszerstatisztika</BaseButton>
+    <BaseButton variant="adminFunctions" to="/admin/stats">Rendszerstatisztika</BaseButton>
   </div>
 </template>
 

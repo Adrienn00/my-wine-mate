@@ -17,10 +17,17 @@ export const useAdminStore = defineStore('admin', () => {
       users.value[index] = updated
     }
   }
+  const stats = ref(null)
+
+  async function fetchStats() {
+    stats.value = await client.get('users/stats')
+  }
 
   return {
     users,
     fetchUsers,
     updateUserRole,
+    fetchStats,
+    stats,
   }
 })
