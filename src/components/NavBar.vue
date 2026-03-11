@@ -14,6 +14,8 @@
         <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
           <!-- ha BE van jelentkezve -->
           <template v-if="isLoggedIn">
+            <NotificationDropdown />
+
             <BaseButton to="/profile" variant="login">Profilom</BaseButton>
             <BaseButton variant="login" @click="logoutUser">Kijelentkezés</BaseButton>
           </template>
@@ -28,23 +30,34 @@
     </div>
   </header>
 </template>
-
 <script setup>
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from './ui/BaseButton.vue'
 import { useAuthStore } from '@/stores/authStore'
+import { useProfileStore } from '@/stores/profileStore'
+import NotificationDropdown from './NotificationDropdown.vue'
 
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
+const profileStore = useProfileStore()
+
+const showNotifications = ref(false)
 
 // ha van token → bejelentkezett
 const isLoggedIn = computed(() => !!auth.token)
 
+// olvasatlan értesítések száma
+const unreadNotifications = computed(() => profileStore.notifications.filter((n) => !n.read).length)
+
+function toggleNotifications() {
+  showNotifications.value = !showNotifications.value
+}
+
 // kijelentkezés + visszairányítás
 function logoutUser() {
   auth.logout()
-  router.push('/') // vagy pl. '/login'
+  router.push('/')
 }
 </script>
