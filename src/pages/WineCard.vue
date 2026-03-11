@@ -27,13 +27,20 @@
 
         <div class="mt-6 space-y-4">
           <RatingDisplay :rating="averageRating" :notes="comments" />
-          <AddRatingForm @submit="handleNewRating" />
+
+          <AddRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
+
+          <p v-if="!profileStore.hasProfile" class="text-gray-400 italic">
+            Értékeléshez
+            <router-link to="/login" class="text-yellow-300 underline"> jelentkezz be </router-link
+            >.
+          </p>
         </div>
 
         <div class="flex space-x-5 mt-6">
           <BaseButton :to="backLink" variant="secondary">Vissza</BaseButton>
           <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
-          <BaseButton variant="secondary" @click="toggleFavorite">
+          <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
             {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
           </BaseButton>
         </div>
@@ -72,9 +79,17 @@ const isFavorite = computed(() => profileStore.isFavoriteWine(wine.value))
 
 const averageRating = computed(() => {
   const ratings = wine.value?.ratings || []
+
   if (!ratings.length) return 0
-  const total = ratings.reduce((sum, r) => sum + r.rating, 0)
-  return Number(total / ratings.length).toFixed(1)
+
+  const total = ratings.reduce((sum, r) => {
+    const rating = Number(r.rating)
+    return sum + (isNaN(rating) ? 0 : rating)
+  }, 0)
+
+  const avg = total / ratings.length
+
+  return isNaN(avg) ? 0 : avg.toFixed(1)
 })
 
 const comments = computed(() => {
