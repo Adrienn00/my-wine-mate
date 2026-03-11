@@ -67,10 +67,31 @@
       </div>
     </div>
   </div>
+
+  <!-- NOTIFICATIONS -->
+  <div
+    v-if="profileStore.profile?.notifications"
+    class="max-w-4xl mx-auto mt-8 bg-gray-900 rounded-lg shadow-lg p-6 border-2 text-yellow-100"
+  >
+    <h2 class="text-xl font-bold mb-4">Értesítések</h2>
+
+    <div
+      v-for="n in profileStore.profile.notifications"
+      :key="n._id"
+      class="bg-gray-800 p-3 rounded mb-3 flex items-center gap-2"
+    >
+      <span v-if="n.type === 'approved'" class="text-green-400">✔</span>
+      <span v-if="n.type === 'rejected'" class="text-red-400">✖</span>
+
+      <span>{{ n.message }}</span>
+    </div>
+
+    <div v-if="!profileStore.profile.notifications.length">Nincs még értesítés.</div>
+  </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
 import BaseInput from '../components/ui/BaseInput.vue'
@@ -82,6 +103,10 @@ const profileStore = useProfileStore()
 
 const isEditing = ref(false)
 const fileInput = ref(null)
+
+onMounted(() => {
+  profileStore.fetchProfile()
+})
 
 async function saveChanges() {
   await profileStore.updateProfile(authStore.user)
