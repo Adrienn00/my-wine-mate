@@ -8,6 +8,7 @@ export const useProfileStore = defineStore('profile', () => {
 
   const favoriteWines = ref([])
   const favoriteRecipes = ref([])
+  const notifications = ref([])
   const selectedPreferences = ref({
     wineTypes: [],
     style: [],
@@ -47,7 +48,7 @@ export const useProfileStore = defineStore('profile', () => {
       auth.user = data
       favoriteWines.value = data.favoriteWines || []
       favoriteRecipes.value = data.favoriteRecipes || []
-
+      notifications.value = data.notifications || []
       const prefs = data.preferences || {}
       selectedPreferences.value = {
         wineTypes: prefs.wineTypes || [],
@@ -168,6 +169,7 @@ export const useProfileStore = defineStore('profile', () => {
     error,
     favoriteWines,
     favoriteRecipes,
+    notifications,
     selectedPreferences,
     wineType,
     hasProfile,
