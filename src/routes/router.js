@@ -20,7 +20,7 @@ import AdminDatabaseManager from '../components/admin/AdminDatabaseManager.vue'
 import RecipeCard from '../pages/RecipeCard.vue'
 import AddNewRecipe from '../pages/AddNewRecipe.vue'
 import PendingItemsTabs from '../components/admin/PendingItemsTabs.vue'
-
+import UserRoleManager from '../components/admin/UserRoleManager.vue'
 const routes = [
   {
     path: '',
@@ -52,6 +52,7 @@ const routes = [
           { path: '/admin', component: Admin },
           { path: '/admin/pending', component: PendingItemsTabs },
           { path: '/admin/manager', component: AdminDatabaseManager },
+          { path: '/admin/roles', component: UserRoleManager },
         ],
       },
     ],
