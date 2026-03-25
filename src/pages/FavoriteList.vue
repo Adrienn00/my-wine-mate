@@ -21,10 +21,10 @@
       </div>
 
       <div v-if="activeTab === 'wines'">
-        <div v-if="favoriteWines.length">
-          <div v-for="wine in favoriteWines" :key="wine._id" class="mb-2 text-center">
-            <BaseButton :to="`/wine/${wine._id}?from=favorites`" variant="simple">
-              {{ wine.name }}
+        <div v-if="favoriteWines && favoriteWines.length">
+          <div v-for="wine in favoriteWines" :key="wine._id || wine" class="mb-2 text-center">
+            <BaseButton :to="`/wine/${wine._id || wine}?from=favorites`" variant="simple">
+              {{ wine.name || 'Bor részletei' }}
             </BaseButton>
           </div>
         </div>
@@ -32,10 +32,14 @@
       </div>
 
       <div v-else>
-        <div v-if="favoriteRecipes.length">
-          <div v-for="recipe in favoriteRecipes" :key="recipe.id" class="mb-2 text-center">
-            <BaseButton :to="`/recipe/${recipe.id}`" variant="simple">
-              {{ recipe.name }}
+        <div v-if="favoriteRecipes && favoriteRecipes.length">
+          <div
+            v-for="recipe in favoriteRecipes"
+            :key="recipe._id || recipe"
+            class="mb-2 text-center"
+          >
+            <BaseButton :to="`/recipe/${recipe._id || recipe}`" variant="simple">
+              {{ recipe.name || 'Recept megnyitása' }}
             </BaseButton>
           </div>
         </div>
@@ -46,17 +50,19 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
-import { onMounted } from 'vue'
 
 const profileStore = useProfileStore()
 const activeTab = ref('wines')
 
-const favoriteWines = computed(() => profileStore.favoriteWines)
-const favoriteRecipes = computed(() => profileStore.favoriteRecipes)
+// Biztosítjuk, hogy üres tömb legyen az alapértelmezett, ha még nem töltött be
+const favoriteWines = computed(() => profileStore.favoriteWines || [])
+const favoriteRecipes = computed(() => profileStore.favoriteRecipes || [])
+
 onMounted(async () => {
+  // A legutóbbi backend javításod után ez már a populate-olt adatokat fogja hozni
   await profileStore.fetchProfile()
 })
 </script>
