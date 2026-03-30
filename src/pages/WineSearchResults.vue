@@ -130,11 +130,17 @@ const sortedResults = computed(() => {
   if (sort.value === 'ratingDesc') {
     list.sort((a, b) => {
       const ratingA = a.ratings?.length
-        ? a.ratings.reduce((s, r) => s + (Number(r.rating) || 0), 0) / a.ratings.length
+        ? a.ratings.reduce((s, r) => {
+            const value = Number.isFinite(Number(r?.overall)) ? Number(r.overall) : Number(r?.rating)
+            return s + (Number.isFinite(value) ? value : 0)
+          }, 0) / a.ratings.length
         : 0
 
       const ratingB = b.ratings?.length
-        ? b.ratings.reduce((s, r) => s + (Number(r.rating) || 0), 0) / b.ratings.length
+        ? b.ratings.reduce((s, r) => {
+            const value = Number.isFinite(Number(r?.overall)) ? Number(r.overall) : Number(r?.rating)
+            return s + (Number.isFinite(value) ? value : 0)
+          }, 0) / b.ratings.length
         : 0
 
       return ratingB - ratingA

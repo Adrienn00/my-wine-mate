@@ -36,9 +36,14 @@ export const useWinesStore = defineStore('wines', () => {
     }
   }
 
-  async function addRating(id, rating, comment) {
+  async function addRating(id, ratingOrPayload, comment = '') {
     try {
-      const response = await client.post(`wines/${id}/rating`, { rating, comment })
+      const payload =
+        ratingOrPayload && typeof ratingOrPayload === 'object'
+          ? ratingOrPayload
+          : { rating: ratingOrPayload, comment }
+
+      const response = await client.post(`wines/${id}/rating`, payload)
 
       const index = wines.value.findIndex((w) => w._id === id)
 
@@ -49,6 +54,22 @@ export const useWinesStore = defineStore('wines', () => {
       return response
     } catch (error) {
       console.error('Error while adding rating:', error)
+      return null
+    }
+  }
+
+  async function deleteRating(id, ratingId) {
+    try {
+      const response = await client.delete(`wines/${id}/rating/${ratingId}`)
+
+      const index = wines.value.findIndex((w) => w._id === id)
+      if (index !== -1) {
+        wines.value[index] = response
+      }
+
+      return response
+    } catch (error) {
+      console.error('Error while deleting rating:', error)
       return null
     }
   }
@@ -108,6 +129,7 @@ export const useWinesStore = defineStore('wines', () => {
     getAllWines,
     getSelectedWine,
     addRating,
+    deleteRating,
     addNewWine,
     approveWine,
     updateWine,
