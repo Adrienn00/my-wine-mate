@@ -1,11 +1,15 @@
 <template>
   <div class="flex justify-center p-8">
     <div
-      class="w-full max-w-5xl bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-700 text-white"
+      class="glass-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
     >
-      <h2 class="text-3xl font-semibold mb-6 text-yellow-100">Adatbázis-kezelés</h2>
+      <div class="mb-4">
+        <BaseButton to="/admin" variant="secondary">Vissza</BaseButton>
+      </div>
 
-      <div class="flex space-x-4 mb-6">
+      <h2 class="mb-6 text-3xl font-semibold">Adatbázis-kezelés</h2>
+
+      <div class="mb-6 flex space-x-4">
         <BaseButton variant="secondary" @click="activeTab = 'wines'">Borok</BaseButton>
         <BaseButton variant="secondary" @click="activeTab = 'recipes'">Receptek</BaseButton>
       </div>

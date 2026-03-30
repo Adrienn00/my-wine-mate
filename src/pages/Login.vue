@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen w-full flex items-center justify-center bg">
+  <div class="flex min-h-screen w-full items-center justify-center px-4 py-10">
     <form
       @submit.prevent="loginUser"
-      class="w-full max-w-md flex flex-col gap-y-4 px-6 py-12 bg-gray-900 rounded-xl shadow-lg"
+      class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
     >
-      <h1 class="text-yellow-100 font-bold text-2xl text-center mb-4">Bejelentkezés</h1>
+      <h1 class="mb-5 text-center text-3xl font-semibold">Bejelentkezés</h1>
 
       <BaseInput id="email" label="E-mail" type="email" v-model="email" :error="emailError" />
 
@@ -16,13 +16,13 @@
         :error="passwordError"
       />
 
-      <div class="w-full text-right">
+      <div class="w-full text-right text-sm">
         <BaseButton to="/forgotPassword" variant="simple"> Elfelejtetted a jelszavad? </BaseButton>
       </div>
 
-      <BaseButton variant="secondary" type="submit" class="w-full mt-2">Bejelentkezés</BaseButton>
+      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Bejelentkezés</BaseButton>
 
-      <BaseButton to="/signup" variant="simple" class="mt-2 text-center text-sm">
+      <BaseButton to="/signup" variant="simple" class="mt-3 text-center text-sm">
         Regisztráció
       </BaseButton>
     </form>
@@ -48,14 +48,11 @@ async function loginUser() {
   passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
   if (emailError.value || passwordError.value) return
 
-  console.log('📨 [login] Sending credentials:', { email: email.value, password: password.value })
-
   try {
-    const response = await auth.login({
+    await auth.login({
       email: email.value,
       password: password.value,
     })
-    console.log('✅ [login] Login successful:', response)
 
     // Átirányítás profilra vagy főoldalra
     router.push('/')
@@ -65,10 +62,3 @@ async function loginUser() {
   }
 }
 </script>
-
-<style scoped>
-.bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

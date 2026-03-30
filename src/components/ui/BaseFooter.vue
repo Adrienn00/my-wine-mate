@@ -1,5 +1,5 @@
 <template>
-  <footer class="bg-gray-900 text-yellow-100 py-6 text-center">
-    <p>2025 My Wine Mate.</p>
+  <footer class="mt-12 border-t border-[var(--line)] bg-[rgba(255,247,238,0.95)] py-8 text-center">
+    <p class="text-sm tracking-wide text-[var(--text-muted)]">My Wine Mate • 2026 • 🍷</p>
   </footer>
 </template>

@@ -2,7 +2,7 @@
   <div>
     <table class="w-full table-auto border-collapse text-left">
       <thead>
-        <tr class="border-b border-gray-600 text-yellow-100">
+        <tr class="border-b border-[var(--line)] text-[var(--text-main)]">
           <th class="pb-2">Név</th>
           <th>Típus</th>
           <th>Stílus</th>
@@ -12,7 +12,11 @@
         </tr>
       </thead>
       <tbody>
-        <tr v-for="wine in paginatedWines" :key="wine._id" class="border-b border-gray-700">
+        <tr
+          v-for="wine in paginatedWines"
+          :key="wine._id"
+          class="border-b border-[var(--line)] hover:bg-[rgba(237,215,212,0.28)]"
+        >
           <td class="py-2">{{ wine.name }}</td>
           <td>{{ wine.type }}</td>
           <td>{{ wine.style }}</td>
@@ -26,19 +30,19 @@
       </tbody>
     </table>
 
-    <div class="flex justify-center items-center gap-4 mt-6">
+    <div class="mt-6 flex items-center justify-center gap-4">
       <button
-        @click="currentPage--"
         :disabled="currentPage === 1"
-        class="px-3 py-1 bg-gray-800 border border-gray-700 rounded"
+        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        @click="currentPage--"
       >
         ←
       </button>
-      <span class="text-sm text-gray-300"> {{ currentPage }} / {{ totalPages }} </span>
+      <span class="text-sm text-[var(--text-muted)]"> {{ currentPage }} / {{ totalPages }} </span>
       <button
-        @click="currentPage++"
         :disabled="currentPage === totalPages || totalPages === 0"
-        class="px-3 py-1 bg-gray-800 border border-gray-700 rounded"
+        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        @click="currentPage++"
       >
         →
       </button>

@@ -18,18 +18,23 @@ const props = defineProps({
   },
 })
 
-const baseClasses = 'rounded px-4 py-2 transition'
+const baseClasses =
+  'inline-flex items-center justify-center rounded-xl px-4 py-2 transition duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-[var(--gold)] focus-visible:ring-offset-transparent'
 
 const variantMap = {
-  primary: 'bg-gray-600 hover:bg-gray-500 rounded text-white',
-  secondary: 'bg-red-900 hover:bg-red-800 text-white',
+  primary:
+    'bg-[linear-gradient(135deg,var(--wine),var(--wine-soft))] text-[#fff7ef] font-semibold shadow-[0_10px_28px_rgba(122,32,56,0.28)] hover:brightness-110',
+  secondary:
+    'border border-[var(--line)] bg-[rgba(255,249,242,0.84)] text-[var(--text-main)] hover:bg-[rgba(243,232,220,0.9)]',
   login:
-    'hover:bg-red-800 text-yellow-100 border-2 border-red-900 bg-red-900 rounded-xl p-2 px-6 rounded',
-  simple: 'hover:underline text-yellow-100',
-  simpleRose: 'text-left w-full hover:text-red-200',
+    'rounded-lg bg-[var(--wine)] px-3 py-1.5 text-sm font-semibold text-[#fff7ef] shadow-[0_6px_16px_rgba(122,32,56,0.25)] hover:bg-[var(--wine-soft)]',
+  simple: 'px-2 py-1 rounded-md text-[var(--text-main)] hover:text-[var(--wine)]',
+  simpleRose:
+    'w-full justify-start rounded-lg border border-transparent px-3 py-2 text-left text-[var(--text-main)] hover:border-[var(--line)] hover:bg-[var(--rose)] hover:text-[var(--wine)]',
   adminFunctions:
-    'w-full text-center font-bold italic border-2 text-yellow-100 bg-gray-900 rounded-xl shadow-md p-4',
-  homepage: 'text-2xl font-playfair text-yellow-100 font-bold',
+    'w-full border border-[var(--line)] bg-[rgba(255,248,237,0.9)] p-4 text-center font-semibold italic text-[var(--text-main)] shadow-sm hover:bg-[rgba(243,232,220,0.9)]',
+  homepage:
+    'px-2 py-1 text-2xl font-semibold tracking-wide text-[var(--text-main)] hover:text-[var(--wine)]',
 }
 
 const variantClass = computed(() => `${baseClasses} ${variantMap[props.variant] || ''}`)

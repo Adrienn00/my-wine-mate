@@ -1,15 +1,17 @@
 <template>
-  <div v-if="wine" class="min-h-screen bg flex flex-col">
-    <main class="flex justify-start px-6 py-8 max-w-6xl mx-auto w-full">
-      <div class="text-left bg-gray-800 text-yellow-100 p-6 rounded max-w-2xl w-full space-y-4">
+  <div v-if="wine" class="min-h-screen px-4 py-8 md:px-8 md:py-12">
+    <main class="mx-auto flex w-full max-w-6xl justify-start">
+      <div
+        class="glass-panel w-full max-w-2xl space-y-4 rounded-2xl border border-[var(--line)] p-6 text-left text-[var(--text-main)]"
+      >
         <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
-        <p class="italic">{{ wine.winery }}</p>
+        <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
 
         <img
           v-if="wine.imageUrl"
           :src="wine.imageUrl"
           alt="Wine image"
-          class="w-full max-w-sm rounded shadow-md my-4"
+          class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
         />
 
         <p><strong>Leírás:</strong> {{ wine.description }}</p>
@@ -27,13 +29,21 @@
 
         <div class="mt-6 space-y-4">
           <RatingDisplay :rating="averageRating" :notes="comments" />
-          <AddRatingForm @submit="handleNewRating" />
+
+          <AddRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
+
+          <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
+            Értékeléshez
+            <router-link to="/login" class="text-[var(--wine)] underline">
+              jelentkezz be </router-link
+            >.
+          </p>
         </div>
 
-        <div class="flex space-x-5 mt-6">
+        <div class="mt-6 flex space-x-5">
           <BaseButton :to="backLink" variant="secondary">Vissza</BaseButton>
           <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
-          <BaseButton variant="secondary" @click="toggleFavorite">
+          <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
             {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
           </BaseButton>
         </div>
@@ -72,9 +82,17 @@ const isFavorite = computed(() => profileStore.isFavoriteWine(wine.value))
 
 const averageRating = computed(() => {
   const ratings = wine.value?.ratings || []
+
   if (!ratings.length) return 0
-  const total = ratings.reduce((sum, r) => sum + r.rating, 0)
-  return Number(total / ratings.length).toFixed(1)
+
+  const total = ratings.reduce((sum, r) => {
+    const rating = Number(r.rating)
+    return sum + (isNaN(rating) ? 0 : rating)
+  }, 0)
+
+  const avg = total / ratings.length
+
+  return isNaN(avg) ? 0 : avg.toFixed(1)
 })
 
 const comments = computed(() => {
@@ -107,10 +125,3 @@ const backLink = computed(() => {
   return map[from]
 })
 </script>
-
-<style scoped>
-.bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

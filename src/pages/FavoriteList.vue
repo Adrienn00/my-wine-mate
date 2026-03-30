@@ -1,11 +1,15 @@
 <template>
   <div class="flex justify-center p-8">
     <div
-      class="w-full max-w-5xl bg-gray-900 rounded-2xl shadow-lg p-8 border border-gray-700 text-white"
+      class="glass-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
     >
-      <h2 class="text-3xl font-semibold mb-6 text-yellow-100 text-center">Kedvenceid</h2>
+      <div class="mb-4">
+        <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+      </div>
 
-      <div class="flex space-x-4 mb-6 justify-center">
+      <h2 class="mb-6 text-center text-3xl font-semibold">Kedvenceid</h2>
+
+      <div class="mb-6 flex justify-center space-x-4">
         <BaseButton
           :variant="activeTab === 'wines' ? 'primary' : 'secondary'"
           @click="activeTab = 'wines'"
@@ -21,42 +25,48 @@
       </div>
 
       <div v-if="activeTab === 'wines'">
-        <div v-if="favoriteWines.length">
-          <div v-for="wine in favoriteWines" :key="wine._id" class="mb-2 text-center">
-            <BaseButton :to="`/wine/${wine._id}?from=favorites`" variant="simple">
-              {{ wine.name }}
+        <div v-if="favoriteWines && favoriteWines.length">
+          <div v-for="wine in favoriteWines" :key="wine._id || wine" class="mb-2 text-center">
+            <BaseButton :to="`/wine/${wine._id || wine}?from=favorites`" variant="simple">
+              {{ wine.name || 'Bor részletei' }}
             </BaseButton>
           </div>
         </div>
-        <p v-else class="text-gray-400 text-center">Nincs még kedvenc borod.</p>
+        <p v-else class="text-center text-[var(--text-muted)]">Nincs még kedvenc borod.</p>
       </div>
 
       <div v-else>
-        <div v-if="favoriteRecipes.length">
-          <div v-for="recipe in favoriteRecipes" :key="recipe.id" class="mb-2 text-center">
-            <BaseButton :to="`/recipe/${recipe.id}`" variant="simple">
-              {{ recipe.name }}
+        <div v-if="favoriteRecipes && favoriteRecipes.length">
+          <div
+            v-for="recipe in favoriteRecipes"
+            :key="recipe._id || recipe"
+            class="mb-2 text-center"
+          >
+            <BaseButton :to="`/recipe/${recipe._id || recipe}`" variant="simple">
+              {{ recipe.name || 'Recept megnyitása' }}
             </BaseButton>
           </div>
         </div>
-        <p v-else class="text-gray-400 text-center">Nincs még kedvenc recepted.</p>
+        <p v-else class="text-center text-[var(--text-muted)]">Nincs még kedvenc recepted.</p>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
-import { onMounted } from 'vue'
 
 const profileStore = useProfileStore()
 const activeTab = ref('wines')
 
-const favoriteWines = computed(() => profileStore.favoriteWines)
-const favoriteRecipes = computed(() => profileStore.favoriteRecipes)
+// Biztosítjuk, hogy üres tömb legyen az alapértelmezett, ha még nem töltött be
+const favoriteWines = computed(() => profileStore.favoriteWines || [])
+const favoriteRecipes = computed(() => profileStore.favoriteRecipes || [])
+
 onMounted(async () => {
+  // A legutóbbi backend javításod után ez már a populate-olt adatokat fogja hozni
   await profileStore.fetchProfile()
 })
 </script>

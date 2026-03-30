@@ -1,10 +1,10 @@
 <template>
-  <div class="min-h-screen w-full flex items-center justify-center bg">
+  <div class="flex min-h-screen w-full items-center justify-center px-4 py-10">
     <form
       @submit.prevent="signup"
-      class="w-full max-w-md flex flex-col gap-y-4 px-6 py-12 bg-gray-900 rounded-xl shadow-lg"
+      class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
     >
-      <h1 class="text-yellow-100 font-bold text-2xl text-center mb-4">Regisztráció</h1>
+      <h1 class="mb-5 text-center text-3xl font-semibold">Regisztráció</h1>
 
       <BaseInput
         id="email"
@@ -32,7 +32,7 @@
         <BaseButton to="/login" variant="simple"> Már regisztráltál? Jelentkezz be! </BaseButton>
       </div>
 
-      <BaseButton variant="secondary" type="submit" class="w-full mt-2">Regisztrálok</BaseButton>
+      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Regisztrálok</BaseButton>
     </form>
   </div>
 </template>
@@ -63,14 +63,8 @@ async function signup() {
 
   // Ha van bármilyen hiba, ne küldjük el
   if (emailError.value || passwordError.value || repeatedPasswordError.value) {
-    console.warn('⚠️ Hibás adatok, nem küldjük el a kérést.')
     return
   }
-
-  console.log('📨 Regisztráció indul a backend felé:', {
-    email: email.value,
-    password: password.value,
-  })
 
   try {
     await auth.register({
@@ -78,17 +72,9 @@ async function signup() {
       email: email.value,
       password: password.value,
     })
-    console.log('✅ Sikeres regisztráció:', auth.user)
     router.push('/login') // vagy mehet automatikusan bejelentkezés után pl. '/'
   } catch (err) {
     console.error('❌ Regisztrációs hiba:', err.message)
   }
 }
 </script>
-
-<style scoped>
-.bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

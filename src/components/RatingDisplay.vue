@@ -1,16 +1,18 @@
 <template>
-  <div class="bg-gray-800 text-white p-4 rounded-lg">
-    <p class="text-lg font-semibold mb-2">Értékelés: {{ rating }}/5</p>
+  <div
+    class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
+  >
+    <p class="mb-2 text-lg font-semibold">Értékelés: {{ rating }}/5</p>
 
-    <div class="flex gap-1 text-yellow-400 mb-3">
+    <div class="mb-3 flex gap-1 text-[var(--gold)]">
       <span v-for="i in 5" :key="i">
         <i :class="i <= Math.round(rating) ? 'fas fa-star' : 'far fa-star'"></i>
       </span>
     </div>
 
     <div v-if="notes?.length">
-      <p class="text-sm font-medium mb-1 text-gray-300">Megjegyzések:</p>
-      <ul class="list-disc ml-5 text-sm text-gray-400 space-y-1">
+      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Megjegyzések:</p>
+      <ul class="ml-5 list-disc space-y-1 text-sm text-[var(--text-muted)]">
         <li v-for="(note, index) in notes" :key="index">{{ note }}</li>
       </ul>
     </div>

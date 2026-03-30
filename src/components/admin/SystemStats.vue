@@ -1,38 +1,42 @@
 <template>
   <div class="max-w-6xl mx-auto px-4">
+    <div class="mb-4">
+      <BaseButton to="/admin" variant="secondary">Vissza</BaseButton>
+    </div>
+
     <div
-      class="text-center text-4xl mb-10 text-yellow-100 font-extrabold underline underline-offset-8"
+      class="mb-10 text-center text-4xl font-extrabold text-[var(--text-main)] underline underline-offset-8"
     >
       Rendszerstatisztika
     </div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-      <div class="bg-gray-900 p-6 rounded-xl text-center shadow-lg">
-        <div class="text-3xl font-bold text-yellow-200">
+      <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-center shadow-sm">
+        <div class="text-3xl font-bold text-[var(--wine)]">
           {{ adminStore.stats?.usersCount }}
         </div>
-        <div class="text-gray-400 mt-2">Felhasználók</div>
+        <div class="mt-2 text-[var(--text-muted)]">Felhasználók</div>
       </div>
 
-      <div class="bg-gray-900 p-6 rounded-xl text-center shadow-lg">
-        <div class="text-3xl font-bold text-yellow-200">
+      <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-center shadow-sm">
+        <div class="text-3xl font-bold text-[var(--wine)]">
           {{ adminStore.stats?.winesCount }}
         </div>
-        <div class="text-gray-400 mt-2">Borok</div>
+        <div class="mt-2 text-[var(--text-muted)]">Borok</div>
       </div>
 
-      <div class="bg-gray-900 p-6 rounded-xl text-center shadow-lg">
-        <div class="text-3xl font-bold text-yellow-200">
+      <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-center shadow-sm">
+        <div class="text-3xl font-bold text-[var(--wine)]">
           {{ adminStore.stats?.confirmedWinesCount }}
         </div>
-        <div class="text-gray-400 mt-2">Jóváhagyott borok</div>
+        <div class="mt-2 text-[var(--text-muted)]">Jóváhagyott borok</div>
       </div>
 
-      <div class="bg-gray-900 p-6 rounded-xl text-center shadow-lg">
-        <div class="text-3xl font-bold text-yellow-200">
+      <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-center shadow-sm">
+        <div class="text-3xl font-bold text-[var(--wine)]">
           {{ adminStore.stats?.pendingWinesCount }}
         </div>
-        <div class="text-gray-400 mt-2">Jóváhagyásra vár</div>
+        <div class="mt-2 text-[var(--text-muted)]">Jóváhagyásra vár</div>
       </div>
     </div>
   </div>
@@ -41,6 +45,7 @@
 <script setup>
 import { onMounted } from 'vue'
 import { useAdminStore } from '@/stores/adminStore'
+import BaseButton from '../ui/BaseButton.vue'
 
 const adminStore = useAdminStore()
 

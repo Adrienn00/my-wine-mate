@@ -4,19 +4,24 @@ import client from '../components/httpService/client'
 
 export const useWinesStore = defineStore('wines', () => {
   const wines = ref([])
+  const loading = ref(false)
 
   const pendingWines = computed(() => wines.value.filter((w) => w && w.is_confirmed === false))
   const confirmedWines = computed(() => wines.value.filter((w) => w && w.is_confirmed === true))
-
   async function getAllWines() {
     try {
+      loading.value = true
+
       const response = await client.get('wines')
       wines.value = Array.isArray(response) ? response : (response?.data ?? [])
+
       return wines.value
     } catch (error) {
       console.error('An error occurred while fetching wines:', error)
       wines.value = []
       return []
+    } finally {
+      loading.value = false
     }
   }
 
@@ -35,9 +40,11 @@ export const useWinesStore = defineStore('wines', () => {
     try {
       const response = await client.post(`wines/${id}/rating`, { rating, comment })
 
-      // frissítsük a listában is, ha benne van
-      const index = wines.value.findIndex((w) => w._id === response._id)
-      if (index !== -1) wines.value[index] = response
+      const index = wines.value.findIndex((w) => w._id === id)
+
+      if (index !== -1) {
+        wines.value[index] = response
+      }
 
       return response
     } catch (error) {
@@ -95,6 +102,7 @@ export const useWinesStore = defineStore('wines', () => {
 
   return {
     wines,
+    loading,
     confirmedWines,
     pendingWines,
     getAllWines,

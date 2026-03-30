@@ -1,14 +1,18 @@
 <template>
-  <div class="text-center text-4xl">Hozzád leginkább találó bor</div>
+  <div class="mx-auto mb-4 mt-2 max-w-xl text-left">
+    <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+  </div>
+
+  <div class="text-center text-4xl text-[var(--text-main)]">Hozzád leginkább találó bor</div>
 
   <div
-    class="flex flex-col justify-start gap-6 my-6 max-w-md mx-auto text-center font-bold italic border-2 text-yellow-100 max-h-150 overflow-auto bg-gray-900 rounded-lg shadow-lg p-8"
+    class="glass-panel my-6 mx-auto flex max-h-150 max-w-xl flex-col justify-start gap-6 overflow-auto rounded-2xl border border-[var(--line)] p-8 text-center text-[var(--text-main)]"
   >
     <!-- NÉZET MÓD -->
     <template v-if="!isEditing">
-      <div class="text-2xl">Elmentett preferenciáid</div>
+      <div class="text-2xl font-semibold">Elmentett preferenciáid</div>
 
-      <div class="text-left font-normal not-italic space-y-2">
+      <div class="space-y-2 text-left font-normal not-italic text-[var(--text-muted)]">
         <div><span class="font-bold">Bor típusa:</span> {{ pretty(prefs.wineTypes) }}</div>
         <div><span class="font-bold">Stílus:</span> {{ pretty(prefs.style) }}</div>
         <div><span class="font-bold">Ízprofil:</span> {{ pretty(prefs.flavourProfile) }}</div>
@@ -21,12 +25,14 @@
         <div><span class="font-bold">Bor év:</span> {{ prettyOne(prefs.wineYears) }}</div>
       </div>
 
-      <BaseButton variant="login" class="mx-auto mt-4" @click="startEdit"> Szerkesztés </BaseButton>
+      <BaseButton variant="primary" class="mx-auto mt-4" @click="startEdit">
+        Szerkesztés
+      </BaseButton>
     </template>
 
     <!-- SZERKESZTÉS MÓD -->
     <template v-else>
-      <div class="text-2xl">Preferenciák szerkesztése</div>
+      <div class="text-2xl font-semibold">Preferenciák szerkesztése</div>
 
       <div>Bor tipusa</div>
 
@@ -86,11 +92,11 @@
         placeholder="Válaszd ki a bor évet"
       />
 
-      <div class="flex gap-3 justify-center mt-2">
-        <BaseButton variant="login" @click="saveEdit" :disabled="saving">
+      <div class="mt-2 flex justify-center gap-3">
+        <BaseButton variant="primary" :disabled="saving" @click="saveEdit">
           {{ saving ? 'Mentés...' : 'Mentés' }}
         </BaseButton>
-        <BaseButton variant="secondary" @click="cancelEdit" :disabled="saving"> Mégse </BaseButton>
+        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit"> Mégse </BaseButton>
       </div>
     </template>
   </div>
@@ -99,28 +105,42 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
+import { useWinesStore } from '../stores/winesStore'
 import BaseMultiselect from '../components/ui/BaseMultiselect.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
+import { buildPreferenceOptionsFromWines } from '../services/preferenceOptions'
 
 const profileStore = useProfileStore()
+const winesStore = useWinesStore()
 
 // betöltés DB-ből
 onMounted(async () => {
-  await profileStore.fetchProfile()
+  await Promise.all([profileStore.fetchProfile(), winesStore.getAllWines()])
 })
-
-// opciók
-const wineTypeOptions = profileStore.wineType.wineTypes
-const wineStyleOptions = profileStore.wineType.style
-const flavourProfileOptions = profileStore.wineType.flavourProfile
-const regionsOptions = profileStore.wineType.regions
-const priceRangesOptions = profileStore.wineType.priceRanges
-const alcoholLevelsOptions = profileStore.wineType.alcoholLevels
-const foodTypePreferences = profileStore.wineType.foodPreferences
-const yearPreferences = profileStore.wineType.wineYears
 
 // a STORE-ban lévő (betöltött) preferenciák
 const prefs = computed(() => profileStore.selectedPreferences)
+
+const dynamicOptions = computed(() =>
+  buildPreferenceOptionsFromWines(winesStore.confirmedWines, profileStore.selectedPreferences)
+)
+
+const fallbackOptions = computed(() => profileStore.wineType || {})
+
+const pickOptions = (key) => {
+  const dynamic = dynamicOptions.value[key] || []
+  if (dynamic.length) return dynamic
+  return fallbackOptions.value[key] || []
+}
+
+const wineTypeOptions = computed(() => pickOptions('wineTypes'))
+const wineStyleOptions = computed(() => pickOptions('style'))
+const flavourProfileOptions = computed(() => pickOptions('flavourProfile'))
+const regionsOptions = computed(() => pickOptions('regions'))
+const priceRangesOptions = computed(() => pickOptions('priceRanges'))
+const alcoholLevelsOptions = computed(() => pickOptions('alcoholLevels'))
+const foodTypePreferences = computed(() => pickOptions('foodPreferences'))
+const yearPreferences = computed(() => pickOptions('wineYears'))
 
 const isEditing = ref(false)
 const saving = ref(false)
