@@ -26,27 +26,37 @@
       <div
         v-for="n in profileStore.notifications"
         :key="n._id"
-        class="flex items-center justify-between border-b border-[var(--line)] py-2 text-sm text-[var(--text-main)]"
+        class="border-b border-[var(--line)] py-2 text-sm text-[var(--text-main)]"
       >
-        <span>{{ n.message }}</span>
-
-        <button
-          class="ml-2 text-xs text-[var(--danger)] hover:brightness-125"
-          @click="deleteNotification(n._id)"
-        >
-          ✕
-        </button>
+        <p>{{ n.message }}</p>
+        <div class="mt-1 flex items-center justify-end gap-3">
+          <button
+            v-if="n.link"
+            class="text-xs font-medium text-[var(--wine)] underline hover:brightness-110"
+            @click="openNotificationLink(n.link)"
+          >
+            Megnézem
+          </button>
+          <button
+            class="text-xs text-[var(--danger)] hover:brightness-125"
+            @click="deleteNotification(n._id)"
+          >
+            ✕
+          </button>
+        </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
 import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
 import client from '@/components/httpService/client'
 import { useProfileStore } from '@/stores/profileStore'
 
 const profileStore = useProfileStore()
 const showNotifications = ref(false)
+const router = useRouter()
 
 const unreadNotifications = computed(() => profileStore.notifications.length)
 
@@ -66,5 +76,11 @@ async function deleteNotification(id) {
   } catch (error) {
     console.error('Notification delete error:', error)
   }
+}
+
+function openNotificationLink(link) {
+  if (!link) return
+  showNotifications.value = false
+  router.push(link)
 }
 </script>

@@ -73,17 +73,39 @@
           </div>
         </section>
 
-        <div class="mt-6 space-y-4">
-          <RatingDisplay :rating="averageRating" :notes="comments" />
+        <div class="mt-6 space-y-3">
+          <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2" open>
+            <summary class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]">
+              Közösségi értékelések
+            </summary>
+            <div class="px-2 pb-2 pt-3">
+              <RatingDisplay
+                :rating="averageRating"
+                :notes="comments"
+                :comment-entries="commentEntries"
+                :criteria-averages="criteriaAverages"
+                :criteria-labels="ratingCriteriaLabels"
+                :is-admin="isAdmin"
+                @delete-comment="handleDeleteComment"
+              />
+            </div>
+          </details>
 
-          <AddRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
+          <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2">
+            <summary class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]">
+              Új értékelés írása
+            </summary>
+            <div class="px-2 pb-2 pt-3">
+              <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
 
-          <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
-            Értékeléshez
-            <router-link to="/login" class="text-[var(--wine)] underline">
-              jelentkezz be </router-link
-            >.
-          </p>
+              <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
+                Értékeléshez
+                <router-link to="/login" class="text-[var(--wine)] underline">
+                  jelentkezz be </router-link
+                >.
+              </p>
+            </div>
+          </details>
         </div>
 
         <div class="mt-6 flex space-x-5">
@@ -108,7 +130,8 @@ import client from '../components/httpService/client'
 
 import BaseButton from '../components/ui/BaseButton.vue'
 import RatingDisplay from '../components/RatingDisplay.vue'
-import AddRatingForm from '../components/AddRatingForm.vue'
+import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
+import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
 const props = defineProps({
   wine: Object,
 })
@@ -130,6 +153,7 @@ const wineId = computed(() => {
   return wine.value?._id || props.wine?._id || route.params.id
 })
 const isLoggedIn = computed(() => Boolean(authStore.token))
+const isAdmin = computed(() => Boolean(authStore.user?.isAdmin))
 
 const isFavorite = computed(() => profileStore.isFavoriteWine(wine.value))
 
@@ -139,18 +163,55 @@ const averageRating = computed(() => {
   if (!ratings.length) return 0
 
   const total = ratings.reduce((sum, r) => {
-    const rating = Number(r.rating)
+    const rating = getOverallRatingValue(r)
     return sum + (isNaN(rating) ? 0 : rating)
   }, 0)
 
   const avg = total / ratings.length
 
-  return isNaN(avg) ? 0 : avg.toFixed(1)
+  return isNaN(avg) ? 0 : Number(avg.toFixed(1))
+})
+
+const criteriaAverages = computed(() => {
+  const ratings = wine.value?.ratings || []
+  const output = {}
+
+  for (const criterion of WINE_RATING_CRITERIA) {
+    const values = ratings
+      .map((entry) => Number(entry?.criteria?.[criterion.key]))
+      .filter((value) => Number.isFinite(value))
+
+    if (!values.length) continue
+
+    const average = values.reduce((sum, value) => sum + value, 0) / values.length
+    output[criterion.key] = Number(average.toFixed(1))
+  }
+
+  return output
+})
+
+const ratingCriteriaLabels = computed(() => {
+  return WINE_RATING_CRITERIA.reduce((acc, criterion) => {
+    acc[criterion.key] = criterion.label
+    return acc
+  }, {})
 })
 
 const comments = computed(() => {
   const ratings = wine.value?.ratings || []
   return ratings.map((r) => r.comment).filter(Boolean)
+})
+
+const commentEntries = computed(() => {
+  const ratings = wine.value?.ratings || []
+  return ratings
+    .filter((r) => String(r?.comment || "").trim())
+    .map((r) => ({
+      id: String(r?.ratingId || r?._id || '').trim(),
+      text: String(r.comment || "").trim(),
+      author: String(r?.userName || "").trim() || "Névtelen",
+      createdAt: r?.createdAt || null,
+    }))
 })
 
 const sortedPurchaseOptions = computed(() => {
@@ -220,9 +281,21 @@ onMounted(async () => {
   await fetchLiveOffers()
 })
 
-async function handleNewRating({ rating, comment }) {
+async function handleNewRating({ criteria, comment }) {
   try {
-    await winesStore.addRating(wine.value._id, rating, comment)
+    await winesStore.addRating(wine.value._id, { criteria, comment })
+  } catch (error) {
+    console.error(error)
+  }
+}
+
+async function handleDeleteComment(entry) {
+  if (!isAdmin.value || !entry?.id || !wine.value?._id) return
+  const ok = window.confirm('Biztosan törölni szeretnéd ezt a hozzászólást?')
+  if (!ok) return
+
+  try {
+    await winesStore.deleteRating(wine.value._id, entry.id)
   } catch (error) {
     console.error(error)
   }
