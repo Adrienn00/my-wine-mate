@@ -34,7 +34,7 @@
       </div>
 
       <div class="mt-8 text-center">
-        <BaseButton variant="secondary" @click="isEditing = true"> Szerkesztés </BaseButton>
+        <BaseButton variant="secondary" @click="startEdit"> Szerkesztés </BaseButton>
       </div>
     </div>
 
@@ -42,27 +42,28 @@
     <div v-else>
       <div class="flex flex-col items-center mb-8">
         <img
-          :src="authStore.user.img || avatar"
+          :src="editForm.img || authStore.user.img || avatar"
           alt="Profilkép"
           class="mb-5 h-32 w-32 cursor-pointer rounded-full border-4 border-[var(--wine-soft)]"
           @click="triggerFileInput"
         />
         <input
-          type="file"
           ref="fileInput"
+          type="file"
           accept="image/*"
-          @change="handleImageUpload"
           class="hidden"
+          @change="handleImageUpload"
         />
+        <p v-if="uploadError" class="mt-2 text-sm text-[var(--danger)]">{{ uploadError }}</p>
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <BaseInput label="Keresztnév" v-model="authStore.user.firstName" />
-        <BaseInput label="Vezetéknév" v-model="authStore.user.lastName" />
-        <BaseInput label="Email" type="email" v-model="authStore.user.email" />
-        <BaseInput label="Telefonszám" v-model="authStore.user.phoneNumber" />
-        <BaseInput label="Lokáció" v-model="authStore.user.location" />
-        <BaseInput label="Irányítószám" v-model="authStore.user.postalCode" />
+        <BaseInput v-model="editForm.firstName" label="Keresztnév" />
+        <BaseInput v-model="editForm.lastName" label="Vezetéknév" />
+        <BaseInput v-model="editForm.email" type="email" label="Email" />
+        <BaseInput v-model="editForm.phoneNumber" label="Telefonszám" />
+        <BaseInput v-model="editForm.location" label="Lokáció" />
+        <BaseInput v-model="editForm.postalCode" label="Irányítószám" />
       </div>
 
       <div class="mt-8 space-x-4 text-center">
@@ -107,13 +108,46 @@ const profileStore = useProfileStore()
 
 const isEditing = ref(false)
 const fileInput = ref(null)
+const uploadError = ref('')
+const editForm = ref({
+  firstName: '',
+  lastName: '',
+  email: '',
+  phoneNumber: '',
+  location: '',
+  postalCode: '',
+  img: '',
+})
 
 onMounted(() => {
   profileStore.fetchProfile()
 })
 
+function mapUserToEditForm(user = {}) {
+  return {
+    firstName: user.firstName || '',
+    lastName: user.lastName || '',
+    email: user.email || '',
+    phoneNumber: user.phoneNumber || '',
+    location: user.location || '',
+    postalCode: user.postalCode || '',
+    img: user.img || '',
+  }
+}
+
+function startEdit() {
+  uploadError.value = ''
+  editForm.value = mapUserToEditForm(authStore.user)
+  isEditing.value = true
+}
+
 async function saveChanges() {
-  await profileStore.updateProfile(authStore.user)
+  const payload = mapUserToEditForm(editForm.value)
+  const updated = await profileStore.updateProfile(payload)
+  if (!updated) {
+    alert('Nem sikerült menteni a profil módosításait.')
+    return
+  }
   isEditing.value = false
 }
 
@@ -122,12 +156,21 @@ function triggerFileInput() {
 }
 
 function handleImageUpload(event) {
+  uploadError.value = ''
   const file = event.target.files[0]
   if (!file) return
+  if (!file.type.startsWith('image/')) {
+    uploadError.value = 'Csak képfájl tölthető fel.'
+    return
+  }
+  if (file.size > 2 * 1024 * 1024) {
+    uploadError.value = 'A kép mérete maximum 2 MB lehet.'
+    return
+  }
 
   const reader = new FileReader()
   reader.onload = (e) => {
-    authStore.user.img = e.target.result
+    editForm.value.img = e.target.result
   }
   reader.readAsDataURL(file)
 }
