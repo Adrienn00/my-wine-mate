@@ -1,21 +1,27 @@
 <template>
-  <div class="p-6">
-    <h2 class="text-2xl font-semibold text-yellow-100 mb-6 text-center">Ajánlott borok számodra</h2>
+  <div class="mx-auto max-w-6xl p-6">
+    <div class="mb-4">
+      <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+    </div>
 
-    <div v-if="loading" class="text-white text-center mt-4">Betöltés...</div>
+    <h2 class="mb-6 text-center text-3xl font-semibold text-[var(--text-main)]">
+      Ajánlott borok számodra
+    </h2>
+
+    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Betöltés...</div>
 
     <div
       v-else-if="recommendedWines.length"
-      class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
+      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
     >
       <div
         v-for="wine in recommendedWines"
         :key="wine._id"
-        class="relative bg-gray-800 text-white p-4 rounded-lg shadow-md border border-gray-400"
+        class="glass-panel relative rounded-xl border border-[var(--line)] p-4 text-[var(--text-main)]"
       >
         <div
           v-if="wine.matchPercent >= 80"
-          class="absolute top-2 right-2 bg-yellow-400 text-black text-xs px-2 py-1 rounded font-semibold"
+          class="absolute top-2 right-2 rounded bg-[var(--gold)] px-2 py-1 text-xs font-semibold text-[#2d1f1c]"
         >
           Best Match
         </div>
@@ -24,7 +30,7 @@
           {{ wine.name }}
         </BaseButton>
 
-        <div class="mt-3 text-sm text-gray-300 space-y-1">
+        <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
           <div>
             <span class="font-semibold">Match:</span>
             {{ wine.matchPercent }}%
@@ -50,7 +56,7 @@
             {{ wine.priceRange || '—' }}
           </div>
 
-          <div v-if="wine.reasons?.length" class="pt-1 text-xs text-yellow-200">
+          <div v-if="wine.reasons?.length" class="pt-1 text-xs text-[var(--wine)]">
             <span class="font-semibold">Miért ajánlott:</span>
             {{ wine.reasons.slice(0, 2).join(' • ') }}
           </div>
@@ -58,7 +64,7 @@
       </div>
     </div>
 
-    <div v-else class="text-white text-center mt-4">
+    <div v-else class="mt-4 text-center text-[var(--text-main)]">
       <p>Nincs elérhető ajánlás a megadott preferenciák alapján.</p>
     </div>
   </div>

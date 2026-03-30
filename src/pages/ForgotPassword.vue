@@ -1,10 +1,8 @@
 <template>
-  <div class="min-h-screen bg text-white flex items-center justify-center px-4">
-    <div class="w-full max-w-md bg-gray-900 p-8 rounded shadow-md">
-      <h2 class="text-3xl font-light text-yellow-100 mb-6 text-center">
-        Elfelejtetted a jelszavad?
-      </h2>
-      <p class="text-sm text-gray-400 mb-6 text-center">
+  <div class="flex min-h-screen items-center justify-center px-4 py-10">
+    <div class="glass-panel w-full max-w-md rounded-2xl p-8 shadow-xl">
+      <h2 class="mb-6 text-center text-3xl font-semibold">Elfelejtetted a jelszavad?</h2>
+      <p class="mb-6 text-center text-sm text-[var(--text-muted)]">
         Add meg az e-mail címed, és küldünk egy visszaállító linket.
       </p>
 
@@ -20,7 +18,7 @@
           />
         </div>
 
-        <BaseButton variant="secondary" type="submit"> Küldés </BaseButton>
+        <BaseButton variant="primary" type="submit"> Küldés </BaseButton>
       </form>
 
       <div class="text-sm text-center mt-6">
@@ -42,9 +40,3 @@ function handleSubmit() {
   email.value = ''
 }
 </script>
-<style scoped>
-.bg {
-  background-image: url('../assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

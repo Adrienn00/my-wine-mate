@@ -1,17 +1,19 @@
 <template>
-  <div class="min-h-screen bg flex flex-col">
-    <main class="flex flex-1 justify-start px-6 py-8 max-w-6xl mx-auto w-full">
-      <div v-if="loading" class="text-yellow-100 animate-pulse text-xl">Recept betöltése...</div>
+  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
+    <main class="mx-auto flex w-full max-w-6xl flex-1 justify-start">
+      <div v-if="loading" class="animate-pulse text-xl font-medium text-[var(--text-main)]">
+        Recept betöltése...
+      </div>
 
       <div
         v-else-if="currentRecipe"
-        class="text-left bg-gray-800 text-yellow-100 p-6 rounded-xl shadow-2xl max-w-md w-full border border-gray-700"
+        class="glass-panel w-full max-w-2xl rounded-2xl border border-[var(--line)] p-6 text-left text-[var(--text-main)] shadow-lg"
       >
-        <h3 class="text-3xl font-bold mb-4 text-orange-200">{{ currentRecipe.name }}</h3>
+        <h3 class="mb-4 text-3xl font-bold text-[var(--wine)]">{{ currentRecipe.name }}</h3>
 
         <div v-if="currentRecipe.ingredients && currentRecipe.ingredients.length" class="mb-4">
           <strong class="text-lg">Hozzávalók:</strong>
-          <p class="text-gray-300 mt-1">
+          <p class="mt-1 text-[var(--text-muted)]">
             {{
               Array.isArray(currentRecipe.ingredients)
                 ? currentRecipe.ingredients.join(', ')
@@ -21,12 +23,12 @@
         </div>
 
         <div class="mb-6">
-          <strong class="text-lg block mb-2 border-b border-gray-600 pb-1">Elkészítés:</strong>
+          <strong class="mb-2 block border-b border-[var(--line)] pb-1 text-lg">Elkészítés:</strong>
 
           <div v-if="currentRecipe.instructions && currentRecipe.instructions.length">
             <ol
               v-if="Array.isArray(currentRecipe.instructions)"
-              class="list-decimal list-inside space-y-2 text-gray-300"
+              class="list-inside list-decimal space-y-2 text-[var(--text-muted)]"
             >
               <li
                 v-for="(step, index) in currentRecipe.instructions"
@@ -36,18 +38,18 @@
                 {{ step }}
               </li>
             </ol>
-            <p v-else class="text-gray-300 italic">{{ currentRecipe.instructions }}</p>
+            <p v-else class="italic text-[var(--text-muted)]">{{ currentRecipe.instructions }}</p>
           </div>
 
-          <p v-else class="text-gray-500 italic">Nincs elkészítési útmutató megadva.</p>
+          <p v-else class="italic text-[var(--text-muted)]">Nincs elkészítési útmutató megadva.</p>
         </div>
 
-        <div class="mt-8 pt-6 border-t border-gray-700 space-y-6">
+        <div class="mt-8 space-y-6 border-t border-[var(--line)] pt-6">
           <RatingDisplay :rating="Number(averageRating)" :notes="comments" />
           <AddRatingForm @submit="handleNewRating" />
         </div>
 
-        <div class="flex flex-wrap gap-3 mt-8">
+        <div class="mt-8 flex flex-wrap gap-3">
           <BaseButton to="/recipes" variant="secondary">Vissza</BaseButton>
           <BaseButton to="/foodpairing" variant="secondary">Bor ajánló</BaseButton>
           <BaseButton :variant="isFavorite ? 'primary' : 'secondary'" @click="toggleFavorite">
@@ -56,7 +58,10 @@
         </div>
       </div>
 
-      <div v-else class="text-red-400 bg-gray-800 p-6 rounded">
+      <div
+        v-else
+        class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.92)] p-6 text-[var(--danger)]"
+      >
         A recept nem található vagy hiba történt a betöltés közben.
       </div>
     </main>
@@ -144,11 +149,3 @@ function toggleFavorite() {
   }
 }
 </script>
-
-<style scoped>
-.bg {
-  background-image: url('/src/assets/images/bgfood.jpg');
-  background-size: cover;
-  background-position: center;
-}
-</style>

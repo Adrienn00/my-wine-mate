@@ -1,8 +1,10 @@
 <template>
-  <div class="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-lg p-8 border-2 text-yellow-100">
-    <h2 class="text-3xl font-semibold mb-8 text-center">Jóváhagyásra váró receptek</h2>
+  <div
+    class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
+  >
+    <h2 class="mb-8 text-center text-3xl font-semibold">Jóváhagyásra váró receptek</h2>
 
-    <div v-if="pendingRecipes.length === 0" class="text-gray-400 text-center">
+    <div v-if="pendingRecipes.length === 0" class="text-center text-[var(--text-muted)]">
       Nincs jóváhagyásra váró recept.
     </div>
 
@@ -10,7 +12,7 @@
       <li
         v-for="recipe in pendingRecipes"
         :key="recipe.id"
-        class="bg-gray-800 p-6 rounded-lg shadow-md border"
+        class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-6 shadow-sm"
       >
         <div v-if="editId === recipe.id" class="space-y-4">
           <BaseInput

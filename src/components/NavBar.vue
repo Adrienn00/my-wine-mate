@@ -1,9 +1,9 @@
 <template>
-  <header class="bg-gray-800 p-4">
-    <div class="max-w-6xl mx-auto flex justify-between items-center">
+  <header :class="headerClass">
+    <div class="mx-auto flex max-w-6xl items-center justify-between rounded-2xl px-3 py-2">
       <BaseButton to="/" variant="homepage">MyWineMate</BaseButton>
 
-      <nav class="space-x-4 font-bold">
+      <nav class="flex items-center gap-2 font-semibold">
         <BaseButton v-if="route.path !== '/'" to="/" variant="simple">Kezdőlap</BaseButton>
         <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="simple"
           >Receptek</BaseButton
@@ -15,9 +15,8 @@
           <!-- ha BE van jelentkezve -->
           <template v-if="isLoggedIn">
             <NotificationDropdown />
-
             <BaseButton to="/profile" variant="login">Profilom</BaseButton>
-            <BaseButton variant="login" @click="logoutUser">Kijelentkezés</BaseButton>
+            <BaseButton variant="secondary" @click="logoutUser">Kijelentkezés</BaseButton>
           </template>
 
           <!-- ha NINCS bejelentkezve -->
@@ -31,29 +30,49 @@
   </header>
 </template>
 <script setup>
-import { computed, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from './ui/BaseButton.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { useProfileStore } from '@/stores/profileStore'
 import NotificationDropdown from './NotificationDropdown.vue'
 
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
-const profileStore = useProfileStore()
-
-const showNotifications = ref(false)
+const isNavHidden = ref(false)
+const isAtTop = ref(true)
+let lastScrollY = 0
 
 // ha van token → bejelentkezett
 const isLoggedIn = computed(() => !!auth.token)
 
-// olvasatlan értesítések száma
-const unreadNotifications = computed(() => profileStore.notifications.filter((n) => !n.read).length)
+const headerClass = computed(() => {
+  const topMood = route.path === '/' && isAtTop.value
+  return [
+    'fixed top-3 left-1/2 z-40 w-[calc(100%-1.5rem)] max-w-6xl -translate-x-1/2 border border-[var(--line)] backdrop-blur-md transition-all duration-300',
+    topMood
+      ? 'bg-[rgba(255,248,239,0.78)] shadow-[0_14px_34px_rgba(96,54,33,0.16)]'
+      : 'bg-[rgba(252,246,238,0.93)] shadow-[0_10px_24px_rgba(96,54,33,0.18)]',
+    isNavHidden.value ? '-translate-y-24 opacity-0' : 'translate-y-0 opacity-100',
+  ]
+})
 
-function toggleNotifications() {
-  showNotifications.value = !showNotifications.value
+function onScroll() {
+  const currentY = window.scrollY
+  isAtTop.value = currentY < 24
+  const scrollingDown = currentY > lastScrollY
+  isNavHidden.value = currentY > 140 && scrollingDown
+  lastScrollY = currentY
 }
+
+onMounted(() => {
+  lastScrollY = window.scrollY
+  window.addEventListener('scroll', onScroll, { passive: true })
+})
+
+onBeforeUnmount(() => {
+  window.removeEventListener('scroll', onScroll)
+})
 
 // kijelentkezés + visszairányítás
 function logoutUser() {

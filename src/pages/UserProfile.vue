@@ -1,19 +1,23 @@
 <template>
   <!-- BETÖLTÉS -->
-  <div v-if="!authStore.user" class="text-center text-yellow-100 mt-10">Betöltés...</div>
+  <div v-if="!authStore.user" class="mt-10 text-center text-[var(--text-main)]">Betöltés...</div>
 
   <!-- PROFIL -->
   <div
     v-else
-    class="max-w-4xl mx-auto bg-gray-900 rounded-lg shadow-lg p-8 border-2 text-yellow-100"
+    class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
   >
+    <div class="mb-4">
+      <BaseButton to="/" variant="secondary">Vissza</BaseButton>
+    </div>
+
     <!-- NÉZET MÓD -->
     <div v-if="!isEditing">
       <div class="flex flex-col items-center mb-8">
         <img
           :src="authStore.user.img || avatar"
           alt="Profilkép"
-          class="w-32 h-32 rounded-full border-4 border-rose-500 mb-5"
+          class="mb-5 h-32 w-32 rounded-full border-4 border-[var(--wine-soft)]"
         />
         <h3 class="text-2xl font-bold">
           {{ authStore.user.firstName }} {{ authStore.user.lastName }}
@@ -40,7 +44,7 @@
         <img
           :src="authStore.user.img || avatar"
           alt="Profilkép"
-          class="w-32 h-32 rounded-full border-4 border-rose-500 mb-5 cursor-pointer"
+          class="mb-5 h-32 w-32 cursor-pointer rounded-full border-4 border-[var(--wine-soft)]"
           @click="triggerFileInput"
         />
         <input
@@ -61,9 +65,9 @@
         <BaseInput label="Irányítószám" v-model="authStore.user.postalCode" />
       </div>
 
-      <div class="mt-8 text-center space-x-4">
+      <div class="mt-8 space-x-4 text-center">
         <BaseButton variant="secondary" @click="saveChanges"> Mentés </BaseButton>
-        <BaseButton variant="danger" @click="isEditing = false"> Mégse </BaseButton>
+        <BaseButton variant="secondary" @click="isEditing = false"> Mégse </BaseButton>
       </div>
     </div>
   </div>
@@ -71,17 +75,17 @@
   <!-- NOTIFICATIONS -->
   <div
     v-if="profileStore.profile?.notifications"
-    class="max-w-4xl mx-auto mt-8 bg-gray-900 rounded-lg shadow-lg p-6 border-2 text-yellow-100"
+    class="glass-panel mx-auto mt-8 max-w-4xl rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)]"
   >
     <h2 class="text-xl font-bold mb-4">Értesítések</h2>
 
     <div
       v-for="n in profileStore.profile.notifications"
       :key="n._id"
-      class="bg-gray-800 p-3 rounded mb-3 flex items-center gap-2"
+      class="mb-3 flex items-center gap-2 rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.88)] p-3"
     >
-      <span v-if="n.type === 'approved'" class="text-green-400">✔</span>
-      <span v-if="n.type === 'rejected'" class="text-red-400">✖</span>
+      <span v-if="n.type === 'approved'" class="text-green-600">✔</span>
+      <span v-if="n.type === 'rejected'" class="text-[var(--danger)]">✖</span>
 
       <span>{{ n.message }}</span>
     </div>

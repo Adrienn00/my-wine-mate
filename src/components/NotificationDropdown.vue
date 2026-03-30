@@ -1,35 +1,38 @@
 <template>
   <div class="relative inline-block">
-    <div class="text-white text-xl cursor-pointer" @click="toggleNotifications">
+    <button
+      class="cursor-pointer rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.88)] px-3 py-1.5 text-xl shadow-[0_8px_20px_rgba(122,32,56,0.14)]"
+      @click="toggleNotifications"
+    >
       🔔
       <span
         v-if="unreadNotifications > 0"
-        class="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full px-2"
+        class="absolute -right-2 -top-2 rounded-full bg-[var(--danger)] px-2 text-xs text-white"
       >
         {{ unreadNotifications }}
       </span>
-    </div>
+    </button>
 
     <div
       v-if="showNotifications"
-      class="absolute right-0 mt-2 w-72 bg-gray-900 border border-gray-700 rounded-lg shadow-lg p-3 z-50"
+      class="glass-panel absolute right-0 z-50 mt-2 w-80 rounded-xl p-3 shadow-lg"
     >
-      <div class="text-yellow-100 font-bold mb-2">Értesítések</div>
+      <div class="mb-2 font-semibold text-[var(--text-main)]">Értesítések</div>
 
-      <div v-if="profileStore.notifications.length === 0" class="text-gray-400 text-sm">
+      <div v-if="profileStore.notifications.length === 0" class="text-sm text-[var(--text-muted)]">
         Nincs értesítés
       </div>
 
       <div
         v-for="n in profileStore.notifications"
         :key="n._id"
-        class="flex justify-between items-center text-sm text-gray-200 border-b border-gray-700 py-2"
+        class="flex items-center justify-between border-b border-[var(--line)] py-2 text-sm text-[var(--text-main)]"
       >
         <span>{{ n.message }}</span>
 
         <button
+          class="ml-2 text-xs text-[var(--danger)] hover:brightness-125"
           @click="deleteNotification(n._id)"
-          class="text-red-400 hover:text-red-200 text-xs ml-2"
         >
           ✕
         </button>

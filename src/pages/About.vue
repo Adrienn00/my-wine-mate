@@ -1,37 +1,26 @@
 <template>
-  <div class="bg">
-    <div
-      class="min-h-screen max-w-6xl mx-auto px-6 py-16 text-yellow-100 flex flex-col lg:flex-row items-center gap-12"
-    >
-      <div class="lg:w-1/2">
-        <h1 class="text-4xl font-light mb-6">Rólunk</h1>
-        <p class="mb-4">
-          A <strong>My Wine Mate</strong> egy államvizsga projekt, amit egyedül készítettem. Az
-          ötlet a vendéglátásban szerzett tapasztalataimból született: láttam, hogy sokan
-          bizonytalanok, amikor bort kell választani – legyen az étkezéshez, ajándékba vagy egy esti
-          beszélgetéshez.
+  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
+    <div class="glass-panel hero-sheen mx-auto max-w-5xl rounded-2xl p-6 md:p-10">
+      <h1 class="mb-6 text-4xl font-semibold md:text-5xl">Rólunk</h1>
+      <div class="space-y-4 text-[var(--text-muted)]">
+        <p>
+          A <strong class="text-[var(--text-main)]">My Wine Mate</strong> egy államvizsga projekt,
+          ami azért készült, hogy a borválasztás ne stressz legyen, hanem élmény.
         </p>
-        <p class="mb-4">
-          Ezt felismerve döntöttem úgy, hogy egy olyan webes alkalmazást hozok létre, ami segít
-          eligazodni a borok világában – egyszerű, gyors és felhasználóbarát módon.
+        <p>
+          A koncepció a vendéglátásból jött: sokan bizonytalanok, amikor bort kell választani
+          vacsorához, ajándékhoz vagy egy esti beszélgetéshez.
         </p>
-        <p class="mb-4">
-          A célom, hogy megkönnyítsem a döntést mindazok számára, akik szeretnének jobban eligazodni
-          a borok között, de nem rendelkeznek mélyebb szakmai ismeretekkel.
+        <p>
+          A célom egy gyors, közérthető és modern webapp, ami segít megtalálni a hozzád legjobban
+          illő bort.
         </p>
-        <p class="mb-4">
-          A My Wine Mate nem csupán egy kereső – hanem egy társ a választásban. A jövőben fotóalapú
-          keresés, adatbázis és bővített borleírások is elérhetőek lesznek.
+        <p>
+          A My Wine Mate nem csak kereső: egy okos társ a döntésben. Később fotóalapú keresés és
+          bővített borprofilok is jönnek.
         </p>
-        <p class="mt-6 italic text-sm text-gray-400">Köszönöm, hogy ellátogattál!</p>
+        <p class="pt-2 text-sm italic">Köszönöm, hogy ellátogattál!</p>
       </div>
     </div>
   </div>
 </template>
-
-<style scoped>
-.bg {
-  background-image: url('../assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

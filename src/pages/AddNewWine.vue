@@ -1,11 +1,19 @@
 <template>
-  <div class="min-h-screen bg">
-    <div class="flex items-center justify-center max-w-6xl mx-auto px-4 py-12">
-      <div class="w-full max-w-3xl flex flex-col gap-y-5">
-        <h1 class="text-center text-3xl md:text-5xl font-light mb-6 leading-snug text-yellow-100">
+  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
+    <div class="mx-auto flex max-w-6xl items-center justify-center">
+      <div
+        class="glass-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
+      >
+        <div class="mb-1">
+          <BaseButton to="/" variant="secondary">Vissza</BaseButton>
+        </div>
+
+        <h1
+          class="mb-6 text-center text-3xl font-light leading-snug text-[var(--text-main)] md:text-5xl"
+        >
           Adj hozzá új bort
         </h1>
-        <form @submit.prevent="submitWine" class="flex flex-col gap-y-5">
+        <form class="flex flex-col gap-y-5" @submit.prevent="submitWine">
           <BaseInput id="wineName" v-model="wine.name" placeholder="Bor neve *" required />
 
           <BaseInput id="winery" v-model="wine.winery" placeholder="Borászat neve" />
@@ -72,11 +80,11 @@
             placeholder="Ételajánlás (vesszővel elválasztva)"
           />
 
-          <BaseInput id="imageUrl" v-model="wine.imageUrl" placeholder="Kép URL" type="url" />
+          <BaseInput id="imageUrl" v-model="wine.imageUrl" type="url" placeholder="Kép URL" />
 
           <label class="flex items-center gap-x-3">
             <input type="checkbox" v-model="wine.is_award_winner" />
-            <span class="text-yellow-100">Díjnyertes bor</span>
+            <span class="text-[var(--text-main)]">Díjnyertes bor</span>
           </label>
 
           <BaseInput id="tags" v-model="tagsText" placeholder="Címkék (vesszővel elválasztva)" />
@@ -178,10 +186,3 @@ async function submitWine() {
   }
 }
 </script>
-
-<style scoped>
-.bg {
-  background-image: url('../assets/images/bg.jpg');
-  background-size: cover;
-}
-</style>

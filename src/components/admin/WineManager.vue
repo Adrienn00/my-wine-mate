@@ -1,6 +1,8 @@
 <template>
-  <div class="p-8 bg-gray-900 rounded-xl shadow text-white">
-    <div class="flex justify-between items-center mb-6">
+  <div
+    class="rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.82)] p-8 text-[var(--text-main)] shadow-sm"
+  >
+    <div class="mb-6 flex items-center justify-between">
       <h2 class="text-2xl font-semibold">Borok kezelése</h2>
       <BaseButton v-if="!isEditing" variant="secondary" @click="startAdd"
         >Új bor hozzáadása</BaseButton

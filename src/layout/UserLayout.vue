@@ -1,8 +1,8 @@
 <template>
-  <div class="flex min-h-screen text-yellow-100 font-bold">
-    <aside class="w-64 bg-gray-900 p-6 flex flex-col justify-between">
+  <div class="flex min-h-screen text-[var(--text-main)]">
+    <aside class="glass-panel m-4 hidden w-72 flex-col justify-between rounded-2xl p-6 lg:flex">
       <div>
-        <h2 class="text-2xl font-bold mb-8">Profil</h2>
+        <h2 class="mb-8 text-2xl font-semibold">Profil</h2>
         <ul class="space-y-4">
           <li><BaseButton to="/profile" variant="simpleRose">Felhasználó</BaseButton></li>
           <li><BaseButton to="/favorite" variant="simpleRose">Kedvencek</BaseButton></li>
@@ -15,10 +15,10 @@
         </ul>
       </div>
 
-      <BaseButton variant="login" @click="logoutUser">Kijelentkezés</BaseButton>
+      <BaseButton variant="secondary" @click="logoutUser">Kijelentkezés</BaseButton>
     </aside>
 
-    <main class="flex-1 p-10 bg-red-900">
+    <main class="min-h-screen flex-1 p-4 lg:p-10">
       <router-view />
     </main>
   </div>

@@ -1,1 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
 @import 'tailwindcss';
+
+:root {
+  --bg-main: #f7f0e8;
+  --bg-soft: #fffaf3;
+  --panel: rgba(255, 248, 239, 0.86);
+  --panel-strong: rgba(250, 242, 233, 0.96);
+  --line: rgba(128, 45, 65, 0.26);
+  --text-main: #2d1f1c;
+  --text-muted: #7a645b;
+  --accent: #8c2d41;
+  --accent-2: #caa367;
+  --rose: #edd7d4;
+  --wine: #7a2038;
+  --wine-soft: #a9445d;
+  --gold: #caa367;
+  --danger: #c04c5d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  color: var(--text-main);
+  background:
+    radial-gradient(760px 360px at -10% -18%, rgba(122, 32, 56, 0.24), transparent),
+    radial-gradient(860px 360px at 108% -12%, rgba(202, 163, 103, 0.24), transparent),
+    linear-gradient(180deg, #fdf8f2, var(--bg-main) 42%, #f2e7d9 100%);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.01em;
+}
+
+.glass-panel {
+  background: linear-gradient(155deg, rgba(255, 248, 239, 0.92), rgba(247, 235, 225, 0.88));
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 34px rgba(80, 42, 23, 0.14);
+  backdrop-filter: blur(6px);
+}
+
+.hero-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-sheen::before {
+  content: '';
+  position: absolute;
+  inset: -60% auto auto -10%;
+  width: 360px;
+  height: 360px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(122, 32, 56, 0.18), transparent 65%);
+  pointer-events: none;
+}
+
+.hero-sheen::after {
+  content: '';
+  position: absolute;
+  inset: auto -8% -45% auto;
+  width: 340px;
+  height: 340px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(202, 163, 103, 0.24), transparent 65%);
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+}
