@@ -26,7 +26,9 @@ const client = {
       try {
         const errData = await response.json()
         if (errData.message) message = errData.message
-      } catch (_) {}
+      } catch {
+        // Keep default message when the backend error body is not JSON.
+      }
       throw new Error(message)
     }
 

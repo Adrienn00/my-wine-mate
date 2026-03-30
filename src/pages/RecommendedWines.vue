@@ -1,4 +1,3 @@
-```vue
 <template>
   <div class="p-6">
     <h2 class="text-2xl font-semibold text-yellow-100 mb-6 text-center">Ajánlott borok számodra</h2>
@@ -50,6 +49,11 @@
             <span class="font-semibold">Ár:</span>
             {{ wine.priceRange || '—' }}
           </div>
+
+          <div v-if="wine.reasons?.length" class="pt-1 text-xs text-yellow-200">
+            <span class="font-semibold">Miért ajánlott:</span>
+            {{ wine.reasons.slice(0, 2).join(' • ') }}
+          </div>
         </div>
       </div>
     </div>
@@ -65,6 +69,8 @@ import { computed, onMounted, ref } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import { getRecommendedWines } from '../services/recommendationEngine'
+import { buildRecommendationCatalog } from '../services/recommendationCatalog'
 
 const profileStore = useProfileStore()
 const winesStore = useWinesStore()
@@ -80,60 +86,8 @@ onMounted(async () => {
   }
 })
 
-const norm = (x) => (x ?? '').toString().trim().toLowerCase()
-
 const recommendedWines = computed(() => {
-  const prefs = profileStore.selectedPreferences || {}
-  const wines = winesStore.wines || []
-
-  const prefTypes = (prefs.wineTypes || []).map(norm)
-  const prefStyles = (prefs.style || []).map(norm)
-  const prefFlavours = (prefs.flavourProfile || []).map(norm)
-  const prefRegions = (prefs.regions || []).map(norm)
-  const prefFood = (prefs.foodPreferences || []).map(norm)
-  const prefPrices = prefs.priceRanges || []
-  const prefAlcohol = prefs.alcoholLevels || []
-  const prefYear = prefs.wineYears
-
-  const maxScore = 10
-
-  return wines
-    .map((wine) => {
-      let score = 0
-
-      const wineType = norm(wine.type)
-      const wineStyle = norm(wine.style)
-      const wineRegion = norm(wine.origin?.region)
-
-      if (prefTypes.includes(wineType)) score += 3
-      if (prefStyles.includes(wineStyle)) score += 2
-
-      if (wine.flavorProfiles?.some((f) => prefFlavours.includes(norm(f)))) score += 2
-
-      if (prefRegions.includes(wineRegion)) score += 1
-
-      if (prefPrices.includes(wine.priceRange)) score += 1
-
-      if (prefAlcohol.length && wine.alcohol) {
-        const level = parseFloat(wine.alcohol)
-
-        if (prefAlcohol.includes('low') && level < 11) score += 1
-        if (prefAlcohol.includes('medium') && level >= 11 && level <= 13.5) score += 1
-        if (prefAlcohol.includes('high') && level > 13.5) score += 1
-      }
-
-      if (wine.foodPairingHints?.some((f) => prefFood.includes(norm(f)))) score += 1
-
-      if (prefYear && wine.year) {
-        if (wine.year.toString().includes(prefYear)) score += 1
-      }
-
-      const matchPercent = Math.round((score / maxScore) * 100)
-
-      return { ...wine, score, matchPercent }
-    })
-    .filter((w) => w.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 6)
+  const catalog = buildRecommendationCatalog(winesStore.wines, profileStore.selectedPreferences)
+  return getRecommendedWines(profileStore.selectedPreferences, winesStore.wines, 6, catalog)
 })
 </script>

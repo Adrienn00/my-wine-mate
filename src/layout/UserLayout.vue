@@ -15,7 +15,7 @@
         </ul>
       </div>
 
-      <BaseButton variant="login">Kijelentkezés</BaseButton>
+      <BaseButton variant="login" @click="logoutUser">Kijelentkezés</BaseButton>
     </aside>
 
     <main class="flex-1 p-10 bg-red-900">
@@ -27,6 +27,13 @@
 <script setup>
 import BaseButton from '@/components/ui/BaseButton.vue'
 import { useAuthStore } from '@/stores/authStore'
+import { useRouter } from 'vue-router'
 
 const authStore = useAuthStore()
+const router = useRouter()
+
+function logoutUser() {
+  authStore.logout()
+  router.push('/')
+}
 </script>

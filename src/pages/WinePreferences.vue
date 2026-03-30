@@ -99,28 +99,42 @@
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
+import { useWinesStore } from '../stores/winesStore'
 import BaseMultiselect from '../components/ui/BaseMultiselect.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
+import { buildPreferenceOptionsFromWines } from '../services/preferenceOptions'
 
 const profileStore = useProfileStore()
+const winesStore = useWinesStore()
 
 // betöltés DB-ből
 onMounted(async () => {
-  await profileStore.fetchProfile()
+  await Promise.all([profileStore.fetchProfile(), winesStore.getAllWines()])
 })
-
-// opciók
-const wineTypeOptions = profileStore.wineType.wineTypes
-const wineStyleOptions = profileStore.wineType.style
-const flavourProfileOptions = profileStore.wineType.flavourProfile
-const regionsOptions = profileStore.wineType.regions
-const priceRangesOptions = profileStore.wineType.priceRanges
-const alcoholLevelsOptions = profileStore.wineType.alcoholLevels
-const foodTypePreferences = profileStore.wineType.foodPreferences
-const yearPreferences = profileStore.wineType.wineYears
 
 // a STORE-ban lévő (betöltött) preferenciák
 const prefs = computed(() => profileStore.selectedPreferences)
+
+const dynamicOptions = computed(() =>
+  buildPreferenceOptionsFromWines(winesStore.confirmedWines, profileStore.selectedPreferences)
+)
+
+const fallbackOptions = computed(() => profileStore.wineType || {})
+
+const pickOptions = (key) => {
+  const dynamic = dynamicOptions.value[key] || []
+  if (dynamic.length) return dynamic
+  return fallbackOptions.value[key] || []
+}
+
+const wineTypeOptions = computed(() => pickOptions('wineTypes'))
+const wineStyleOptions = computed(() => pickOptions('style'))
+const flavourProfileOptions = computed(() => pickOptions('flavourProfile'))
+const regionsOptions = computed(() => pickOptions('regions'))
+const priceRangesOptions = computed(() => pickOptions('priceRanges'))
+const alcoholLevelsOptions = computed(() => pickOptions('alcoholLevels'))
+const foodTypePreferences = computed(() => pickOptions('foodPreferences'))
+const yearPreferences = computed(() => pickOptions('wineYears'))
 
 const isEditing = ref(false)
 const saving = ref(false)

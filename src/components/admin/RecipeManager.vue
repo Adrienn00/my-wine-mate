@@ -108,8 +108,7 @@ async function submitEdit() {
 
   try {
     if (editRecipe.value._id) {
-      // Itt a store-ban kellene egy update funkció, ha nincs, hívd az add-ot
-      console.log('Szerkesztés folyamatban...', editRecipe.value._id)
+      alert('A recept szerkesztése még nincs implementálva.')
     } else {
       await recipesStore.addNewRecipe({ ...editRecipe.value, is_confirmed: true })
     }

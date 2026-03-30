@@ -2,7 +2,11 @@
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-const API_URL = 'http://localhost:3000/api/users' // módosítsd, ha kell
+const API_BASE = (import.meta.env.VITE_API_BASE_URL || 'http://localhost:3000/api').replace(
+  /\/+$/,
+  ''
+)
+const API_URL = `${API_BASE}/users`
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem('token') || null)
@@ -14,6 +18,7 @@ export const useAuthStore = defineStore('auth', () => {
     const headers = options.headers || {}
     if (token.value) headers.Authorization = `Bearer ${token.value}`
     const res = await fetch(url, { ...options, headers })
+    if (res.status === 204) return null
     const data = await res.json()
     if (!res.ok) throw new Error(data.message || 'Request failed')
     return data
@@ -21,18 +26,13 @@ export const useAuthStore = defineStore('auth', () => {
   async function register(formData) {
     loading.value = true
     error.value = null
-    console.log('➡️ [register] Sending data to backend:', formData)
-
     try {
       const res = await fetch(`${API_URL}/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
       })
-      console.log('⬅️ [register] Raw response:', res)
-
       const data = await res.json()
-      console.log('⬅️ [register] Parsed response JSON:', data)
 
       if (!res.ok) throw new Error(data.message || 'Registration failed')
 

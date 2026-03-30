@@ -66,8 +66,7 @@ function goToDetails(wineId) {
 
 <style scoped>
 .bg {
-  /* Ügyelj az elérési útra, lehet érdemes alias-t (pl. @/assets/...) használni */
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-image: url('../assets/images/bg.jpg');
   background-size: cover;
 }
 </style>

@@ -125,7 +125,7 @@ const backLink = computed(() => {
 
 <style scoped>
 .bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-image: url('../assets/images/bg.jpg');
   background-size: cover;
 }
 </style>

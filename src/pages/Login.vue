@@ -48,14 +48,11 @@ async function loginUser() {
   passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
   if (emailError.value || passwordError.value) return
 
-  console.log('📨 [login] Sending credentials:', { email: email.value, password: password.value })
-
   try {
-    const response = await auth.login({
+    await auth.login({
       email: email.value,
       password: password.value,
     })
-    console.log('✅ [login] Login successful:', response)
 
     // Átirányítás profilra vagy főoldalra
     router.push('/')
@@ -68,7 +65,7 @@ async function loginUser() {
 
 <style scoped>
 .bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-image: url('../assets/images/bg.jpg');
   background-size: cover;
 }
 </style>

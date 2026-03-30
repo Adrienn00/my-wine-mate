@@ -72,7 +72,6 @@ export const useProfileStore = defineStore('profile', () => {
 
   // --- PROFIL FRISSÍTÉS ---
   async function updateProfile(updatedData) {
-    console.log('UPDATE PROFILE payload:', updatedData)
     try {
       const updated = await client.put(`${API_BASE}/profile`, updatedData)
       auth.user = updated

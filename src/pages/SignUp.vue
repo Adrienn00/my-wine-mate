@@ -63,14 +63,8 @@ async function signup() {
 
   // Ha van bármilyen hiba, ne küldjük el
   if (emailError.value || passwordError.value || repeatedPasswordError.value) {
-    console.warn('⚠️ Hibás adatok, nem küldjük el a kérést.')
     return
   }
-
-  console.log('📨 Regisztráció indul a backend felé:', {
-    email: email.value,
-    password: password.value,
-  })
 
   try {
     await auth.register({
@@ -78,7 +72,6 @@ async function signup() {
       email: email.value,
       password: password.value,
     })
-    console.log('✅ Sikeres regisztráció:', auth.user)
     router.push('/login') // vagy mehet automatikusan bejelentkezés után pl. '/'
   } catch (err) {
     console.error('❌ Regisztrációs hiba:', err.message)
@@ -88,7 +81,7 @@ async function signup() {
 
 <style scoped>
 .bg {
-  background-image: url('/home/adrienn/www/my-wine-mate/src/assets/images/bg.jpg');
+  background-image: url('../assets/images/bg.jpg');
   background-size: cover;
 }
 </style>
