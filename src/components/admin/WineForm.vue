@@ -18,6 +18,11 @@
     </div>
 
     <BaseInput v-model="localWine.description" label="Leírás" textarea />
+    <BaseInput
+      v-model="purchaseOptionsText"
+      label="Vásárlási opciók (Sor formátum: Bolt neve | Ár | URL)"
+      textarea
+    />
 
     <BaseInput
       v-model="flavorInput"
@@ -102,6 +107,9 @@ const localWine = ref(JSON.parse(JSON.stringify(props.initialData)))
 const flavorInput = ref('')
 const grapeInput = ref('')
 const foodInput = ref('')
+const purchaseOptionsText = ref('')
+
+hydratePurchaseOptionsText()
 
 function submitEdit() {
   if (
@@ -113,6 +121,7 @@ function submitEdit() {
     alert('A kötelező mezők nincsenek kitöltve!')
     return
   }
+  localWine.value.purchaseOptions = parsePurchaseOptionsText(purchaseOptionsText.value)
   emit('save', localWine.value)
 }
 
@@ -144,5 +153,38 @@ function addFoodPairing() {
 }
 function removeFoodPairing(i) {
   localWine.value.foodPairingHints.splice(i, 1)
+}
+
+function hydratePurchaseOptionsText() {
+  const options = localWine.value.purchaseOptions || []
+  purchaseOptionsText.value = options
+    .map((option) => {
+      const shopName = option.shopName || ''
+      const price = option.price ?? ''
+      const url = option.url || ''
+      return [shopName, price, url].filter(Boolean).join(' | ')
+    })
+    .join('\n')
+}
+
+function parsePurchaseOptionsText(rawText) {
+  if (!rawText?.trim()) return []
+  return rawText
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [shopNameRaw = '', priceRaw = '', urlRaw = ''] = line
+        .split('|')
+        .map((part) => part.trim())
+      const parsedPrice = Number(String(priceRaw).replace(',', '.'))
+      return {
+        shopName: shopNameRaw,
+        price: Number.isFinite(parsedPrice) ? parsedPrice : null,
+        currency: 'RON',
+        url: urlRaw,
+      }
+    })
+    .filter((option) => option.shopName || option.url)
 }
 </script>

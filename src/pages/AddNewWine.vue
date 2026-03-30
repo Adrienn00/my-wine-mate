@@ -80,6 +80,13 @@
             placeholder="Ételajánlás (vesszővel elválasztva)"
           />
 
+          <BaseInput
+            id="purchaseOptions"
+            v-model="purchaseOptionsText"
+            placeholder="Vásárlási opciók (soronként: Bolt | Ár | URL)"
+            textarea
+          />
+
           <BaseInput id="imageUrl" v-model="wine.imageUrl" type="url" placeholder="Kép URL" />
 
           <label class="flex items-center gap-x-3">
@@ -124,12 +131,14 @@ const wine = ref({
   imageUrl: '',
   is_award_winner: false,
   tags: [],
+  purchaseOptions: [],
 })
 
 const flavorProfilesText = ref('')
 const grapeVarietiesText = ref('')
 const foodPairingHintsText = ref('')
 const tagsText = ref('')
+const purchaseOptionsText = ref('')
 
 async function submitWine() {
   if (!wine.value.name.trim()) {
@@ -155,6 +164,24 @@ async function submitWine() {
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean)
+
+  wine.value.purchaseOptions = purchaseOptionsText.value
+    .split('\n')
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const [shopNameRaw = '', priceRaw = '', urlRaw = ''] = line
+        .split('|')
+        .map((part) => part.trim())
+      const parsedPrice = Number(String(priceRaw).replace(',', '.'))
+      return {
+        shopName: shopNameRaw,
+        price: Number.isFinite(parsedPrice) ? parsedPrice : null,
+        currency: 'RON',
+        url: urlRaw,
+      }
+    })
+    .filter((option) => option.shopName || option.url)
   try {
     await winesStore.addNewWine({ ...wine.value })
     alert('Sikeresen elküldve')
@@ -175,11 +202,13 @@ async function submitWine() {
       imageUrl: '',
       is_award_winner: false,
       tags: [],
+      purchaseOptions: [],
     }
     flavorProfilesText.value = ''
     grapeVarietiesText.value = ''
     foodPairingHintsText.value = ''
     tagsText.value = ''
+    purchaseOptionsText.value = ''
   } catch (error) {
     alert('Hiba tortent a hozzaadaskor')
     console.error(error)
