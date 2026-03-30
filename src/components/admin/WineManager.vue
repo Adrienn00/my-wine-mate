@@ -47,6 +47,7 @@ const emptyWine = () => ({
   priceRange: '',
   foodPairingHints: [],
   aiFoodPairingEnabled: false,
+  purchaseOptions: [],
   imageUrl: '',
   is_award_winner: false,
   is_confirmed: true,

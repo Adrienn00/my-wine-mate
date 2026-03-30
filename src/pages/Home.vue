@@ -8,6 +8,49 @@
           </div>
         </transition>
 
+        <section
+          v-if="searchHistory.length"
+          class="glass-panel rounded-2xl border border-[var(--line)]"
+        >
+          <button
+            class="history-toggle-btn"
+            :aria-expanded="isHistoryOpen"
+            @click="isHistoryOpen = !isHistoryOpen"
+          >
+            <span class="text-base font-semibold md:text-lg">
+              Keresési előzmények ({{ searchHistory.length }})
+            </span>
+            <span class="history-chevron">{{ isHistoryOpen ? '▴' : '▾' }}</span>
+          </button>
+
+          <div v-if="isHistoryOpen" class="border-t border-[var(--line)] p-4 md:p-5">
+            <div class="mb-3 flex items-center justify-end gap-4">
+              <button class="history-clear-btn" @click="removeSearchHistory">
+                Előzmények törlése
+              </button>
+            </div>
+
+            <div class="space-y-2">
+              <div
+                v-for="entry in searchHistory"
+                :key="entry.id"
+                class="flex items-center justify-between gap-2 rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.94)] p-2"
+              >
+                <button class="history-item-btn" @click="repeatSearch(entry.filters)">
+                  {{ formatSearchLabel(entry.filters) }}
+                </button>
+                <button
+                  class="history-item-delete-btn"
+                  title="Előzmény törlése"
+                  @click.stop="removeSingleHistoryEntry(entry.id)"
+                >
+                  ✕
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+
         <div v-if="hasSearched && !showSearchPanel" class="flex justify-end">
           <button class="search-toggle-btn" @click="expandSearchPanel">Szűrők szerkesztése</button>
         </div>
@@ -38,6 +81,12 @@ import { useRouter } from 'vue-router'
 import { useWinesStore } from '../stores/winesStore'
 import WineSearchForm from './WineSearchForm.vue'
 import WineSearchResults from './WineSearchResults.vue'
+import {
+  addSearchHistoryEntry,
+  clearSearchHistory,
+  getSearchHistory,
+  removeSearchHistoryEntry,
+} from '../services/searchHistory'
 
 const winesStore = useWinesStore()
 const router = useRouter()
@@ -47,6 +96,8 @@ const hasSearched = ref(false)
 const hasAnyFilter = ref(false)
 const resultsSection = ref(null)
 const showSearchPanel = ref(true)
+const searchHistory = ref([])
+const isHistoryOpen = ref(false)
 
 const uniqueValues = (array) => [...new Set(array.filter(Boolean))]
 
@@ -64,11 +115,13 @@ onMounted(async () => {
   if (!winesStore.wines.length) {
     await winesStore.getAllWines()
   }
+  searchHistory.value = getSearchHistory()
 })
 
 async function handleSearch(filters) {
   hasSearched.value = true
   hasAnyFilter.value = Object.values(filters).some((val) => val !== '')
+  searchHistory.value = addSearchHistoryEntry(filters)
 
   const wines = await winesStore.getAllWines()
 
@@ -104,6 +157,33 @@ function expandSearchPanel() {
   showSearchPanel.value = true
   window.scrollTo({ top: 0, behavior: 'smooth' })
 }
+
+function repeatSearch(filters) {
+  handleSearch(filters)
+}
+
+function removeSearchHistory() {
+  clearSearchHistory()
+  searchHistory.value = []
+  isHistoryOpen.value = false
+}
+
+function removeSingleHistoryEntry(entryId) {
+  searchHistory.value = removeSearchHistoryEntry(entryId)
+  if (!searchHistory.value.length) {
+    isHistoryOpen.value = false
+  }
+}
+
+function formatSearchLabel(filters) {
+  const labels = []
+  if (filters.query) labels.push(`"${filters.query}"`)
+  if (filters.type) labels.push(filters.type)
+  if (filters.style) labels.push(filters.style)
+  if (filters.price) labels.push(filters.price)
+  if (filters.flavor) labels.push(filters.flavor)
+  return labels.length ? labels.join(' • ') : 'Üres keresés'
+}
 </script>
 
 <style scoped>
@@ -134,5 +214,81 @@ function expandSearchPanel() {
 .fold-search-leave-to {
   opacity: 0;
   transform: translateY(-12px) scale(0.98);
+}
+
+.history-toggle-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  border: none;
+  border-radius: 1rem;
+  background: transparent;
+  color: var(--text-main);
+  padding: 0.9rem 1rem;
+  cursor: pointer;
+}
+
+.history-toggle-btn:hover {
+  background: rgba(237, 215, 212, 0.26);
+}
+
+.history-chevron {
+  font-size: 1.1rem;
+  color: var(--wine);
+}
+
+.history-item-btn {
+  width: 100%;
+  text-align: left;
+  border-radius: 0.75rem;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--text-main);
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 0.4rem 0.55rem;
+  transition: 0.18s ease;
+}
+
+.history-item-btn:hover {
+  border-color: var(--accent);
+  color: var(--wine);
+  background: rgba(237, 215, 212, 0.44);
+}
+
+.history-clear-btn {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.73rem;
+  font-weight: 600;
+  padding: 0.3rem 0.6rem;
+  transition: 0.16s ease;
+}
+
+.history-clear-btn:hover {
+  color: var(--danger);
+  border-color: rgba(192, 76, 93, 0.42);
+}
+
+.history-item-delete-btn {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 247, 244, 0.92);
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  font-weight: 700;
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+  transition: 0.16s ease;
+}
+
+.history-item-delete-btn:hover {
+  color: var(--danger);
+  border-color: rgba(192, 76, 93, 0.42);
 }
 </style>
