@@ -11,6 +11,19 @@
       >
         <h3 class="mb-4 text-3xl font-bold text-[var(--wine)]">{{ currentRecipe.name }}</h3>
 
+        <div
+          v-if="currentRecipe.recipeCategories?.length"
+          class="mb-4 flex flex-wrap gap-2 text-sm font-semibold"
+        >
+          <span
+            v-for="category in currentRecipe.recipeCategories"
+            :key="category"
+            class="rounded-full bg-[rgba(122,32,56,0.1)] px-3 py-1 text-[var(--wine)]"
+          >
+            {{ category }}
+          </span>
+        </div>
+
         <div v-if="currentRecipe.ingredients && currentRecipe.ingredients.length" class="mb-4">
           <strong class="text-lg">Hozzávalók:</strong>
           <p class="mt-1 text-[var(--text-muted)]">
@@ -80,7 +93,10 @@ import RatingDisplay from '../components/RatingDisplay.vue'
 import AddRatingForm from '../components/AddRatingForm.vue'
 
 const props = defineProps({
-  recipe: Object,
+  recipe: {
+    type: Object,
+    default: null,
+  },
 })
 
 const route = useRoute()

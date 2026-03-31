@@ -1,3 +1,5 @@
+import { RECIPE_DIET_CATEGORIES } from './recipeCategories'
+
 const normalizeText = (value) =>
   (value ?? '')
     .toString()
@@ -77,6 +79,11 @@ export function buildPreferenceOptionsFromWines(wines = [], preferences = {}) {
     uniqueDisplayValues([...sourceWines.map((wine) => wine?.year), preferences.wineYears])
   )
 
+  const recipeCategories = uniqueDisplayValues([
+    ...RECIPE_DIET_CATEGORIES,
+    ...asArray(preferences.recipeCategories),
+  ])
+
   return {
     wineTypes,
     style,
@@ -85,6 +92,7 @@ export function buildPreferenceOptionsFromWines(wines = [], preferences = {}) {
     priceRanges,
     alcoholLevels,
     foodPreferences,
+    recipeCategories,
     wineYears,
   }
 }
