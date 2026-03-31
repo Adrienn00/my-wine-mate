@@ -2,7 +2,8 @@
   <section class="glass-panel hero-sheen rounded-3xl p-6 text-left md:p-10">
     <div class="mb-6 flex items-start justify-between gap-6">
       <div>
-        <h1 class="text-3xl font-semibold md:text-5xl">Find the wine that fits you best</h1>
+        <p class="micro-label">Smart Search</p>
+        <h1 class="mt-2 text-3xl md:text-5xl">Find the wine that fits you best</h1>
         <p class="mt-3 max-w-2xl text-sm text-[var(--text-muted)] md:text-base">
           Smart filtering by flavor profile, style, and price range. Choose 1-2 preferences and
           instantly see the best matches.
@@ -95,9 +96,11 @@ function emitSearch() {
   border: 1px solid var(--line);
   background: rgba(255, 249, 242, 0.92);
   color: var(--text-main);
+  font-size: 0.95rem;
   padding: 0.7rem 0.9rem;
   outline: none;
   transition: 0.2s ease;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 .search-select:focus {

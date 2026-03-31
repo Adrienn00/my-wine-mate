@@ -1,6 +1,15 @@
 <template>
-  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <div class="mx-auto max-w-6xl space-y-8">
+  <div class="page-shell">
+    <div class="page-frame page-stack">
+      <section class="section-intro px-1">
+        <span class="section-kicker">Discover</span>
+        <h1 class="section-title">A steadier, more polished way to explore wine.</h1>
+        <p class="section-summary">
+          Search with a clear structure, revisit what you tried before, and keep the results area
+          feeling like part of the same experience instead of a separate screen.
+        </p>
+      </section>
+
       <div class="space-y-3">
         <transition name="fold-search">
           <div v-if="showSearchPanel">
@@ -56,7 +65,7 @@
         </div>
       </div>
 
-      <section ref="resultsSection" class="glass-panel rounded-2xl p-5 md:p-7">
+      <section ref="resultsSection" class="glass-panel rounded-[1.8rem] p-5 md:p-7">
         <div class="mb-4 flex items-center justify-between">
           <h2 class="text-2xl font-semibold md:text-3xl">Results 🍇</h2>
           <span class="text-xs uppercase tracking-widest text-[var(--text-muted)]">

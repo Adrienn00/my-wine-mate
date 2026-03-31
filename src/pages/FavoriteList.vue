@@ -1,15 +1,20 @@
 <template>
-  <div class="flex justify-center p-8">
-    <div
-      class="glass-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
-    >
-      <div class="mb-4">
+  <div class="page-shell">
+    <div class="page-frame page-stack">
+      <div class="page-actions">
         <BaseButton to="/profile" variant="secondary">Back</BaseButton>
       </div>
 
-      <h2 class="mb-6 text-center text-3xl font-semibold">Your Favorites</h2>
+      <div class="section-intro px-1">
+        <span class="section-kicker">Collection</span>
+        <h1 class="section-title">Your Favorites</h1>
+      </div>
 
-      <div class="mb-6 flex justify-center space-x-4">
+      <div
+        class="glass-panel w-full rounded-[1.8rem] border border-[var(--line)] p-8 text-[var(--text-main)]"
+      >
+
+      <div class="mb-6 flex justify-center gap-4">
         <BaseButton
           :variant="activeTab === 'wines' ? 'primary' : 'secondary'"
           @click="activeTab = 'wines'"
@@ -48,6 +53,7 @@
           </div>
         </div>
         <p v-else class="text-center text-[var(--text-muted)]">You do not have any favorite recipes yet.</p>
+      </div>
       </div>
     </div>
   </div>

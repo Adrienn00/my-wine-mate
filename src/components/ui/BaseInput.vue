@@ -49,7 +49,7 @@ const props = defineProps({
 
 const inputClasses = computed(() => {
   const base =
-    'mb-4 w-full rounded-xl border bg-[rgba(255,250,243,0.92)] px-4 py-2.5 text-[var(--text-main)] outline-none transition placeholder:text-[rgba(122,100,91,0.65)] focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(122,32,56,0.2)]'
+    'mb-4 w-full rounded-xl border bg-[rgba(255,250,243,0.92)] px-4 py-2.5 text-sm text-[var(--text-main)] shadow-[inset_0_1px_0_rgba(255,255,255,0.55)] outline-none transition placeholder:text-[rgba(122,100,91,0.65)] focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(122,32,56,0.2)]'
   return `${base} ${props.error ? 'border-[var(--danger)]' : 'border-[var(--line)]'}`
 })
 </script>

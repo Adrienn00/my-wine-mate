@@ -1,7 +1,7 @@
 <template>
   <div class="relative inline-block">
     <button
-      class="cursor-pointer rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.88)] px-3 py-1.5 text-xl shadow-[0_8px_20px_rgba(122,32,56,0.14)]"
+      class="cursor-pointer rounded-full border border-[var(--line)] bg-[rgba(255,248,239,0.88)] px-3.5 py-2 text-lg shadow-[0_10px_24px_rgba(122,32,56,0.14)] transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(122,32,56,0.28)]"
       @click="toggleNotifications"
     >
       🔔
@@ -32,13 +32,13 @@
         <div class="mt-1 flex items-center justify-end gap-3">
           <button
             v-if="n.link"
-            class="text-xs font-medium text-[var(--wine)] underline hover:brightness-110"
+            class="rounded-full border border-[var(--line)] px-2.5 py-1 text-xs font-semibold text-[var(--wine)] transition hover:bg-[rgba(237,215,212,0.3)]"
             @click="openNotificationLink(n.link)"
           >
             View
           </button>
           <button
-            class="text-xs text-[var(--danger)] hover:brightness-125"
+            class="rounded-full border border-[rgba(192,76,93,0.18)] px-2.5 py-1 text-xs font-semibold text-[var(--danger)] transition hover:bg-[rgba(255,229,229,0.72)]"
             @click="deleteNotification(n._id)"
           >
             ✕

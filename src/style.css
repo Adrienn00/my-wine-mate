@@ -32,6 +32,12 @@ body {
   margin: 0;
   font-family: 'Manrope', 'Segoe UI', sans-serif;
   color: var(--text-main);
+  line-height: 1.55;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
   background:
     radial-gradient(760px 360px at -10% -18%, rgba(122, 32, 56, 0.24), transparent),
     radial-gradient(860px 360px at 108% -12%, rgba(202, 163, 103, 0.24), transparent),
@@ -45,6 +51,15 @@ h3,
 h4 {
   font-family: 'Cormorant Garamond', Georgia, serif;
   letter-spacing: 0.01em;
+  font-weight: 600;
+  line-height: 1.02;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
 }
 
 .glass-panel {
@@ -52,6 +67,72 @@ h4 {
   border: 1px solid var(--line);
   box-shadow: 0 16px 34px rgba(80, 42, 23, 0.14);
   backdrop-filter: blur(6px);
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 2rem 1rem 3.5rem;
+}
+
+.page-frame {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 6rem;
+  max-width: 72rem;
+}
+
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.section-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(2.1rem, 3vw, 3.4rem);
+  font-weight: 600;
+  line-height: 0.96;
+}
+
+.section-summary {
+  max-width: 44rem;
+  color: var(--text-muted);
+}
+
+.soft-card {
+  border: 1px solid rgba(128, 45, 65, 0.14);
+  background: rgba(255, 251, 246, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.micro-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wine);
 }
 
 .hero-sheen {
@@ -83,4 +164,18 @@ h4 {
 
 a {
   color: inherit;
+}
+
+::selection {
+  background: rgba(122, 32, 56, 0.18);
+}
+
+@media (min-width: 768px) {
+  .page-shell {
+    padding: 2.75rem 2rem 4rem;
+  }
+
+  .page-stack {
+    gap: 2rem;
+  }
 }

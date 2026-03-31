@@ -20,15 +20,16 @@ const model = defineModel()
 ::v-deep(.multiselect__tags) {
   background-color: #fff9f1;
   color: #2d1f1c;
-  font-size: 16px;
+  font-size: 0.95rem;
   border: 1px solid rgba(128, 45, 65, 0.26);
-  border-radius: 0.75rem;
+  border-radius: 0.9rem;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
 
 ::v-deep(.multiselect__tag) {
   background-color: #7a2038;
   color: #fff7ef;
-  border-radius: 4px;
+  border-radius: 999px;
   font-weight: 600;
 }
 
@@ -36,6 +37,7 @@ const model = defineModel()
   background-color: #fff6ec;
   color: #3a2521;
   font-style: normal;
+  font-size: 0.92rem;
   padding: 8px 12px;
   cursor: pointer;
 }
@@ -49,6 +51,14 @@ const model = defineModel()
 ::v-deep(.multiselect) {
   background-color: transparent;
   border: 1px solid transparent;
-  border-radius: 10px;
+  border-radius: 0.9rem;
+  font-family: inherit;
+}
+
+::v-deep(.multiselect__placeholder),
+::v-deep(.multiselect__single),
+::v-deep(.multiselect__input) {
+  font-family: inherit;
+  font-size: 0.95rem;
 }
 </style>

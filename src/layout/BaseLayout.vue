@@ -1,6 +1,6 @@
 <template>
   <NavBar />
-  <div class="min-h-screen pt-24 text-[var(--text-main)]">
+  <div class="min-h-screen pt-28 text-[var(--text-main)] md:pt-32">
     <router-view />
   </div>
   <BaseFooter />

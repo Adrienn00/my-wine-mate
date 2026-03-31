@@ -1,10 +1,21 @@
 <template>
-  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <section class="glass-panel mx-auto max-w-5xl rounded-2xl p-5 md:p-8">
-      <div class="mb-5 flex items-center justify-between">
-        <h1 class="text-3xl font-semibold md:text-4xl">Recipes 🍷</h1>
-        <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
+  <div class="page-shell">
+    <section class="page-frame page-stack">
+      <div class="section-intro px-1">
+        <span class="section-kicker">Kitchen</span>
+        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 class="section-title">Recipes</h1>
+            <p class="section-summary">
+              Browse recipes inside the same visual language as the wine explorer, with cleaner
+              cards, steadier spacing, and easier scanning.
+            </p>
+          </div>
+          <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
+        </div>
       </div>
+
+      <section class="glass-panel rounded-[1.8rem] p-5 md:p-8">
 
       <div
         v-if="recipesStore.loading"
@@ -53,6 +64,7 @@
           Next
         </button>
       </div>
+      </section>
     </section>
   </div>
 </template>
