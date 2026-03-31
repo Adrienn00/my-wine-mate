@@ -1,1 +1,181 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+:root {
+  --bg-main: #f7f0e8;
+  --bg-soft: #fffaf3;
+  --panel: rgba(255, 248, 239, 0.86);
+  --panel-strong: rgba(250, 242, 233, 0.96);
+  --line: rgba(128, 45, 65, 0.26);
+  --text-main: #2d1f1c;
+  --text-muted: #7a645b;
+  --accent: #8c2d41;
+  --accent-2: #caa367;
+  --rose: #edd7d4;
+  --wine: #7a2038;
+  --wine-soft: #a9445d;
+  --gold: #caa367;
+  --danger: #c04c5d;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#app {
+  min-height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: 'Manrope', 'Segoe UI', sans-serif;
+  color: var(--text-main);
+  line-height: 1.55;
+  font-feature-settings:
+    'liga' 1,
+    'kern' 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background:
+    radial-gradient(760px 360px at -10% -18%, rgba(122, 32, 56, 0.24), transparent),
+    radial-gradient(860px 360px at 108% -12%, rgba(202, 163, 103, 0.24), transparent),
+    linear-gradient(180deg, #fdf8f2, var(--bg-main) 42%, #f2e7d9 100%);
+  background-attachment: fixed;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: 'Cormorant Garamond', Georgia, serif;
+  letter-spacing: 0.01em;
+  font-weight: 600;
+  line-height: 1.02;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+}
+
+.glass-panel {
+  background: linear-gradient(155deg, rgba(255, 248, 239, 0.92), rgba(247, 235, 225, 0.88));
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 34px rgba(80, 42, 23, 0.14);
+  backdrop-filter: blur(6px);
+}
+
+.page-shell {
+  min-height: 100vh;
+  padding: 2rem 1rem 3.5rem;
+}
+
+.page-frame {
+  margin: 0 auto;
+  width: 100%;
+  max-width: 6rem;
+  max-width: 72rem;
+}
+
+.page-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.section-intro {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-bottom: 0.6rem;
+}
+
+.section-kicker {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+
+.section-title {
+  margin: 0;
+  font-size: clamp(2.1rem, 3vw, 3.4rem);
+  font-weight: 600;
+  line-height: 0.96;
+}
+
+.section-summary {
+  max-width: 44rem;
+  color: var(--text-muted);
+}
+
+.soft-card {
+  border: 1px solid rgba(128, 45, 65, 0.14);
+  background: rgba(255, 251, 246, 0.82);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.58);
+}
+
+.page-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+}
+
+.micro-label {
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--wine);
+}
+
+.hero-sheen {
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-sheen::before {
+  content: '';
+  position: absolute;
+  inset: -60% auto auto -10%;
+  width: 360px;
+  height: 360px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(122, 32, 56, 0.18), transparent 65%);
+  pointer-events: none;
+}
+
+.hero-sheen::after {
+  content: '';
+  position: absolute;
+  inset: auto -8% -45% auto;
+  width: 340px;
+  height: 340px;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(202, 163, 103, 0.24), transparent 65%);
+  pointer-events: none;
+}
+
+a {
+  color: inherit;
+}
+
+::selection {
+  background: rgba(122, 32, 56, 0.18);
+}
+
+@media (min-width: 768px) {
+  .page-shell {
+    padding: 2.75rem 2rem 4rem;
+  }
+
+  .page-stack {
+    gap: 2rem;
+  }
+}

@@ -1,14 +1,12 @@
 <template>
-  <div>
-    <h2>BaseLayout</h2>
-    <router-link to="/">Home</router-link> 
-    <router-link to="/about">About</router-link>
+  <NavBar />
+  <div class="min-h-screen pt-28 text-[var(--text-main)] md:pt-32">
     <router-view />
   </div>
+  <BaseFooter />
 </template>
 
-<script>
-export default {
-  name: "BaseLayout",
-};
+<script setup>
+import BaseFooter from '../components/ui/BaseFooter.vue'
+import NavBar from '../components/NavBar.vue'
 </script>

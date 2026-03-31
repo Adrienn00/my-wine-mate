@@ -1,0 +1,208 @@
+import { defineStore } from 'pinia'
+import { ref, computed } from 'vue'
+import client from '../components/httpService/client'
+import { useAuthStore } from './authStore'
+import { RECIPE_DIET_CATEGORIES, RECIPE_MEAT_TYPES } from '../services/recipeCategories'
+
+export const useProfileStore = defineStore('profile', () => {
+  const auth = useAuthStore()
+
+  const favoriteWines = ref([])
+  const favoriteRecipes = ref([])
+  const notifications = ref([])
+  const selectedPreferences = ref({
+    wineTypes: [],
+    style: [],
+    flavourProfile: [],
+    regions: [],
+    alcoholLevels: [],
+    foodPreferences: [],
+    recipeCategories: [],
+    recipeMeatTypes: [],
+    recipeDishTypes: [],
+    recipeMainIngredients: [],
+    wineYears: '',
+    priceRanges: [],
+  })
+
+  const wineType = ref({
+    wineTypes: ['Red', 'White', 'Rose', 'Sparkling'],
+    style: ['Dry', 'Semi-dry', 'Semi-sweet', 'Sweet'],
+    flavourProfile: ['Floral', 'Earthy', 'Fruity', 'Spicy', 'Other'],
+    regions: ['Tokaj', 'Villány', 'Eger', 'Sopron'],
+    alcoholLevels: ['Low', 'Medium', 'High'],
+    foodPreferences: ['Vegetarian', 'Vegan', 'Fish', 'Dessert', 'Meaty'],
+    recipeCategories: RECIPE_DIET_CATEGORIES,
+    recipeMeatTypes: RECIPE_MEAT_TYPES,
+    recipeDishTypes: ['Soup', 'Main course', 'Side dish', 'Salad', 'Breakfast', 'Dessert', 'Snack'],
+    recipeMainIngredients: [
+      'Chicken',
+      'Beef',
+      'Pork',
+      'Fish',
+      'Potato',
+      'Rice',
+      'Pasta',
+      'Vegetable',
+      'Fruit',
+      'Cheese',
+      'Mushroom',
+    ],
+    wineYears: [2023, 2022, 2021, 2020, 2019],
+    priceRanges: ['0-50', '50-80', '80-130', '>130'],
+  })
+
+  const loading = ref(false)
+  const error = ref(null)
+
+  const API_BASE = 'users'
+
+  const toId = (x) => (x && (x._id || x.id)) || x
+
+  async function fetchProfile() {
+    if (!auth.token) return null
+    loading.value = true
+    try {
+      const data = await client.get(`${API_BASE}/profile`)
+      auth.user = data
+      favoriteWines.value = data.favoriteWines || []
+      favoriteRecipes.value = data.favoriteRecipes || []
+      notifications.value = data.notifications || []
+      const prefs = data.preferences || {}
+      selectedPreferences.value = {
+        wineTypes: prefs.wineTypes || [],
+        style: prefs.style || [],
+        flavourProfile: prefs.flavourProfile || [],
+        regions: prefs.regions || [],
+        alcoholLevels: prefs.alcoholLevels || [],
+        foodPreferences: prefs.foodPreferences || [],
+        recipeCategories: prefs.recipeCategories || [],
+        recipeMeatTypes: prefs.recipeMeatTypes || [],
+        recipeDishTypes: prefs.recipeDishTypes || [],
+        recipeMainIngredients: prefs.recipeMainIngredients || [],
+        wineYears: prefs.wineYears || '',
+        priceRanges: prefs.priceRanges || [],
+      }
+      return data
+    } catch (err) {
+      console.error('Error fetching profile:', err)
+      error.value = err.message
+      return null
+    } finally {
+      loading.value = false
+    }
+  }
+
+  async function updateProfile(updatedData) {
+    try {
+      const updated = await client.put(`${API_BASE}/profile`, updatedData)
+      auth.user = updated
+
+      const prefs = updated.preferences || {}
+      selectedPreferences.value = {
+        wineTypes: prefs.wineTypes || [],
+        style: prefs.style || [],
+        flavourProfile: prefs.flavourProfile || [],
+        regions: prefs.regions || [],
+        alcoholLevels: prefs.alcoholLevels || [],
+        foodPreferences: prefs.foodPreferences || [],
+        recipeCategories: prefs.recipeCategories || [],
+        recipeMeatTypes: prefs.recipeMeatTypes || [],
+        recipeDishTypes: prefs.recipeDishTypes || [],
+        recipeMainIngredients: prefs.recipeMainIngredients || [],
+        wineYears: prefs.wineYears || '',
+        priceRanges: prefs.priceRanges || [],
+      }
+
+      return updated
+    } catch (err) {
+      console.error('Error updating profile:', err)
+      error.value = err.message
+      return null
+    }
+  }
+
+  async function addFavoriteWine(wine) {
+    try {
+      const res = await client.post(`${API_BASE}/favorite/wines`, {
+        wineId: toId(wine),
+      })
+      favoriteWines.value = res
+      return res
+    } catch (err) {
+      console.error('Error adding favorite wine:', err)
+      error.value = err.message
+    }
+  }
+
+  async function removeFavoriteWine(wine) {
+    try {
+      const res = await client.delete(`${API_BASE}/favorite/wines/${toId(wine)}`)
+      favoriteWines.value = res
+      return res
+    } catch (err) {
+      console.error('Error removing favorite wine:', err)
+      error.value = err.message
+    }
+  }
+
+  async function addFavoriteRecipe(recipe) {
+    try {
+      const res = await client.post(`${API_BASE}/favorite/recipes`, {
+        recipeId: toId(recipe),
+      })
+      favoriteRecipes.value = res
+      return res
+    } catch (err) {
+      console.error('Error adding favorite recipe:', err)
+      error.value = err.message
+    }
+  }
+
+  async function removeFavoriteRecipe(recipe) {
+    try {
+      const res = await client.delete(`${API_BASE}/favorite/recipes/${toId(recipe)}`)
+      favoriteRecipes.value = res
+      return res
+    } catch (err) {
+      console.error('Error removing favorite recipe:', err)
+      error.value = err.message
+    }
+  }
+
+  function isFavoriteWine(wine) {
+    const id = toId(wine)
+    return favoriteWines.value.some((w) => toId(w).toString() === id.toString())
+  }
+
+  function isFavoriteRecipe(recipe) {
+    const id = toId(recipe)
+    return favoriteRecipes.value.some((r) => toId(r).toString() === id.toString())
+  }
+
+  const hasProfile = computed(() => !!auth.user)
+  const fullName = computed(() =>
+    auth.user ? `${auth.user.firstName || ''} ${auth.user.lastName || ''}`.trim() : ''
+  )
+
+  return {
+    loading,
+    error,
+    favoriteWines,
+    favoriteRecipes,
+    notifications,
+    selectedPreferences,
+    wineType,
+    hasProfile,
+    fullName,
+
+    fetchProfile,
+    updateProfile,
+    addFavoriteWine,
+    removeFavoriteWine,
+    addFavoriteRecipe,
+    removeFavoriteRecipe,
+    isFavoriteWine,
+    isFavoriteRecipe,
+  }
+})

@@ -1,12 +1,11 @@
 <template>
   <div id="app">
-    <router-view /> 
+    <router-view />
   </div>
 </template>
 
 <script setup>
-import BaseLayout from './layout/BaseLayout.vue';
-
+import BaseLayout from './layout/BaseLayout.vue'
 </script>
 
 <style>
