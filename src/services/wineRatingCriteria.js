@@ -1,8 +1,8 @@
 export const WINE_RATING_CRITERIA = [
-  { key: 'tasteProfile', label: 'Ízprofil' },
+  { key: 'tasteProfile', label: 'Taste profile' },
   { key: 'aroma', label: 'Aroma' },
-  { key: 'valueForMoney', label: 'Ár/érték' },
-  { key: 'pairing', label: 'Ételpárosítás' },
+  { key: 'valueForMoney', label: 'Value for money' },
+  { key: 'pairing', label: 'Food pairing' },
 ]
 
 export function getOverallRatingValue(entry) {

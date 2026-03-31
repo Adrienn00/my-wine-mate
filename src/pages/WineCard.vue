@@ -14,24 +14,24 @@
           class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
         />
 
-        <p><strong>Leírás:</strong> {{ wine.description }}</p>
-        <p><strong>Szőlőfajta:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
-        <p><strong>Stílus:</strong> {{ wine.style }}</p>
-        <p><strong>Évjárat:</strong> {{ wine.year }}</p>
-        <p><strong>Alkohol:</strong> {{ wine.alcohol }}%</p>
-        <p><strong>Árkategória:</strong> {{ wine.priceRange }}</p>
-        <p><strong>Ízvilág:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
+        <p><strong>Description:</strong> {{ wine.description }}</p>
+        <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
+        <p><strong>Style:</strong> {{ wine.style }}</p>
+        <p><strong>Vintage:</strong> {{ wine.year }}</p>
+        <p><strong>Alcohol:</strong> {{ wine.alcohol }}%</p>
+        <p><strong>Price range:</strong> {{ wine.priceRange }}</p>
+        <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
         <p>
-          <strong>Származási hely:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}
+          <strong>Origin:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}
         </p>
-        <p><strong>Címkék:</strong> {{ wine.tags?.join(', ') }}</p>
-        <p><strong>Ételpárosítási javaslatok:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
+        <p><strong>Tags:</strong> {{ wine.tags?.join(', ') }}</p>
+        <p><strong>Food pairing hints:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
 
         <section
           v-if="isLoggedIn && purchaseLinks.length"
           class="rounded-xl border border-[var(--line)] p-4"
         >
-          <h4 class="text-lg font-semibold">Vásárlási lehetőségek</h4>
+          <h4 class="text-lg font-semibold">Purchase Options</h4>
           <p class="mt-1 text-sm text-[var(--text-muted)]">{{ purchaseIntroText }}</p>
 
           <div class="shop-strip mt-3">
@@ -40,10 +40,10 @@
               :key="`${option.shopName}-${option.url}-${idx}`"
               class="shop-card"
             >
-              <p v-if="hasStoredPrices && idx === 0" class="shop-chip">Legjobb ár</p>
+              <p v-if="hasStoredPrices && idx === 0" class="shop-chip">Best Price</p>
               <div>
                 <p class="font-semibold leading-tight">
-                  {{ option.shopName || 'Ismeretlen bolt' }}
+                  {{ option.shopName || 'Unknown shop' }}
                 </p>
                 <p class="text-sm text-[var(--text-muted)]">
                   {{ formatPurchasePrice(option) }}
@@ -56,27 +56,32 @@
                 rel="noopener noreferrer"
                 class="buy-link-btn mt-3 inline-flex"
               >
-                Megnézem
+                View Offer
               </a>
             </article>
           </div>
         </section>
 
         <section v-else-if="!isLoggedIn" class="rounded-xl border border-[var(--line)] p-4">
-          <h4 class="text-lg font-semibold">Vásárlási lehetőségek</h4>
+          <h4 class="text-lg font-semibold">Purchase Options</h4>
           <p class="mt-1 text-sm text-[var(--text-muted)]">
-            Ehhez a funkcióhoz jelentkezz be vagy regisztrálj.
+            Log in or sign up to use this feature.
           </p>
           <div class="mt-3 flex flex-wrap gap-2">
-            <BaseButton to="/login" variant="secondary">Bejelentkezés</BaseButton>
-            <BaseButton to="/signup" variant="secondary">Regisztráció</BaseButton>
+            <BaseButton to="/login" variant="secondary">Log In</BaseButton>
+            <BaseButton to="/signup" variant="secondary">Sign Up</BaseButton>
           </div>
         </section>
 
         <div class="mt-6 space-y-3">
-          <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2" open>
-            <summary class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]">
-              Közösségi értékelések
+          <details
+            class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2"
+            open
+          >
+            <summary
+              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+            >
+              Community Ratings
             </summary>
             <div class="px-2 pb-2 pt-3">
               <RatingDisplay
@@ -92,16 +97,18 @@
           </details>
 
           <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2">
-            <summary class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]">
-              Új értékelés írása
+            <summary
+              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+            >
+              Write a New Review
             </summary>
             <div class="px-2 pb-2 pt-3">
               <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
 
               <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
-                Értékeléshez
+                To leave a review,
                 <router-link to="/login" class="text-[var(--wine)] underline">
-                  jelentkezz be </router-link
+                  log in </router-link
                 >.
               </p>
             </div>
@@ -109,10 +116,12 @@
         </div>
 
         <div class="mt-6 flex space-x-5">
-          <BaseButton :to="backLink" variant="secondary">Vissza</BaseButton>
-          <BaseButton to="/foodPairing" variant="secondary">Étel ajánló</BaseButton>
+          <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
+          <BaseButton :to="`/foodPairing?wineId=${wine._id}`" variant="secondary">
+            Food Pairing
+          </BaseButton>
           <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
-            {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
+            {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
           </BaseButton>
         </div>
       </div>
@@ -133,7 +142,10 @@ import RatingDisplay from '../components/RatingDisplay.vue'
 import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
 import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
 const props = defineProps({
-  wine: Object,
+  wine: {
+    type: Object,
+    default: null,
+  },
 })
 
 const route = useRoute()
@@ -205,11 +217,11 @@ const comments = computed(() => {
 const commentEntries = computed(() => {
   const ratings = wine.value?.ratings || []
   return ratings
-    .filter((r) => String(r?.comment || "").trim())
+    .filter((r) => String(r?.comment || '').trim())
     .map((r) => ({
       id: String(r?.ratingId || r?._id || '').trim(),
-      text: String(r.comment || "").trim(),
-      author: String(r?.userName || "").trim() || "Névtelen",
+      text: String(r.comment || '').trim(),
+      author: String(r?.userName || '').trim() || 'Anonymous',
       createdAt: r?.createdAt || null,
     }))
 })
@@ -234,24 +246,24 @@ const generatedPurchaseLinks = computed(() => {
   const q = encodeURIComponent(query)
   return [
     {
-      shopName: 'Árukereső',
+      shopName: 'Arukereso',
       url: `https://www.arukereso.hu/?st=${q}`,
-      note: 'Gyors árösszehasonlítás',
+      note: 'Quick price comparison',
     },
     {
       shopName: 'Google Shopping',
       url: `https://www.google.com/search?tbm=shop&q=${q}`,
-      note: 'Webshop találatok',
+      note: 'Online store results',
     },
     {
       shopName: 'Wine-Searcher',
       url: `https://www.wine-searcher.com/find/${q}`,
-      note: 'Nemzetközi kínálat',
+      note: 'International offers',
     },
     {
       shopName: 'Vivino',
       url: `https://www.vivino.com/search/wines?q=${q}`,
-      note: 'Értékelések és boltok',
+      note: 'Ratings and shops',
     },
   ]
 })
@@ -266,14 +278,14 @@ const hasStoredPrices = computed(() => sortedPurchaseOptions.value.some((option)
 
 const purchaseIntroText = computed(() => {
   if (liveOffers.value.length && liveOffersSource.value === 'serpapi') {
-    return 'Automatikusan betöltött élő webshop találatok.'
+    return 'Automatically loaded live webshop results.'
   }
   if (liveOffers.value.length && liveOffersSource.value === 'fallback') {
-    return 'Élő árforrás nélkül jelenleg kereső linkeket mutatunk.'
+    return 'Live pricing is unavailable, so search links are shown instead.'
   }
   return sortedPurchaseOptions.value.filter((option) => option?.url).length
-    ? 'Ár szerint rendezve (legolcsóbb elöl).'
-    : 'Automatikusan generált vásárlási linkek a bor neve alapján.'
+    ? 'Sorted by price, starting with the lowest.'
+    : 'Automatically generated purchase links based on the wine name.'
 })
 
 onMounted(async () => {
@@ -291,7 +303,7 @@ async function handleNewRating({ criteria, comment }) {
 
 async function handleDeleteComment(entry) {
   if (!isAdmin.value || !entry?.id || !wine.value?._id) return
-  const ok = window.confirm('Biztosan törölni szeretnéd ezt a hozzászólást?')
+  const ok = window.confirm('Are you sure you want to delete this comment?')
   if (!ok) return
 
   try {
@@ -320,9 +332,9 @@ const backLink = computed(() => {
 
 function formatPurchasePrice(option) {
   const price = Number(option?.price)
-  if (!Number.isFinite(price)) return option?.note || 'Ár: nincs megadva'
+  if (!Number.isFinite(price)) return option?.note || 'Price: not available'
   const currency = option?.currency || 'RON'
-  return `Ár: ${Math.round(price).toLocaleString('hu-HU')} ${currency}`
+  return `Price: ${Math.round(price).toLocaleString('en-US')} ${currency}`
 }
 
 async function fetchLiveOffers() {

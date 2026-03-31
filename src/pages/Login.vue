@@ -4,26 +4,26 @@
       @submit.prevent="loginUser"
       class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
     >
-      <h1 class="mb-5 text-center text-3xl font-semibold">Bejelentkezés</h1>
+      <h1 class="mb-5 text-center text-3xl font-semibold">Log In</h1>
 
       <BaseInput id="email" label="E-mail" type="email" v-model="email" :error="emailError" />
 
       <BaseInput
         id="password"
-        label="Jelszó"
+        label="Password"
         type="password"
         v-model="password"
         :error="passwordError"
       />
 
       <div class="w-full text-right text-sm">
-        <BaseButton to="/forgotPassword" variant="simple"> Elfelejtetted a jelszavad? </BaseButton>
+        <BaseButton to="/forgotPassword" variant="simple"> Forgot your password? </BaseButton>
       </div>
 
-      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Bejelentkezés</BaseButton>
+      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Log In</BaseButton>
 
       <BaseButton to="/signup" variant="simple" class="mt-3 text-center text-sm">
-        Regisztráció
+        Sign Up
       </BaseButton>
     </form>
   </div>
@@ -44,8 +44,8 @@ const router = useRouter()
 const auth = useAuthStore()
 
 async function loginUser() {
-  emailError.value = !email.value ? 'Add meg az emailed!' : ''
-  passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
+  emailError.value = !email.value ? 'Please enter your email.' : ''
+  passwordError.value = !password.value ? 'Please enter your password.' : ''
   if (emailError.value || passwordError.value) return
 
   try {
@@ -54,11 +54,10 @@ async function loginUser() {
       password: password.value,
     })
 
-    // Átirányítás profilra vagy főoldalra
     router.push('/')
   } catch (err) {
     console.error('❌ [login] Login failed:', err.message)
-    passwordError.value = 'Hibás e-mail vagy jelszó!'
+    passwordError.value = 'Incorrect email or password.'
   }
 }
 </script>

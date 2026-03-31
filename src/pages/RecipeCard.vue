@@ -2,7 +2,7 @@
   <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <main class="mx-auto flex w-full max-w-6xl flex-1 justify-start">
       <div v-if="loading" class="animate-pulse text-xl font-medium text-[var(--text-main)]">
-        Recept betöltése...
+        Loading recipe...
       </div>
 
       <div
@@ -25,7 +25,7 @@
         </div>
 
         <div v-if="currentRecipe.ingredients && currentRecipe.ingredients.length" class="mb-4">
-          <strong class="text-lg">Hozzávalók:</strong>
+          <strong class="text-lg">Ingredients:</strong>
           <p class="mt-1 text-[var(--text-muted)]">
             {{
               Array.isArray(currentRecipe.ingredients)
@@ -36,7 +36,7 @@
         </div>
 
         <div class="mb-6">
-          <strong class="mb-2 block border-b border-[var(--line)] pb-1 text-lg">Elkészítés:</strong>
+          <strong class="mb-2 block border-b border-[var(--line)] pb-1 text-lg">Instructions:</strong>
 
           <div v-if="currentRecipe.instructions && currentRecipe.instructions.length">
             <ol
@@ -54,7 +54,7 @@
             <p v-else class="italic text-[var(--text-muted)]">{{ currentRecipe.instructions }}</p>
           </div>
 
-          <p v-else class="italic text-[var(--text-muted)]">Nincs elkészítési útmutató megadva.</p>
+          <p v-else class="italic text-[var(--text-muted)]">No preparation instructions were provided.</p>
         </div>
 
         <div class="mt-8 space-y-6 border-t border-[var(--line)] pt-6">
@@ -63,10 +63,12 @@
         </div>
 
         <div class="mt-8 flex flex-wrap gap-3">
-          <BaseButton to="/recipes" variant="secondary">Vissza</BaseButton>
-          <BaseButton to="/foodpairing" variant="secondary">Bor ajánló</BaseButton>
+          <BaseButton to="/recipes" variant="secondary">Back</BaseButton>
+          <BaseButton :to="`/foodPairing?recipeId=${currentRecipe._id}`" variant="secondary">
+            Wine Pairing
+          </BaseButton>
           <BaseButton :variant="isFavorite ? 'primary' : 'secondary'" @click="toggleFavorite">
-            {{ isFavorite ? 'Eltávolítás a kedvencekből' : 'Kedvencekhez adom' }}
+            {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
           </BaseButton>
         </div>
       </div>
@@ -75,7 +77,7 @@
         v-else
         class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.92)] p-6 text-[var(--danger)]"
       >
-        A recept nem található vagy hiba történt a betöltés közben.
+        The recipe could not be found or an error occurred while loading it.
       </div>
     </main>
   </div>
@@ -106,15 +108,15 @@ const profileStore = useProfileStore()
 const fetchedRecipe = ref(null)
 const loading = ref(false)
 
-// Kiszámított recept: props-ból (ha listából jövünk) vagy a lekérésből
+// Use either the passed recipe prop or the recipe fetched by id.
 const currentRecipe = computed(() => props.recipe || fetchedRecipe.value)
 
-// Kedvencek kezelése
+// Favorite state.
 const isFavorite = computed(() => {
   return currentRecipe.value ? profileStore.isFavoriteRecipe(currentRecipe.value) : false
 })
 
-// Átlagos pontszám számítása
+// Average rating.
 const averageRating = computed(() => {
   const ratings = currentRecipe.value?.ratings || []
   if (!ratings.length) return 0
@@ -122,40 +124,39 @@ const averageRating = computed(() => {
   return (total / ratings.length).toFixed(1)
 })
 
-// Kommentek kigyűjtése
+// Extract comments.
 const comments = computed(() => {
   const ratings = currentRecipe.value?.ratings || []
   return ratings.map((r) => r.comment).filter(Boolean)
 })
 
-// Adatok betöltése az URL-ben lévő MongoDB ID alapján
+// Load the recipe using the MongoDB id from the URL.
 onMounted(async () => {
   if (!props.recipe) {
     loading.value = true
     try {
       const id = route.params.id
-      // Most már az /api/recipes/:id végponton kapjuk meg az adatot
       fetchedRecipe.value = await client.get(`recipes/${id}`)
     } catch (error) {
-      console.error('Hiba a recept betöltésekor:', error)
+      console.error('Error while loading recipe:', error)
     } finally {
       loading.value = false
     }
   }
 })
 
-// Új értékelés beküldése
+// Submit a new rating.
 async function handleNewRating({ rating, comment }) {
   if (!currentRecipe.value) return
   try {
     const updated = await recipesStore.addRating(currentRecipe.value._id, rating, comment)
     if (updated) fetchedRecipe.value = updated
   } catch (error) {
-    console.error('Értékelési hiba:', error)
+    console.error('Rating error:', error)
   }
 }
 
-// Kedvenc állapot váltása
+// Toggle favorite state.
 function toggleFavorite() {
   if (!currentRecipe.value) return
   if (isFavorite.value) {

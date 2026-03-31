@@ -17,10 +17,10 @@
       v-if="showNotifications"
       class="glass-panel absolute right-0 z-50 mt-2 w-80 rounded-xl p-3 shadow-lg"
     >
-      <div class="mb-2 font-semibold text-[var(--text-main)]">Értesítések</div>
+      <div class="mb-2 font-semibold text-[var(--text-main)]">Notifications</div>
 
       <div v-if="profileStore.notifications.length === 0" class="text-sm text-[var(--text-muted)]">
-        Nincs értesítés
+        No notifications
       </div>
 
       <div
@@ -35,7 +35,7 @@
             class="text-xs font-medium text-[var(--wine)] underline hover:brightness-110"
             @click="openNotificationLink(n.link)"
           >
-            Megnézem
+            View
           </button>
           <button
             class="text-xs text-[var(--danger)] hover:brightness-125"

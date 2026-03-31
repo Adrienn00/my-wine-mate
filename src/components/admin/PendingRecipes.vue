@@ -2,10 +2,10 @@
   <div
     class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
   >
-    <h2 class="mb-8 text-center text-3xl font-semibold">Jóváhagyásra váró receptek</h2>
+    <h2 class="mb-8 text-center text-3xl font-semibold">Recipes Awaiting Approval</h2>
 
     <div v-if="pendingRecipes.length === 0" class="text-center text-[var(--text-muted)]">
-      Nincs jóváhagyásra váró recept.
+      There are no recipes awaiting approval.
     </div>
 
     <ul class="space-y-6">
@@ -18,54 +18,54 @@
           <BaseInput
             id="name"
             v-model="editRecipe.name"
-            label="Recept neve"
-            placeholder="Recept neve"
+            label="Recipe name"
+            placeholder="Recipe name"
           />
           <BaseInput
             id="ingredients"
             v-model="editRecipe.ingredientsInput"
-            label="Hozzavalok"
-            placeholder="Hozzavalok"
+            label="Ingredients"
+            placeholder="Ingredients"
             textarea
           />
           <BaseInput
             id="instructions"
             v-model="editRecipe.instructionsInput"
-            label="Elkeszites"
-            placeholder="Lepesek kulon sorokban"
+            label="Instructions"
+            placeholder="Steps on separate lines"
             textarea
           />
           <div>
             <label class="mb-1.5 block text-sm font-medium text-[var(--text-muted)]">
-              Recept kategoriak
+              Recipe categories
             </label>
             <BaseMultiselect
               v-model="editRecipe.recipeCategories"
               :options="recipeDietCategories"
               :multiple="true"
-              placeholder="Valaszd ki a kategoriakat"
+              placeholder="Select categories"
             />
           </div>
           <div class="flex space-x-4">
             <BaseButton variant="secondary" @click="saveEdit(recipe._id || recipe.id)">
-              Mentés
+              Save
             </BaseButton>
-            <BaseButton variant="secondary" @click="cancelEdit"> Mégse </BaseButton>
+            <BaseButton variant="secondary" @click="cancelEdit"> Cancel </BaseButton>
           </div>
         </div>
 
         <div v-else class="flex justify-between items-start">
           <div>
             <h3 class="text-xl font-bold mb-2">{{ recipe.name }}</h3>
-            <p><strong>Hozzavalok:</strong> {{ formatArray(recipe.ingredients) }}</p>
-            <p><strong>Elkeszites:</strong> {{ formatArray(recipe.instructions) }}</p>
-            <p><strong>Kategoriak:</strong> {{ formatArray(recipe.recipeCategories) }}</p>
+            <p><strong>Ingredients:</strong> {{ formatArray(recipe.ingredients) }}</p>
+            <p><strong>Instructions:</strong> {{ formatArray(recipe.instructions) }}</p>
+            <p><strong>Categories:</strong> {{ formatArray(recipe.recipeCategories) }}</p>
           </div>
 
           <div class="flex flex-col space-y-3">
-            <BaseButton variant="secondary" @click="startEdit(recipe)"> Szerkesztés </BaseButton>
+            <BaseButton variant="secondary" @click="startEdit(recipe)"> Edit </BaseButton>
             <BaseButton variant="secondary" @click="approveRecipe(recipe._id || recipe.id)">
-              Jóváhagyás
+              Approve
             </BaseButton>
           </div>
         </div>

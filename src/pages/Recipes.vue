@@ -2,15 +2,15 @@
   <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <section class="glass-panel mx-auto max-w-5xl rounded-2xl p-5 md:p-8">
       <div class="mb-5 flex items-center justify-between">
-        <h1 class="text-3xl font-semibold md:text-4xl">Receptek 🍷</h1>
-        <BaseButton variant="primary" to="/addRecipe">Új recept</BaseButton>
+        <h1 class="text-3xl font-semibold md:text-4xl">Recipes 🍷</h1>
+        <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
       </div>
 
       <div
         v-if="recipesStore.loading"
         class="py-10 text-center animate-pulse font-medium text-[var(--text-main)]"
       >
-        Receptek betöltése...
+        Loading recipes...
       </div>
 
       <ul v-else class="grid grid-cols-1 gap-3 md:grid-cols-2">
@@ -46,11 +46,11 @@
         class="mt-5 flex items-center justify-between gap-4"
       >
         <button class="pager-btn" :disabled="currentPage === 1" @click="currentPage--">
-          Előző
+          Previous
         </button>
-        <p class="text-sm text-[var(--text-muted)]">{{ currentPage }} / {{ totalPages }} oldal</p>
+        <p class="text-sm text-[var(--text-muted)]">{{ currentPage }} / {{ totalPages }} pages</p>
         <button class="pager-btn" :disabled="currentPage === totalPages" @click="currentPage++">
-          Következő
+          Next
         </button>
       </div>
     </section>
@@ -73,7 +73,7 @@ const paginatedRecipes = computed(() => {
   return confirmedRecipes.value.slice(start, start + pageSize)
 })
 
-// JAVÍTÁS: Amikor az oldal betölt, meghívjuk a backend lekérést
+// Load recipes when the page opens.
 onMounted(() => {
   recipesStore.getAllRecipes()
 })

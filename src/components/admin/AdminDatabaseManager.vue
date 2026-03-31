@@ -4,14 +4,14 @@
       class="glass-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
     >
       <div class="mb-4">
-        <BaseButton to="/admin" variant="secondary">Vissza</BaseButton>
+        <BaseButton to="/admin" variant="secondary">Back</BaseButton>
       </div>
 
-      <h2 class="mb-6 text-3xl font-semibold">Adatbázis-kezelés</h2>
+      <h2 class="mb-6 text-3xl font-semibold">Database Management</h2>
 
       <div class="mb-6 flex space-x-4">
-        <BaseButton variant="secondary" @click="activeTab = 'wines'">Borok</BaseButton>
-        <BaseButton variant="secondary" @click="activeTab = 'recipes'">Receptek</BaseButton>
+        <BaseButton variant="secondary" @click="activeTab = 'wines'">Wines</BaseButton>
+        <BaseButton variant="secondary" @click="activeTab = 'recipes'">Recipes</BaseButton>
       </div>
       <div v-if="activeTab === 'wines'">
         <WineManager />

@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto max-w-6xl p-6">
     <div class="mb-4">
-      <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+      <BaseButton to="/profile" variant="secondary">Back</BaseButton>
     </div>
 
     <h2 class="mb-6 text-center text-3xl font-semibold text-[var(--text-main)]">
-      Ajánlott borok számodra
+      Recommended Wines for You
     </h2>
 
-    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Betöltés...</div>
+    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Loading...</div>
 
     <div
       v-else-if="recommendedWines.length"
@@ -37,27 +37,27 @@
           </div>
 
           <div>
-            <span class="font-semibold">Típus:</span>
+            <span class="font-semibold">Type:</span>
             {{ wine.type || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Stílus:</span>
+            <span class="font-semibold">Style:</span>
             {{ wine.style || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Ízprofil:</span>
+            <span class="font-semibold">Flavor profile:</span>
             {{ wine.flavorProfiles?.join(', ') || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Ár:</span>
+            <span class="font-semibold">Price:</span>
             {{ wine.priceRange || '—' }}
           </div>
 
           <div v-if="wine.reasons?.length" class="pt-1 text-xs text-[var(--wine)]">
-            <span class="font-semibold">Miért ajánlott:</span>
+            <span class="font-semibold">Why it is recommended:</span>
             {{ wine.reasons.slice(0, 2).join(' • ') }}
           </div>
         </div>
@@ -65,7 +65,7 @@
     </div>
 
     <div v-else class="mt-4 text-center text-[var(--text-main)]">
-      <p>Nincs elérhető ajánlás a megadott preferenciák alapján.</p>
+      <p>No recommendations are available for the selected preferences.</p>
     </div>
   </div>
 </template>

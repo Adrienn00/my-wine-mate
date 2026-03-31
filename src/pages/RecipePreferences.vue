@@ -1,70 +1,70 @@
 <template>
   <div class="mx-auto mb-4 mt-2 max-w-xl text-left">
-    <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+    <BaseButton to="/profile" variant="secondary">Back</BaseButton>
   </div>
 
-  <div class="text-center text-4xl text-[var(--text-main)]">Hozzád illő receptek</div>
+  <div class="text-center text-4xl text-[var(--text-main)]">Recipe Preferences</div>
 
   <div
     class="glass-panel my-6 mx-auto flex max-h-150 max-w-xl flex-col justify-start gap-6 overflow-auto rounded-2xl border border-[var(--line)] p-8 text-center text-[var(--text-main)]"
   >
     <template v-if="!isEditing">
-      <div class="text-2xl font-semibold">Elmentett recept preferenciáid</div>
+      <div class="text-2xl font-semibold">Saved Recipe Preferences</div>
 
       <div class="space-y-2 text-left font-normal not-italic text-[var(--text-muted)]">
         <div>
-          <span class="font-bold">Recept kategóriák:</span> {{ pretty(prefs.recipeCategories) }}
+          <span class="font-bold">Recipe categories:</span> {{ pretty(prefs.recipeCategories) }}
         </div>
-        <div><span class="font-bold">Ételtípus:</span> {{ pretty(prefs.recipeDishTypes) }}</div>
+        <div><span class="font-bold">Dish types:</span> {{ pretty(prefs.recipeDishTypes) }}</div>
         <div>
-          <span class="font-bold">Fő alapanyag:</span> {{ pretty(prefs.recipeMainIngredients) }}
+          <span class="font-bold">Main ingredients:</span> {{ pretty(prefs.recipeMainIngredients) }}
         </div>
         <div>
-          <span class="font-bold">Kedvelt húsfajták:</span> {{ pretty(prefs.recipeMeatTypes) }}
+          <span class="font-bold">Preferred meat types:</span> {{ pretty(prefs.recipeMeatTypes) }}
         </div>
       </div>
 
       <BaseButton variant="primary" class="mx-auto mt-4" @click="startEdit">
-        Szerkesztés
+        Edit
       </BaseButton>
     </template>
 
     <template v-else>
-      <div class="text-2xl font-semibold">Recept preferenciák szerkesztése</div>
+      <div class="text-2xl font-semibold">Edit Recipe Preferences</div>
 
       <BaseMultiselect
         v-model="draft.recipeCategories"
         :options="recipeCategoryOptions"
         :multiple="true"
-        placeholder="Válaszd ki, milyen típusú recepteket szeretsz"
+        placeholder="Select the recipe categories you like"
       />
 
       <BaseMultiselect
         v-model="draft.recipeDishTypes"
         :options="recipeDishTypeOptions"
         :multiple="true"
-        placeholder="Válaszd ki, milyen ételtípusokat keresel"
+        placeholder="Select the dish types you are looking for"
       />
 
       <BaseMultiselect
         v-model="draft.recipeMainIngredients"
         :options="recipeMainIngredientOptions"
         :multiple="true"
-        placeholder="Válaszd ki a kedvelt fő alapanyagokat"
+        placeholder="Select your preferred main ingredients"
       />
 
       <BaseMultiselect
         v-model="draft.recipeMeatTypes"
         :options="recipeMeatTypeOptions"
         :multiple="true"
-        placeholder="Ha húsos, milyen hús legyen benne"
+        placeholder="If it contains meat, what kind do you prefer?"
       />
 
       <div class="mt-2 flex justify-center gap-3">
         <BaseButton variant="primary" :disabled="saving" @click="saveEdit">
-          {{ saving ? 'Mentés...' : 'Mentés' }}
+          {{ saving ? 'Saving...' : 'Save' }}
         </BaseButton>
-        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit">Mégse</BaseButton>
+        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit">Cancel</BaseButton>
       </div>
     </template>
   </div>

@@ -3,7 +3,7 @@
     @submit.prevent="submit"
     class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
   >
-    <p class="mb-2 text-lg font-semibold">Adj értékelést 🍇</p>
+    <p class="mb-2 text-lg font-semibold">Rate this item 🍇</p>
     <div class="mb-4 flex gap-2 text-xl text-[var(--gold)]">
       <BaseButton
         v-for="i in 5"
@@ -20,11 +20,11 @@
     </div>
     <textarea
       v-model="comment"
-      placeholder="Írd ide a megjegyzésed..."
+      placeholder="Write your comment here..."
       class="mb-6 w-full rounded border border-[var(--line)] bg-[rgba(255,251,246,0.94)] px-4 py-2 text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[rgba(202,163,103,0.22)]"
       rows="3"
     ></textarea>
-    <BaseButton type="submit" variant="secondary"> Küldés </BaseButton>
+    <BaseButton type="submit" variant="secondary"> Submit </BaseButton>
   </form>
 </template>
 
@@ -37,7 +37,7 @@ const selectedRating = ref(0)
 const comment = ref('')
 
 function submit() {
-  if (selectedRating.value === 0) return alert('Válassz értékelést!')
+  if (selectedRating.value === 0) return alert('Please select a rating.')
   emit('submit', {
     rating: selectedRating.value,
     comment: comment.value.trim(),

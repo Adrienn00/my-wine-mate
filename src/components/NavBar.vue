@@ -4,25 +4,25 @@
       <BaseButton to="/" variant="homepage">MyWineMate</BaseButton>
 
       <nav class="flex items-center gap-2 font-semibold">
-        <BaseButton v-if="route.path !== '/'" to="/" variant="simple">Kezdőlap</BaseButton>
+        <BaseButton v-if="route.path !== '/'" to="/" variant="simple">Home</BaseButton>
         <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="simple"
-          >Receptek</BaseButton
+          >Recipes</BaseButton
         >
-        <BaseButton v-if="route.path !== '/about'" to="/about" variant="simple">Rólunk</BaseButton>
+        <BaseButton v-if="route.path !== '/about'" to="/about" variant="simple">About</BaseButton>
 
         <!-- csak azon az oldalakon mutatunk auth gombokat, ahol eddig is -->
         <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
           <!-- ha BE van jelentkezve -->
           <template v-if="isLoggedIn">
             <NotificationDropdown />
-            <BaseButton to="/profile" variant="login">Profilom</BaseButton>
-            <BaseButton variant="secondary" @click="logoutUser">Kijelentkezés</BaseButton>
+            <BaseButton to="/profile" variant="login">My Profile</BaseButton>
+            <BaseButton variant="secondary" @click="logoutUser">Log Out</BaseButton>
           </template>
 
           <!-- ha NINCS bejelentkezve -->
           <template v-else>
-            <BaseButton to="/login" variant="login">Bejelentkezés</BaseButton>
-            <BaseButton to="/signup" variant="login">Regisztráció</BaseButton>
+            <BaseButton to="/login" variant="login">Log In</BaseButton>
+            <BaseButton to="/signup" variant="login">Sign Up</BaseButton>
           </template>
         </template>
       </nav>
@@ -74,7 +74,7 @@ onBeforeUnmount(() => {
   window.removeEventListener('scroll', onScroll)
 })
 
-// kijelentkezés + visszairányítás
+// Log out and redirect to the home page.
 function logoutUser() {
   auth.logout()
   router.push('/')

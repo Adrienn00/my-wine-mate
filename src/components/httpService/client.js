@@ -4,13 +4,11 @@ const client = {
   async request(path, options = {}) {
     const headers = options.headers || {}
 
-    // Token beillesztése, ha van
     const token = localStorage.getItem('token')
     if (token) {
       headers.Authorization = `Bearer ${token}`
     }
 
-    // Alapértelmezett Content-Type csak akkor, ha van body
     if (!headers['Content-Type'] && options.body) {
       headers['Content-Type'] = 'application/json'
     }
@@ -21,7 +19,6 @@ const client = {
     })
 
     if (!response.ok) {
-      // Hibaüzenet olvasása a backendből, ha van
       let message = `HTTP error: ${response.status}`
       try {
         const errData = await response.json()
@@ -32,7 +29,6 @@ const client = {
       throw new Error(message)
     }
 
-    // 204 (No Content) esetén ne próbáljon JSON-t olvasni
     if (response.status === 204) return null
 
     return response.json()

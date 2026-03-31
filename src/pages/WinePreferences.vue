@@ -1,102 +1,102 @@
 <template>
   <div class="mx-auto mb-4 mt-2 max-w-xl text-left">
-    <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+    <BaseButton to="/profile" variant="secondary">Back</BaseButton>
   </div>
 
-  <div class="text-center text-4xl text-[var(--text-main)]">Hozzád leginkább találó bor</div>
+  <div class="text-center text-4xl text-[var(--text-main)]">Wine Preferences</div>
 
   <div
     class="glass-panel my-6 mx-auto flex max-h-150 max-w-xl flex-col justify-start gap-6 overflow-auto rounded-2xl border border-[var(--line)] p-8 text-center text-[var(--text-main)]"
   >
-    <!-- NÉZET MÓD -->
+    <!-- View mode -->
     <template v-if="!isEditing">
-      <div class="text-2xl font-semibold">Elmentett preferenciáid</div>
+      <div class="text-2xl font-semibold">Saved Preferences</div>
 
       <div class="space-y-2 text-left font-normal not-italic text-[var(--text-muted)]">
-        <div><span class="font-bold">Bor típusa:</span> {{ pretty(prefs.wineTypes) }}</div>
-        <div><span class="font-bold">Stílus:</span> {{ pretty(prefs.style) }}</div>
-        <div><span class="font-bold">Ízprofil:</span> {{ pretty(prefs.flavourProfile) }}</div>
-        <div><span class="font-bold">Régió:</span> {{ pretty(prefs.regions) }}</div>
-        <div><span class="font-bold">Árkategória:</span> {{ pretty(prefs.priceRanges) }}</div>
-        <div><span class="font-bold">Alkoholtartalom:</span> {{ pretty(prefs.alcoholLevels) }}</div>
+        <div><span class="font-bold">Wine types:</span> {{ pretty(prefs.wineTypes) }}</div>
+        <div><span class="font-bold">Style:</span> {{ pretty(prefs.style) }}</div>
+        <div><span class="font-bold">Flavor profile:</span> {{ pretty(prefs.flavourProfile) }}</div>
+        <div><span class="font-bold">Region:</span> {{ pretty(prefs.regions) }}</div>
+        <div><span class="font-bold">Price range:</span> {{ pretty(prefs.priceRanges) }}</div>
+        <div><span class="font-bold">Alcohol level:</span> {{ pretty(prefs.alcoholLevels) }}</div>
         <div>
-          <span class="font-bold">Étel preferencia:</span> {{ pretty(prefs.foodPreferences) }}
+          <span class="font-bold">Food preferences:</span> {{ pretty(prefs.foodPreferences) }}
         </div>
-        <div><span class="font-bold">Bor év:</span> {{ prettyOne(prefs.wineYears) }}</div>
+        <div><span class="font-bold">Wine year:</span> {{ prettyOne(prefs.wineYears) }}</div>
       </div>
 
       <BaseButton variant="primary" class="mx-auto mt-4" @click="startEdit">
-        Szerkesztés
+        Edit
       </BaseButton>
     </template>
 
-    <!-- SZERKESZTÉS MÓD -->
+    <!-- Edit mode -->
     <template v-else>
-      <div class="text-2xl font-semibold">Preferenciák szerkesztése</div>
+      <div class="text-2xl font-semibold">Edit Preferences</div>
 
-      <div>Bor tipusa</div>
+      <div>Wine type</div>
 
       <BaseMultiselect
         v-model="draft.wineTypes"
         :options="wineTypeOptions"
         :multiple="true"
-        placeholder="Válaszd ki a kedvenc típusaid"
+        placeholder="Select your favorite wine types"
       />
 
       <BaseMultiselect
         v-model="draft.style"
         :options="wineStyleOptions"
         :multiple="true"
-        placeholder="Válaszd ki a kedvelt"
+        placeholder="Select your preferred styles"
       />
 
       <BaseMultiselect
         v-model="draft.flavourProfile"
         :options="flavourProfileOptions"
         :multiple="true"
-        placeholder="Válaszd ki a kedvelt ízprofiljaid"
+        placeholder="Select your preferred flavor profiles"
       />
 
       <BaseMultiselect
         v-model="draft.regions"
         :options="regionsOptions"
         :multiple="true"
-        placeholder="Válaszd ki a régió(ka)t"
+        placeholder="Select region(s)"
       />
 
       <BaseMultiselect
         v-model="draft.priceRanges"
         :options="priceRangesOptions"
         :multiple="true"
-        placeholder="Válaszd ki az árakat"
+        placeholder="Select price ranges"
       />
 
       <BaseMultiselect
         v-model="draft.alcoholLevels"
         :options="alcoholLevelsOptions"
         :multiple="true"
-        placeholder="Válaszd ki az alkoholtartalmat"
+        placeholder="Select alcohol levels"
       />
 
       <BaseMultiselect
         v-model="draft.foodPreferences"
         :options="foodTypePreferences"
         :multiple="true"
-        placeholder="Válaszd ki az étkezési típusod"
+        placeholder="Select your food preferences"
       />
 
       <BaseMultiselect
         v-model="draft.wineYears"
         :options="yearPreferences"
         :multiple="false"
-        placeholder="Válaszd ki a bor évet"
+        placeholder="Select wine year"
       />
 
       <div class="mt-2 flex justify-center gap-3">
         <BaseButton variant="primary" :disabled="saving" @click="saveEdit">
-          {{ saving ? 'Mentés...' : 'Mentés' }}
+          {{ saving ? 'Saving...' : 'Save' }}
         </BaseButton>
-        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit"> Mégse </BaseButton>
+        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit"> Cancel </BaseButton>
       </div>
     </template>
   </div>
@@ -113,12 +113,12 @@ import { buildPreferenceOptionsFromWines } from '../services/preferenceOptions'
 const profileStore = useProfileStore()
 const winesStore = useWinesStore()
 
-// betöltés DB-ből
+// Load data from the database.
 onMounted(async () => {
   await Promise.all([profileStore.fetchProfile(), winesStore.getAllWines()])
 })
 
-// a STORE-ban lévő (betöltött) preferenciák
+// Preferences currently stored in the Pinia store.
 const prefs = computed(() => profileStore.selectedPreferences)
 
 const dynamicOptions = computed(() =>
@@ -145,7 +145,7 @@ const yearPreferences = computed(() => pickOptions('wineYears'))
 const isEditing = ref(false)
 const saving = ref(false)
 
-// draft szerkesztéshez
+// Draft state used while editing.
 const draft = reactive({
   wineTypes: [],
   style: [],
@@ -195,7 +195,7 @@ async function saveEdit() {
 
     await profileStore.updateProfile(payload)
 
-    // biztos ami biztos: frissítsük vissza a store-t is DB-ből
+    // Refresh the store from the database to keep everything in sync.
     await profileStore.fetchProfile()
 
     isEditing.value = false

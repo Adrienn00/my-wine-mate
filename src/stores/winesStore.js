@@ -25,7 +25,6 @@ export const useWinesStore = defineStore('wines', () => {
     }
   }
 
-  // EGY bor lekérése a backenden (ne a wines tömbből keresgélj)
   async function getSelectedWine(id) {
     try {
       const response = await client.get(`wines/${id}`)

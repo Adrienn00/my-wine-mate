@@ -2,7 +2,7 @@
   <div
     class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
   >
-    <p class="mb-2 text-lg font-semibold">Értékelés: {{ formattedRating }}/5</p>
+    <p class="mb-2 text-lg font-semibold">Rating: {{ formattedRating }}/5</p>
 
     <div class="mb-3 flex gap-1 text-[var(--gold)]">
       <span v-for="i in 5" :key="i">
@@ -11,7 +11,7 @@
     </div>
 
     <div v-if="criteriaItems.length" class="mb-3">
-      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Részpontszámok:</p>
+      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Category scores:</p>
       <ul class="space-y-1 text-sm text-[var(--text-muted)]">
         <li v-for="item in criteriaItems" :key="item.key">
           {{ item.label }}: <span class="font-medium text-[var(--text-main)]">{{ item.value }}</span>
@@ -20,7 +20,7 @@
     </div>
 
     <div v-if="commentEntries?.length">
-      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Vélemények:</p>
+      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Reviews:</p>
       <ul class="space-y-2 text-sm text-[var(--text-muted)]">
         <li
           v-for="(entry, index) in commentEntries"
@@ -39,7 +39,7 @@
               class="rounded border border-[rgba(150,39,56,0.35)] px-2 py-1 text-xs text-[var(--wine)] transition hover:bg-[rgba(150,39,56,0.08)]"
               @click="emit('delete-comment', entry)"
             >
-              Törlés
+              Delete
             </button>
           </div>
         </li>
@@ -47,7 +47,7 @@
     </div>
 
     <div v-else-if="notes?.length">
-      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Megjegyzések:</p>
+      <p class="mb-1 text-sm font-medium text-[var(--text-muted)]">Comments:</p>
       <ul class="ml-5 list-disc space-y-1 text-sm text-[var(--text-muted)]">
         <li v-for="(note, index) in notes" :key="index">{{ note }}</li>
       </ul>

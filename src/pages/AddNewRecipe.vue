@@ -4,43 +4,43 @@
       class="glass-panel mx-auto max-w-3xl rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)] shadow-lg md:p-8"
     >
       <div class="mb-6 flex items-center justify-between gap-4">
-        <h1 class="text-3xl font-semibold md:text-4xl">Új recept beküldése</h1>
-        <BaseButton to="/recipes" variant="secondary">Vissza</BaseButton>
+        <h1 class="text-3xl font-semibold md:text-4xl">Submit a New Recipe</h1>
+        <BaseButton to="/recipes" variant="secondary">Back</BaseButton>
       </div>
 
       <div class="space-y-4">
-        <BaseInput v-model="recipe.name" label="Recept neve" placeholder="Pl. Gombás rizottó" />
+        <BaseInput v-model="recipe.name" label="Recipe name" placeholder="E.g. Mushroom risotto" />
 
         <BaseInput
           v-model="ingredientsInput"
-          label="Hozzávalók"
-          placeholder="Pl. rizs, gomba, vaj, parmezán"
+          label="Ingredients"
+          placeholder="E.g. rice, mushrooms, butter, parmesan"
           textarea
         />
 
         <BaseInput
           v-model="instructionsInput"
-          label="Elkészítés"
-          placeholder="Írd a lépéseket külön sorokba."
+          label="Instructions"
+          placeholder="Write each step on a new line."
           textarea
         />
 
         <div>
           <label class="mb-1.5 block text-sm font-medium text-[var(--text-muted)]">
-            Recept kategóriák
+            Recipe categories
           </label>
           <BaseMultiselect
             v-model="recipe.recipeCategories"
             :options="recipeDietCategories"
             :multiple="true"
-            placeholder="Válaszd ki a recept kategóriáit"
+            placeholder="Select recipe categories"
           />
         </div>
       </div>
 
       <div class="mt-8 flex flex-wrap gap-3">
-        <BaseButton variant="primary" @click="submitRecipe">Beküldés</BaseButton>
-        <BaseButton variant="secondary" to="/recipes">Mégse</BaseButton>
+        <BaseButton variant="primary" @click="submitRecipe">Submit</BaseButton>
+        <BaseButton variant="secondary" to="/recipes">Cancel</BaseButton>
       </div>
     </section>
   </div>
@@ -77,7 +77,7 @@ async function submitRecipe() {
     !ingredientsInput.value.trim() ||
     !instructionsInput.value.trim()
   ) {
-    alert('Kérlek, tölts ki minden kötelező mezőt!')
+    alert('Please fill in all required fields.')
     return
   }
 
@@ -97,14 +97,14 @@ async function submitRecipe() {
     const success = await recipesStore.addNewRecipe(payload)
 
     if (success) {
-      alert('Recept sikeresen beküldve jóváhagyásra!')
+      alert('Recipe submitted successfully for approval.')
       recipe.value = initialRecipe()
       ingredientsInput.value = ''
       instructionsInput.value = ''
       router.push('/recipes')
     }
   } catch (error) {
-    alert(`Hiba történt a mentés során: ${error.message}`)
+    alert(`An error occurred while saving: ${error.message}`)
   }
 }
 </script>

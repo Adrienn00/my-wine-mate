@@ -1,6 +1,6 @@
 <template>
-  <!-- BETÖLTÉS -->
-  <div v-if="!authStore.user" class="mt-10 text-center text-[var(--text-main)]">Betöltés...</div>
+  <!-- Loading state -->
+  <div v-if="!authStore.user" class="mt-10 text-center text-[var(--text-main)]">Loading...</div>
 
   <!-- PROFIL -->
   <div
@@ -8,15 +8,15 @@
     class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
   >
     <div class="mb-4">
-      <BaseButton to="/" variant="secondary">Vissza</BaseButton>
+      <BaseButton to="/" variant="secondary">Back</BaseButton>
     </div>
 
-    <!-- NÉZET MÓD -->
+    <!-- View mode -->
     <div v-if="!isEditing">
       <div class="flex flex-col items-center mb-8">
         <img
           :src="authStore.user.img || avatar"
-          alt="Profilkép"
+          alt="Profile picture"
           class="mb-5 h-32 w-32 rounded-full border-4 border-[var(--wine-soft)]"
         />
         <h3 class="text-2xl font-bold">
@@ -25,25 +25,25 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <p><strong>Keresztnév:</strong> {{ authStore.user.firstName }}</p>
-        <p><strong>Vezetéknév:</strong> {{ authStore.user.lastName }}</p>
-        <p><strong>Email cím:</strong> {{ authStore.user.email }}</p>
-        <p><strong>Telefonszám:</strong> {{ authStore.user.phoneNumber }}</p>
-        <p><strong>Lokáció:</strong> {{ authStore.user.location }}</p>
-        <p><strong>Irányítószám:</strong> {{ authStore.user.postalCode }}</p>
+        <p><strong>First name:</strong> {{ authStore.user.firstName }}</p>
+        <p><strong>Last name:</strong> {{ authStore.user.lastName }}</p>
+        <p><strong>Email:</strong> {{ authStore.user.email }}</p>
+        <p><strong>Phone number:</strong> {{ authStore.user.phoneNumber }}</p>
+        <p><strong>Location:</strong> {{ authStore.user.location }}</p>
+        <p><strong>Postal code:</strong> {{ authStore.user.postalCode }}</p>
       </div>
 
       <div class="mt-8 text-center">
-        <BaseButton variant="secondary" @click="isEditing = true"> Szerkesztés </BaseButton>
+        <BaseButton variant="secondary" @click="isEditing = true"> Edit </BaseButton>
       </div>
     </div>
 
-    <!-- SZERKESZTÉS MÓD -->
+    <!-- Edit mode -->
     <div v-else>
       <div class="flex flex-col items-center mb-8">
         <img
           :src="authStore.user.img || avatar"
-          alt="Profilkép"
+          alt="Profile picture"
           class="mb-5 h-32 w-32 cursor-pointer rounded-full border-4 border-[var(--wine-soft)]"
           @click="triggerFileInput"
         />
@@ -57,17 +57,17 @@
       </div>
 
       <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-        <BaseInput label="Keresztnév" v-model="authStore.user.firstName" />
-        <BaseInput label="Vezetéknév" v-model="authStore.user.lastName" />
+        <BaseInput label="First name" v-model="authStore.user.firstName" />
+        <BaseInput label="Last name" v-model="authStore.user.lastName" />
         <BaseInput label="Email" type="email" v-model="authStore.user.email" />
-        <BaseInput label="Telefonszám" v-model="authStore.user.phoneNumber" />
-        <BaseInput label="Lokáció" v-model="authStore.user.location" />
-        <BaseInput label="Irányítószám" v-model="authStore.user.postalCode" />
+        <BaseInput label="Phone number" v-model="authStore.user.phoneNumber" />
+        <BaseInput label="Location" v-model="authStore.user.location" />
+        <BaseInput label="Postal code" v-model="authStore.user.postalCode" />
       </div>
 
       <div class="mt-8 space-x-4 text-center">
-        <BaseButton variant="secondary" @click="saveChanges"> Mentés </BaseButton>
-        <BaseButton variant="secondary" @click="isEditing = false"> Mégse </BaseButton>
+        <BaseButton variant="secondary" @click="saveChanges"> Save </BaseButton>
+        <BaseButton variant="secondary" @click="isEditing = false"> Cancel </BaseButton>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@
     v-if="profileStore.profile?.notifications"
     class="glass-panel mx-auto mt-8 max-w-4xl rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)]"
   >
-    <h2 class="text-xl font-bold mb-4">Értesítések</h2>
+    <h2 class="text-xl font-bold mb-4">Notifications</h2>
 
     <div
       v-for="n in profileStore.profile.notifications"
@@ -90,7 +90,7 @@
       <span>{{ n.message }}</span>
     </div>
 
-    <div v-if="!profileStore.profile.notifications.length">Nincs még értesítés.</div>
+    <div v-if="!profileStore.profile.notifications.length">No notifications yet.</div>
   </div>
 </template>
 
