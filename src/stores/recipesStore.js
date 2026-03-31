@@ -7,6 +7,17 @@ export const useRecipesStore = defineStore('recipes', () => {
   const loading = ref(false)
   const error = ref(null)
 
+  const replaceRecipeInStore = (id, nextRecipe) => {
+    const index = recipes.value.findIndex(
+      (recipe) => recipe && (recipe._id === id || recipe.id === id)
+    )
+    if (index !== -1) {
+      recipes.value[index] = nextRecipe
+      return
+    }
+    recipes.value.push(nextRecipe)
+  }
+
   // --- SZŰRT LISTÁK (A WineStore mintájára) ---
   const pendingRecipes = computed(() => recipes.value.filter((r) => r && r.is_confirmed === false))
   const confirmedRecipes = computed(() => recipes.value.filter((r) => r && r.is_confirmed === true))
@@ -41,15 +52,23 @@ export const useRecipesStore = defineStore('recipes', () => {
     }
   }
 
+  async function updateRecipe(id, recipeData) {
+    try {
+      const updatedRecipe = await client.put(`recipes/${id}`, recipeData)
+      replaceRecipeInStore(id, updatedRecipe)
+      return updatedRecipe
+    } catch (err) {
+      console.error('Hiba a recept frissítésekor:', err)
+      return null
+    }
+  }
+
   // --- ÉRTÉKELÉS HOZZÁADÁSA ---
   async function addRating(id, rating, comment) {
     try {
       // Backend: POST /recipes/:id/rating [cite: 163]
       const response = await client.post(`recipes/${id}/rating`, { rating, comment })
-      const index = recipes.value.findIndex((r) => r._id === id)
-      if (index !== -1) {
-        recipes.value[index] = response
-      }
+      replaceRecipeInStore(id, response)
       return response
     } catch (err) {
       console.error('Hiba az értékelés küldésekor:', err)
@@ -62,10 +81,7 @@ export const useRecipesStore = defineStore('recipes', () => {
     try {
       // Backend: PUT /recipes/:id (is_confirmed: true) [cite: 163]
       const updatedRecipe = await client.put(`recipes/${id}`, { is_confirmed: true })
-      const index = recipes.value.findIndex((r) => r._id === id)
-      if (index !== -1) {
-        recipes.value[index] = updatedRecipe
-      }
+      replaceRecipeInStore(id, updatedRecipe)
       return updatedRecipe
     } catch (err) {
       console.error('Hiba a jóváhagyáskor:', err)
@@ -97,6 +113,7 @@ export const useRecipesStore = defineStore('recipes', () => {
     pendingRecipes,
     getAllRecipes,
     addNewRecipe,
+    updateRecipe,
     addRating,
     approveRecipe,
     deleteRecipe,

@@ -15,6 +15,7 @@ import FavoriteList from '../pages/FavoriteList.vue'
 import WineCard from '../pages/WineCard.vue'
 import UserLayout from '../layout/UserLayout.vue'
 import WinePreferences from '../pages/WinePreferences.vue'
+import RecipePreferences from '../pages/RecipePreferences.vue'
 import Admin from '../components/admin/Admin.vue'
 import AdminDatabaseManager from '../components/admin/AdminDatabaseManager.vue'
 import RecipeCard from '../pages/RecipeCard.vue'
@@ -49,6 +50,7 @@ const routes = [
           { path: '/profile', component: UserProfile },
           { path: '/favorite', component: FavoriteList },
           { path: '/preferences', component: WinePreferences },
+          { path: '/recipe-preferences', component: RecipePreferences },
           { path: '/recommended', component: RecommendedWines },
           { path: '/admin', component: Admin },
           { path: '/admin/pending', component: PendingItemsTabs },

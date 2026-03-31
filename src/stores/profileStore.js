@@ -2,6 +2,7 @@ import { defineStore } from 'pinia'
 import { ref, computed } from 'vue'
 import client from '../components/httpService/client'
 import { useAuthStore } from './authStore'
+import { RECIPE_DIET_CATEGORIES, RECIPE_MEAT_TYPES } from '../services/recipeCategories'
 
 export const useProfileStore = defineStore('profile', () => {
   const auth = useAuthStore()
@@ -16,6 +17,10 @@ export const useProfileStore = defineStore('profile', () => {
     regions: [],
     alcoholLevels: [],
     foodPreferences: [],
+    recipeCategories: [],
+    recipeMeatTypes: [],
+    recipeDishTypes: [],
+    recipeMainIngredients: [],
     wineYears: '',
     priceRanges: [],
   })
@@ -27,6 +32,22 @@ export const useProfileStore = defineStore('profile', () => {
     regions: ['Tokaj', 'Villány', 'Eger', 'Sopron'],
     alcoholLevels: ['Alacsony', 'Közepes', 'Magas'],
     foodPreferences: ['Vegetáriánus', 'Vegán', 'Hal', 'Desszert', 'Húsos'],
+    recipeCategories: RECIPE_DIET_CATEGORIES,
+    recipeMeatTypes: RECIPE_MEAT_TYPES,
+    recipeDishTypes: ['Leves', 'Főétel', 'Köret', 'Saláta', 'Reggeli', 'Desszert', 'Snack'],
+    recipeMainIngredients: [
+      'Csirke',
+      'Marha',
+      'Sertés',
+      'Hal',
+      'Burgonya',
+      'Rizs',
+      'Tészta',
+      'Zöldség',
+      'Gyümölcs',
+      'Sajt',
+      'Gomba',
+    ],
     wineYears: [2023, 2022, 2021, 2020, 2019],
     priceRanges: ['0-50', '50-80', '80-130', '>130'],
   })
@@ -57,6 +78,10 @@ export const useProfileStore = defineStore('profile', () => {
         regions: prefs.regions || [],
         alcoholLevels: prefs.alcoholLevels || [],
         foodPreferences: prefs.foodPreferences || [],
+        recipeCategories: prefs.recipeCategories || [],
+        recipeMeatTypes: prefs.recipeMeatTypes || [],
+        recipeDishTypes: prefs.recipeDishTypes || [],
+        recipeMainIngredients: prefs.recipeMainIngredients || [],
         wineYears: prefs.wineYears || '',
         priceRanges: prefs.priceRanges || [],
       }
@@ -85,6 +110,10 @@ export const useProfileStore = defineStore('profile', () => {
         regions: prefs.regions || [],
         alcoholLevels: prefs.alcoholLevels || [],
         foodPreferences: prefs.foodPreferences || [],
+        recipeCategories: prefs.recipeCategories || [],
+        recipeMeatTypes: prefs.recipeMeatTypes || [],
+        recipeDishTypes: prefs.recipeDishTypes || [],
+        recipeMainIngredients: prefs.recipeMainIngredients || [],
         wineYears: prefs.wineYears || '',
         priceRanges: prefs.priceRanges || [],
       }

@@ -26,6 +26,18 @@
           >
             {{ recipe.name }}
           </BaseButton>
+          <div
+            v-if="recipe.recipeCategories?.length"
+            class="mt-3 flex flex-wrap gap-2 text-xs font-semibold"
+          >
+            <span
+              v-for="category in recipe.recipeCategories"
+              :key="category"
+              class="rounded-full bg-[rgba(122,32,56,0.1)] px-2.5 py-1 text-[var(--wine)]"
+            >
+              {{ category }}
+            </span>
+          </div>
         </li>
       </ul>
 

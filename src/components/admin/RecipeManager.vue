@@ -16,8 +16,29 @@
 
       <div class="space-y-4">
         <BaseInput v-model="editRecipe.name" label="Név" />
-        <BaseInput v-model="editRecipe.ingredients" label="Hozzávalók" />
-        <BaseInput v-model="editRecipe.description" label="Leírás" />
+        <BaseInput
+          v-model="editRecipe.ingredientsInput"
+          label="Hozzávalók"
+          placeholder="Vesszővel elválasztva"
+          textarea
+        />
+        <BaseInput
+          v-model="editRecipe.instructionsInput"
+          label="Elkészítés"
+          placeholder="Lépésenként új sorba"
+          textarea
+        />
+        <div>
+          <label class="mb-1.5 block text-sm font-medium text-[var(--text-muted)]">
+            Recept kategóriák
+          </label>
+          <BaseMultiselect
+            v-model="editRecipe.recipeCategories"
+            :options="recipeDietCategories"
+            :multiple="true"
+            placeholder="Válaszd ki a kategóriákat"
+          />
+        </div>
       </div>
 
       <div class="mt-6 flex gap-3">
@@ -34,7 +55,8 @@
           >
             <th class="p-3">Név</th>
             <th class="p-3">Hozzávalók</th>
-            <th class="p-3">Leírás</th>
+            <th class="p-3">Elkészítés</th>
+            <th class="p-3">Kategóriák</th>
             <th class="p-3 text-center">Műveletek</th>
           </tr>
         </thead>
@@ -45,8 +67,15 @@
             class="border-b border-[var(--line)] hover:bg-[rgba(237,215,212,0.28)]"
           >
             <td class="p-3 font-semibold">{{ recipe.name }}</td>
-            <td class="p-3 text-sm text-[var(--text-muted)]">{{ recipe.ingredients }}</td>
-            <td class="p-3 text-sm italic text-[var(--text-muted)]">{{ recipe.description }}</td>
+            <td class="p-3 text-sm text-[var(--text-muted)]">
+              {{ formatArray(recipe.ingredients) }}
+            </td>
+            <td class="p-3 text-sm italic text-[var(--text-muted)]">
+              {{ formatArray(recipe.instructions) }}
+            </td>
+            <td class="p-3 text-sm text-[var(--text-muted)]">
+              {{ formatArray(recipe.recipeCategories) }}
+            </td>
             <td class="p-3">
               <div class="flex justify-center gap-2">
                 <BaseButton variant="secondary" @click="startEdit(recipe)">Szerkesztés</BaseButton>
@@ -75,18 +104,22 @@
 <script setup>
 import { ref, computed, onMounted, watch } from 'vue' // onMounted kell a betöltéshez!
 import { useRecipesStore } from '../../stores/recipesStore'
+import { RECIPE_DIET_CATEGORIES, asRecipeCategoryArray } from '../../services/recipeCategories'
 import BaseInput from '../ui/BaseInput.vue'
 import BaseButton from '../ui/BaseButton.vue'
+import BaseMultiselect from '../ui/BaseMultiselect.vue'
 
 const recipesStore = useRecipesStore()
+const recipeDietCategories = RECIPE_DIET_CATEGORIES
 
 const isEditing = ref(false)
 const currentPage = ref(1)
 const pageSize = 10
 const editRecipe = ref({
   name: '',
-  ingredients: '',
-  description: '',
+  ingredientsInput: '',
+  instructionsInput: '',
+  recipeCategories: [],
 })
 
 const allRecipes = computed(() => recipesStore.recipes || [])
@@ -115,15 +148,24 @@ function startAdd() {
   isEditing.value = true
   editRecipe.value = {
     name: '',
-    ingredients: '',
-    description: '',
+    ingredientsInput: '',
+    instructionsInput: '',
+    recipeCategories: [],
   }
 }
 
 function startEdit(recipe) {
   isEditing.value = true
-  // MongoDB objektum másolása
-  editRecipe.value = { ...recipe }
+  editRecipe.value = {
+    ...recipe,
+    ingredientsInput: Array.isArray(recipe.ingredients)
+      ? recipe.ingredients.join(', ')
+      : (recipe.ingredients ?? ''),
+    instructionsInput: Array.isArray(recipe.instructions)
+      ? recipe.instructions.join('\n')
+      : (recipe.instructions ?? ''),
+    recipeCategories: asRecipeCategoryArray(recipe.recipeCategories),
+  }
 }
 
 function cancelEdit() {
@@ -131,18 +173,32 @@ function cancelEdit() {
 }
 
 async function submitEdit() {
-  const { name, ingredients, description } = editRecipe.value
+  const { _id, name, ingredientsInput, instructionsInput, recipeCategories } = editRecipe.value
 
-  if (!name || !ingredients || !description) {
+  if (!name || !ingredientsInput || !instructionsInput) {
     alert('Kérlek, tölts ki minden mezőt!')
     return
   }
 
+  const payload = {
+    ...editRecipe.value,
+    ingredients: ingredientsInput
+      .split(',')
+      .map((item) => item.trim())
+      .filter(Boolean),
+    instructions: instructionsInput
+      .split('\n')
+      .map((item) => item.trim())
+      .filter(Boolean),
+    recipeCategories: asRecipeCategoryArray(recipeCategories),
+    is_confirmed: true,
+  }
+
   try {
-    if (editRecipe.value._id) {
-      alert('A recept szerkesztése még nincs implementálva.')
+    if (_id) {
+      await recipesStore.updateRecipe(_id, payload)
     } else {
-      await recipesStore.addNewRecipe({ ...editRecipe.value, is_confirmed: true })
+      await recipesStore.addNewRecipe(payload)
     }
     isEditing.value = false
     await recipesStore.getAllRecipes() // Lista frissítése mentés után
@@ -162,6 +218,11 @@ async function handleDelete(id) {
       alert('Hiba történt a törlés során!')
     }
   }
+}
+
+function formatArray(value) {
+  if (!value || value.length === 0) return '—'
+  return Array.isArray(value) ? value.join(', ') : String(value)
 }
 </script>
 
