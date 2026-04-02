@@ -22,7 +22,11 @@ const client = {
       let message = `HTTP error: ${response.status}`
       try {
         const errData = await response.json()
-        if (errData.message) message = errData.message
+        if (errData.error) {
+          message = errData.error
+        } else if (errData.message) {
+          message = errData.message
+        }
       } catch {
         // Keep default message when the backend error body is not JSON.
       }

@@ -71,29 +71,29 @@
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useWinesStore } from '../stores/winesStore'
+import { onMounted, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
-import { getRecommendedWines } from '../services/recommendationEngine'
-import { buildRecommendationCatalog } from '../services/recommendationCatalog'
+import client from '../components/httpService/client'
 
 const profileStore = useProfileStore()
-const winesStore = useWinesStore()
 
 const loading = ref(true)
+const recommendedWines = ref([])
 
 onMounted(async () => {
   try {
     await profileStore.fetchProfile()
-    await winesStore.getAllWines()
+    const response = await client.post('wines/recommendations', {
+      preferences: profileStore.selectedPreferences,
+      limit: 6,
+    })
+    recommendedWines.value = response.results || []
+  } catch (error) {
+    console.error('Error while loading recommended wines:', error)
+    recommendedWines.value = []
   } finally {
     loading.value = false
   }
-})
-
-const recommendedWines = computed(() => {
-  const catalog = buildRecommendationCatalog(winesStore.wines, profileStore.selectedPreferences)
-  return getRecommendedWines(profileStore.selectedPreferences, winesStore.wines, 6, catalog)
 })
 </script>
