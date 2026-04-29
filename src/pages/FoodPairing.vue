@@ -51,8 +51,16 @@
               {{ itemName(item) }}
             </BaseButton>
 
+            <div
+              class="mt-2 inline-flex rounded-full border border-[var(--line)] bg-white/60 px-2.5 py-1 text-xs font-semibold text-[var(--wine)]"
+            >
+              {{ item.recommendationLabel || 'Smart recommendation' }}
+            </div>
+
             <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
-              <div><span class="font-semibold">Match:</span> {{ toPercent(item.probability) }}%</div>
+              <div>
+                <span class="font-semibold">Match:</span> {{ toPercent(item.probability) }}%
+              </div>
               <div v-if="isWineMode">
                 <span class="font-semibold">Categories:</span>
                 {{ item.categories?.join(', ') || '—' }}
@@ -130,8 +138,16 @@
               {{ itemName(item) }}
             </BaseButton>
 
+            <div
+              class="mt-2 inline-flex rounded-full border border-[var(--line)] bg-white/60 px-2.5 py-1 text-xs font-semibold text-[var(--wine)]"
+            >
+              {{ item.recommendationLabel || 'Smart recommendation' }}
+            </div>
+
             <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
-              <div><span class="font-semibold">Match:</span> {{ toPercent(item.probability) }}%</div>
+              <div>
+                <span class="font-semibold">Match:</span> {{ toPercent(item.probability) }}%
+              </div>
               <div v-if="isWineMode">
                 <span class="font-semibold">Categories:</span>
                 {{ item.categories?.join(', ') || '—' }}
@@ -208,14 +224,10 @@ import BaseButton from '../components/ui/BaseButton.vue'
 import client from '../components/httpService/client'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
-import { useRecipesStore } from '../stores/recipesStore'
-import { useWinesStore } from '../stores/winesStore'
 
 const route = useRoute()
 const authStore = useAuthStore()
 const profileStore = useProfileStore()
-const winesStore = useWinesStore()
-const recipesStore = useRecipesStore()
 const loading = ref(true)
 const recommendations = ref([])
 const preferenceRecommendations = ref([])
@@ -227,12 +239,7 @@ const feedbackStatus = ref({})
 
 onMounted(async () => {
   try {
-    await Promise.all([
-      winesStore.getAllWines(),
-      recipesStore.getAllRecipes(),
-      authStore.token ? profileStore.fetchProfile() : Promise.resolve(null),
-    ])
-    await ensureSourceItem()
+    await Promise.all([ensureSourceItem(), authStore.token ? profileStore.fetchProfile() : Promise.resolve(null)])
     await loadRecommendations()
   } catch (error) {
     errorMessage.value = error.message || 'Failed to load AI recommendations.'
@@ -246,15 +253,26 @@ const recipeId = computed(() => String(route.query.recipeId || '').trim())
 const isWineMode = computed(() => Boolean(wineId.value))
 const hasRecipePreferenceSelections = computed(() => {
   const prefs = profileStore.selectedPreferences || {}
-  return [prefs.foodPreferences, prefs.recipeCategories, prefs.recipeMeatTypes, prefs.recipeDishTypes, prefs.recipeMainIngredients].some(
-    (value) => (Array.isArray(value) ? value.length > 0 : Boolean(String(value || '').trim()))
-  )
+  return [
+    prefs.foodPreferences,
+    prefs.recipeCategories,
+    prefs.recipeMeatTypes,
+    prefs.recipeDishTypes,
+    prefs.recipeMainIngredients,
+  ].some((value) => (Array.isArray(value) ? value.length > 0 : Boolean(String(value || '').trim())))
 })
 const hasWinePreferenceSelections = computed(() => {
   const prefs = profileStore.selectedPreferences || {}
-  return [prefs.wineTypes, prefs.style, prefs.flavourProfile, prefs.regions, prefs.alcoholLevels, prefs.foodPreferences, prefs.wineYears, prefs.priceRanges].some(
-    (value) => (Array.isArray(value) ? value.length > 0 : Boolean(String(value || '').trim()))
-  )
+  return [
+    prefs.wineTypes,
+    prefs.style,
+    prefs.flavourProfile,
+    prefs.regions,
+    prefs.alcoholLevels,
+    prefs.foodPreferences,
+    prefs.wineYears,
+    prefs.priceRanges,
+  ].some((value) => (Array.isArray(value) ? value.length > 0 : Boolean(String(value || '').trim())))
 })
 const hasPreferenceSelections = computed(() =>
   isWineMode.value ? hasRecipePreferenceSelections.value : hasWinePreferenceSelections.value
@@ -263,12 +281,8 @@ const canLoadPreferenceRecommendations = computed(
   () => Boolean(authStore.user?._id) && hasPreferenceSelections.value
 )
 
-const sourceWine = computed(() =>
-  winesStore.confirmedWines.find((wine) => wine._id === wineId.value) || fetchedWine.value
-)
-const sourceRecipe = computed(() =>
-  recipesStore.confirmedRecipes.find((recipe) => recipe._id === recipeId.value) || fetchedRecipe.value
-)
+const sourceWine = computed(() => fetchedWine.value)
+const sourceRecipe = computed(() => fetchedRecipe.value)
 const sourceItem = computed(() => sourceWine.value || sourceRecipe.value || null)
 
 const pageTitle = computed(() =>
@@ -307,32 +321,14 @@ function itemLink(item) {
 }
 
 async function loadRecommendations() {
-  if (wineId.value) {
-    const recommendResponse = await client.get(`pairings/recommend?wineId=${wineId.value}&topK=6`)
-    recommendations.value = recommendResponse.results || []
+  const sourceQuery = wineId.value ? `wineId=${wineId.value}` : recipeId.value ? `recipeId=${recipeId.value}` : ''
 
-    if (canLoadPreferenceRecommendations.value) {
-      const preferenceResponse = await client.get(
-        `pairings/recommend?wineId=${wineId.value}&topK=6&usePreferences=true&engine=llm&userId=${authStore.user._id}`
-      )
-      preferenceRecommendations.value = preferenceResponse.results || []
-    } else {
-      preferenceRecommendations.value = []
-    }
-    return
-  }
-
-  if (recipeId.value) {
-    const response = await client.get(`pairings/recommend?recipeId=${recipeId.value}&topK=6`)
-    recommendations.value = response.results || []
-    if (canLoadPreferenceRecommendations.value) {
-      const preferenceResponse = await client.get(
-        `pairings/recommend?recipeId=${recipeId.value}&topK=6&usePreferences=true&engine=llm&userId=${authStore.user._id}`
-      )
-      preferenceRecommendations.value = preferenceResponse.results || []
-    } else {
-      preferenceRecommendations.value = []
-    }
+  if (sourceQuery) {
+    const response = await client.get(
+      `pairings/recommend-bundle?${sourceQuery}&topK=6&includePreferences=${canLoadPreferenceRecommendations.value}`
+    )
+    recommendations.value = response.general?.results || []
+    preferenceRecommendations.value = response.preference?.results || []
     return
   }
 
@@ -346,7 +342,7 @@ async function ensureSourceItem() {
   }
 
   if (wineId.value && !sourceWine.value) {
-    fetchedWine.value = await winesStore.getSelectedWine(wineId.value)
+    fetchedWine.value = await client.get(`wines/${wineId.value}`)
   }
 }
 
@@ -362,14 +358,6 @@ function toPercent(probability) {
   const numeric = Number(probability)
   if (!Number.isFinite(numeric)) return 0
   return Math.round(numeric * 100)
-}
-
-function normalizeText(value) {
-  return String(value || '')
-    .trim()
-    .toLowerCase()
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
 }
 
 async function submitFeedback(item, feedback) {

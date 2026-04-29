@@ -23,6 +23,7 @@ import AddNewRecipe from '../pages/AddNewRecipe.vue'
 import PendingItemsTabs from '../components/admin/PendingItemsTabs.vue'
 import UserRoleManager from '../components/admin/UserRoleManager.vue'
 import SystemStats from '../components/admin/SystemStats.vue'
+import AIManagement from '../components/admin/AIManagement.vue'
 const routes = [
   {
     path: '',
@@ -57,6 +58,7 @@ const routes = [
           { path: '/admin/manager', component: AdminDatabaseManager },
           { path: '/admin/roles', component: UserRoleManager },
           { path: '/admin/stats', component: SystemStats },
+          { path: '/admin/ai', component: AIManagement },
         ],
       },
     ],

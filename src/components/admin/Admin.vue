@@ -15,7 +15,7 @@
         <BaseButton variant="adminFunctions" to="/admin/manager">Database Management</BaseButton>
         <BaseButton variant="adminFunctions" to="/admin/roles">Role Management</BaseButton>
         <BaseButton variant="adminFunctions">OCR System Management</BaseButton>
-        <BaseButton variant="adminFunctions">AI Management</BaseButton>
+        <BaseButton variant="adminFunctions" to="/admin/ai">AI Management</BaseButton>
         <BaseButton variant="adminFunctions" to="/admin/stats">System Statistics</BaseButton>
       </div>
     </div>
