@@ -2,48 +2,48 @@
   <div
     class="rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.82)] p-8 text-[var(--text-main)] shadow-sm"
   >
-    <h2 class="mb-6 text-2xl font-semibold">Receptek kezelése</h2>
+    <h2 class="mb-6 text-2xl font-semibold">Recipe Management</h2>
 
-    <BaseButton class="mb-6" variant="secondary" @click="startAdd">Új recept hozzáadása</BaseButton>
+    <BaseButton class="mb-6" variant="secondary" @click="startAdd">Add New Recipe</BaseButton>
 
     <div
       v-if="isEditing"
       class="mb-8 rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-6"
     >
       <h3 class="mb-4 text-xl text-[var(--wine)]">
-        {{ editRecipe._id ? 'Recept szerkesztése' : 'Új recept hozzáadása' }}
+        {{ editRecipe._id ? 'Edit Recipe' : 'Add New Recipe' }}
       </h3>
 
       <div class="space-y-4">
-        <BaseInput v-model="editRecipe.name" label="Név" />
+        <BaseInput v-model="editRecipe.name" label="Name" />
         <BaseInput
           v-model="editRecipe.ingredientsInput"
-          label="Hozzávalók"
-          placeholder="Vesszővel elválasztva"
+          label="Ingredients"
+          placeholder="Comma separated"
           textarea
         />
         <BaseInput
           v-model="editRecipe.instructionsInput"
-          label="Elkészítés"
-          placeholder="Lépésenként új sorba"
+          label="Instructions"
+          placeholder="One step per line"
           textarea
         />
         <div>
           <label class="mb-1.5 block text-sm font-medium text-[var(--text-muted)]">
-            Recept kategóriák
+            Recipe categories
           </label>
           <BaseMultiselect
             v-model="editRecipe.recipeCategories"
             :options="recipeDietCategories"
             :multiple="true"
-            placeholder="Válaszd ki a kategóriákat"
+            placeholder="Select categories"
           />
         </div>
       </div>
 
       <div class="mt-6 flex gap-3">
-        <BaseButton variant="primary" @click="submitEdit">Mentés</BaseButton>
-        <BaseButton variant="secondary" @click="cancelEdit">Mégse</BaseButton>
+        <BaseButton variant="primary" @click="submitEdit">Save</BaseButton>
+        <BaseButton variant="secondary" @click="cancelEdit">Cancel</BaseButton>
       </div>
     </div>
 
@@ -53,11 +53,11 @@
           <tr
             class="border-b border-[var(--line)] bg-[rgba(255,251,246,0.95)] text-[var(--text-main)]"
           >
-            <th class="p-3">Név</th>
-            <th class="p-3">Hozzávalók</th>
-            <th class="p-3">Elkészítés</th>
-            <th class="p-3">Kategóriák</th>
-            <th class="p-3 text-center">Műveletek</th>
+            <th class="p-3">Name</th>
+            <th class="p-3">Ingredients</th>
+            <th class="p-3">Instructions</th>
+            <th class="p-3">Categories</th>
+            <th class="p-3 text-center">Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -78,8 +78,8 @@
             </td>
             <td class="p-3">
               <div class="flex justify-center gap-2">
-                <BaseButton variant="secondary" @click="startEdit(recipe)">Szerkesztés</BaseButton>
-                <BaseButton variant="danger" @click="handleDelete(recipe._id)">Törlés</BaseButton>
+                <BaseButton variant="secondary" @click="startEdit(recipe)">Edit</BaseButton>
+                <BaseButton variant="danger" @click="handleDelete(recipe._id)">Delete</BaseButton>
               </div>
             </td>
           </tr>
@@ -87,7 +87,7 @@
       </table>
 
       <div v-if="allRecipes.length === 0" class="p-10 text-center italic text-[var(--text-muted)]">
-        Nincsenek receptek az adatbázisban.
+        There are no recipes in the database.
       </div>
 
       <div v-if="allRecipes.length > pageSize" class="mt-6 flex items-center justify-center gap-4">
@@ -102,7 +102,7 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted, watch } from 'vue' // onMounted kell a betöltéshez!
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRecipesStore } from '../../stores/recipesStore'
 import { RECIPE_DIET_CATEGORIES, asRecipeCategoryArray } from '../../services/recipeCategories'
 import BaseInput from '../ui/BaseInput.vue'
@@ -129,7 +129,6 @@ const paginatedRecipes = computed(() => {
   return allRecipes.value.slice(start, start + pageSize)
 })
 
-// --- ADATOK BETÖLTÉSE ---
 onMounted(async () => {
   await recipesStore.getAllRecipes()
 })
@@ -176,7 +175,7 @@ async function submitEdit() {
   const { _id, name, ingredientsInput, instructionsInput, recipeCategories } = editRecipe.value
 
   if (!name || !ingredientsInput || !instructionsInput) {
-    alert('Kérlek, tölts ki minden mezőt!')
+    alert('Please fill in all fields.')
     return
   }
 
@@ -201,21 +200,20 @@ async function submitEdit() {
       await recipesStore.addNewRecipe(payload)
     }
     isEditing.value = false
-    await recipesStore.getAllRecipes() // Lista frissítése mentés után
+    await recipesStore.getAllRecipes()
   } catch (err) {
-    console.error('Mentési hiba:', err)
+    console.error('Save error:', err)
   }
 }
 
-// JAVÍTÁS: deleteRecipes helyett deleteRecipe
 async function handleDelete(id) {
   if (!id) return
-  if (confirm('Biztosan törlöd ezt a receptet?')) {
+  if (confirm('Are you sure you want to delete this recipe?')) {
     const success = await recipesStore.deleteRecipe(id)
     if (success) {
-      await recipesStore.getAllRecipes() // Frissítés törlés után
+      await recipesStore.getAllRecipes()
     } else {
-      alert('Hiba történt a törlés során!')
+      alert('An error occurred while deleting the recipe.')
     }
   }
 }

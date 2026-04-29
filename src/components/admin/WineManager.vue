@@ -3,9 +3,9 @@
     class="rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.82)] p-8 text-[var(--text-main)] shadow-sm"
   >
     <div class="mb-6 flex items-center justify-between">
-      <h2 class="text-2xl font-semibold">Borok kezelése</h2>
+      <h2 class="text-2xl font-semibold">Wine Management</h2>
       <BaseButton v-if="!isEditing" variant="secondary" @click="startAdd"
-        >Új bor hozzáadása</BaseButton
+        >Add New Wine</BaseButton
       >
     </div>
 
@@ -84,7 +84,7 @@ async function handleSave(wineData) {
 }
 
 async function handleDelete(id) {
-  if (confirm('Biztosan törlöd ezt a bort?')) {
+  if (confirm('Are you sure you want to delete this wine?')) {
     await winesStore.deleteWine(id)
   }
 }

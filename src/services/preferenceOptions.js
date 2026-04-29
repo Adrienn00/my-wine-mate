@@ -24,9 +24,9 @@ const uniqueDisplayValues = (values) => {
 const alcoholBucketLabel = (alcoholValue) => {
   const level = Number.parseFloat(alcoholValue)
   if (!Number.isFinite(level)) return ''
-  if (level < 11) return 'Alacsony'
-  if (level <= 13.5) return 'Közepes'
-  return 'Magas'
+  if (level < 11) return 'Low'
+  if (level <= 13.5) return 'Medium'
+  return 'High'
 }
 
 const sortYearsDesc = (years) =>

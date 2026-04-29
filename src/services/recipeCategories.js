@@ -1,42 +1,42 @@
-export const RECIPE_DIET_CATEGORIES = ['Vegetáriánus', 'Vegán', 'Húsos', 'Gluténmentes', 'Desszert']
+export const RECIPE_DIET_CATEGORIES = ['Vegetarian', 'Vegan', 'Meaty', 'Gluten-free', 'Dessert']
 
 export const RECIPE_MEAT_TYPES = [
-  'Csirke',
-  'Pulyka',
-  'Marha',
-  'Sertés',
-  'Hal',
-  'Tenger gyümölcsei',
-  'Kacsa',
-  'Bárány',
+  'Chicken',
+  'Turkey',
+  'Beef',
+  'Pork',
+  'Fish',
+  'Seafood',
+  'Duck',
+  'Lamb',
 ]
 
 export const RECIPE_DISH_TYPES = [
-  'Leves',
-  'Főétel',
-  'Köret',
-  'Saláta',
-  'Reggeli',
-  'Desszert',
+  'Soup',
+  'Main course',
+  'Side dish',
+  'Salad',
+  'Breakfast',
+  'Dessert',
   'Snack',
-  'Szósz / Krém',
-  'Lekvár / Befőtt',
+  'Sauce / Cream',
+  'Jam / Preserves',
 ]
 
 export const RECIPE_MAIN_INGREDIENTS = [
-  'Csirke',
-  'Pulyka',
-  'Marha',
-  'Sertés',
-  'Hal',
-  'Tenger gyümölcsei',
-  'Burgonya',
-  'Rizs',
-  'Tészta',
-  'Zöldség',
-  'Gyümölcs',
-  'Sajt',
-  'Gomba',
+  'Chicken',
+  'Turkey',
+  'Beef',
+  'Pork',
+  'Fish',
+  'Seafood',
+  'Potato',
+  'Rice',
+  'Pasta',
+  'Vegetable',
+  'Fruit',
+  'Cheese',
+  'Mushroom',
 ]
 
 export const asRecipeCategoryArray = (value) => {
@@ -54,11 +54,11 @@ const normalizeText = (value) =>
     .replace(/[\u0300-\u036f]/g, '')
 
 const RECIPE_MEAT_TYPE_KEYWORDS = [
-  { label: 'Csirke', keywords: ['csirke'] },
-  { label: 'Pulyka', keywords: ['pulyka'] },
-  { label: 'Marha', keywords: ['marha', 'borju', 'borjú'] },
+  { label: 'Chicken', keywords: ['csirke'] },
+  { label: 'Turkey', keywords: ['pulyka'] },
+  { label: 'Beef', keywords: ['marha', 'borju', 'borjú'] },
   {
-    label: 'Sertés',
+    label: 'Pork',
     keywords: [
       'sertes',
       'sertés',
@@ -72,7 +72,7 @@ const RECIPE_MEAT_TYPE_KEYWORDS = [
     ],
   },
   {
-    label: 'Hal',
+    label: 'Fish',
     keywords: [
       'lazac',
       'tonhal',
@@ -87,7 +87,7 @@ const RECIPE_MEAT_TYPE_KEYWORDS = [
     ],
   },
   {
-    label: 'Tenger gyümölcsei',
+    label: 'Seafood',
     keywords: [
       'garnela',
       'garnéla',
@@ -98,17 +98,17 @@ const RECIPE_MEAT_TYPE_KEYWORDS = [
       'tenger gyümölcsei',
     ],
   },
-  { label: 'Kacsa', keywords: ['kacsa'] },
-  { label: 'Bárány', keywords: ['barany', 'bárány'] },
+  { label: 'Duck', keywords: ['kacsa'] },
+  { label: 'Lamb', keywords: ['barany', 'bárány'] },
 ]
 
 const RECIPE_DISH_TYPE_KEYWORDS = [
-  { label: 'Leves', keywords: ['leves'] },
-  { label: 'Köret', keywords: ['koret', 'köret', 'pure', 'püré', 'rizs', 'krumpli', 'burgonya'] },
-  { label: 'Saláta', keywords: ['salata', 'saláta'] },
-  { label: 'Reggeli', keywords: ['reggeli', 'bundas kenyer', 'bundás kenyér', 'omlett'] },
+  { label: 'Soup', keywords: ['leves'] },
+  { label: 'Side dish', keywords: ['koret', 'köret', 'pure', 'püré', 'rizs', 'krumpli', 'burgonya'] },
+  { label: 'Salad', keywords: ['salata', 'saláta'] },
+  { label: 'Breakfast', keywords: ['reggeli', 'bundas kenyer', 'bundás kenyér', 'omlett'] },
   {
-    label: 'Desszert',
+    label: 'Dessert',
     keywords: [
       'desszert',
       'torta',
@@ -125,24 +125,24 @@ const RECIPE_DISH_TYPE_KEYWORDS = [
     ],
   },
   { label: 'Snack', keywords: ['pogacsa', 'pogácsa', 'kifli', 'szendvics', 'falatka'] },
-  { label: 'Szósz / Krém', keywords: ['szosz', 'szósz', 'krem', 'krém', 'martas', 'mártás'] },
-  { label: 'Lekvár / Befőtt', keywords: ['lekvar', 'lekvár', 'befott', 'befőtt', 'dzsem'] },
+  { label: 'Sauce / Cream', keywords: ['szosz', 'szósz', 'krem', 'krém', 'martas', 'mártás'] },
+  { label: 'Jam / Preserves', keywords: ['lekvar', 'lekvár', 'befott', 'befőtt', 'dzsem'] },
 ]
 
 const RECIPE_MAIN_INGREDIENT_KEYWORDS = [
-  { label: 'Csirke', keywords: ['csirke'] },
-  { label: 'Pulyka', keywords: ['pulyka'] },
-  { label: 'Marha', keywords: ['marha', 'borju', 'borjú'] },
-  { label: 'Sertés', keywords: ['sertes', 'sertés', 'diszno', 'disznó', 'karaj', 'tarja'] },
+  { label: 'Chicken', keywords: ['csirke'] },
+  { label: 'Turkey', keywords: ['pulyka'] },
+  { label: 'Beef', keywords: ['marha', 'borju', 'borjú'] },
+  { label: 'Pork', keywords: ['sertes', 'sertés', 'diszno', 'disznó', 'karaj', 'tarja'] },
   {
-    label: 'Hal',
+    label: 'Fish',
     keywords: ['lazac', 'tonhal', 'hekk', 'pisztrang', 'harcsa', 'ponty', 'tokehal', 'tőkehal'],
   },
-  { label: 'Tenger gyümölcsei', keywords: ['garnela', 'garnéla', 'polip', 'kagyló', 'kagylo'] },
-  { label: 'Burgonya', keywords: ['burgonya', 'krumpli'] },
-  { label: 'Rizs', keywords: ['rizs', 'rizotto', 'rizottó'] },
+  { label: 'Seafood', keywords: ['garnela', 'garnéla', 'polip', 'kagyló', 'kagylo'] },
+  { label: 'Potato', keywords: ['burgonya', 'krumpli'] },
+  { label: 'Rice', keywords: ['rizs', 'rizotto', 'rizottó'] },
   {
-    label: 'Tészta',
+    label: 'Pasta',
     keywords: [
       'teszta',
       'tészta',
@@ -156,7 +156,7 @@ const RECIPE_MAIN_INGREDIENT_KEYWORDS = [
     ],
   },
   {
-    label: 'Zöldség',
+    label: 'Vegetable',
     keywords: [
       'karfiol',
       'brokkoli',
@@ -173,7 +173,7 @@ const RECIPE_MAIN_INGREDIENT_KEYWORDS = [
     ],
   },
   {
-    label: 'Gyümölcs',
+    label: 'Fruit',
     keywords: [
       'alma',
       'korte',
@@ -189,10 +189,10 @@ const RECIPE_MAIN_INGREDIENT_KEYWORDS = [
     ],
   },
   {
-    label: 'Sajt',
+    label: 'Cheese',
     keywords: ['sajt', 'mozzarella', 'parmezan', 'parmezán', 'camembert', 'feta', 'ricotta'],
   },
-  { label: 'Gomba', keywords: ['gomba'] },
+  { label: 'Mushroom', keywords: ['gomba'] },
 ]
 
 export const detectRecipeMeatTypes = (recipe = {}) => {
@@ -230,14 +230,14 @@ export const detectRecipeDishTypes = (recipe = {}) => {
     !nameText.includes('salata') &&
     !nameText.includes('saláta')
   ) {
-    matches.push('Főétel')
+    matches.push('Main course')
   }
 
   if (
     allText.includes('desszert') ||
-    asRecipeCategoryArray(recipe.recipeCategories).includes('Desszert')
+    asRecipeCategoryArray(recipe.recipeCategories).includes('Dessert')
   ) {
-    if (!matches.includes('Desszert')) matches.push('Desszert')
+    if (!matches.includes('Dessert')) matches.push('Dessert')
   }
 
   return [...new Set(matches)]

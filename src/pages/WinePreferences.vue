@@ -1,105 +1,140 @@
 <template>
-  <div class="mx-auto mb-4 mt-2 max-w-xl text-left">
-    <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
-  </div>
-
-  <div class="text-center text-4xl text-[var(--text-main)]">Hozzád leginkább találó bor</div>
-
-  <div
-    class="glass-panel my-6 mx-auto flex max-h-150 max-w-xl flex-col justify-start gap-6 overflow-auto rounded-2xl border border-[var(--line)] p-8 text-center text-[var(--text-main)]"
-  >
-    <!-- NÉZET MÓD -->
-    <template v-if="!isEditing">
-      <div class="text-2xl font-semibold">Elmentett preferenciáid</div>
-
-      <div class="space-y-2 text-left font-normal not-italic text-[var(--text-muted)]">
-        <div><span class="font-bold">Bor típusa:</span> {{ pretty(prefs.wineTypes) }}</div>
-        <div><span class="font-bold">Stílus:</span> {{ pretty(prefs.style) }}</div>
-        <div><span class="font-bold">Ízprofil:</span> {{ pretty(prefs.flavourProfile) }}</div>
-        <div><span class="font-bold">Régió:</span> {{ pretty(prefs.regions) }}</div>
-        <div><span class="font-bold">Árkategória:</span> {{ pretty(prefs.priceRanges) }}</div>
-        <div><span class="font-bold">Alkoholtartalom:</span> {{ pretty(prefs.alcoholLevels) }}</div>
-        <div>
-          <span class="font-bold">Étel preferencia:</span> {{ pretty(prefs.foodPreferences) }}
-        </div>
-        <div><span class="font-bold">Bor év:</span> {{ prettyOne(prefs.wineYears) }}</div>
+  <section class="page-shell">
+    <div class="page-frame page-stack max-w-4xl">
+      <div class="page-actions">
+        <BaseButton to="/profile" variant="secondary">Back</BaseButton>
       </div>
 
-      <BaseButton variant="primary" class="mx-auto mt-4" @click="startEdit">
-        Szerkesztés
-      </BaseButton>
-    </template>
-
-    <!-- SZERKESZTÉS MÓD -->
-    <template v-else>
-      <div class="text-2xl font-semibold">Preferenciák szerkesztése</div>
-
-      <div>Bor tipusa</div>
-
-      <BaseMultiselect
-        v-model="draft.wineTypes"
-        :options="wineTypeOptions"
-        :multiple="true"
-        placeholder="Válaszd ki a kedvenc típusaid"
-      />
-
-      <BaseMultiselect
-        v-model="draft.style"
-        :options="wineStyleOptions"
-        :multiple="true"
-        placeholder="Válaszd ki a kedvelt"
-      />
-
-      <BaseMultiselect
-        v-model="draft.flavourProfile"
-        :options="flavourProfileOptions"
-        :multiple="true"
-        placeholder="Válaszd ki a kedvelt ízprofiljaid"
-      />
-
-      <BaseMultiselect
-        v-model="draft.regions"
-        :options="regionsOptions"
-        :multiple="true"
-        placeholder="Válaszd ki a régió(ka)t"
-      />
-
-      <BaseMultiselect
-        v-model="draft.priceRanges"
-        :options="priceRangesOptions"
-        :multiple="true"
-        placeholder="Válaszd ki az árakat"
-      />
-
-      <BaseMultiselect
-        v-model="draft.alcoholLevels"
-        :options="alcoholLevelsOptions"
-        :multiple="true"
-        placeholder="Válaszd ki az alkoholtartalmat"
-      />
-
-      <BaseMultiselect
-        v-model="draft.foodPreferences"
-        :options="foodTypePreferences"
-        :multiple="true"
-        placeholder="Válaszd ki az étkezési típusod"
-      />
-
-      <BaseMultiselect
-        v-model="draft.wineYears"
-        :options="yearPreferences"
-        :multiple="false"
-        placeholder="Válaszd ki a bor évet"
-      />
-
-      <div class="mt-2 flex justify-center gap-3">
-        <BaseButton variant="primary" :disabled="saving" @click="saveEdit">
-          {{ saving ? 'Mentés...' : 'Mentés' }}
-        </BaseButton>
-        <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit"> Mégse </BaseButton>
+      <div class="section-intro text-center">
+        <div class="section-kicker">Profile Settings</div>
+        <h1 class="section-title">Wine Preferences</h1>
+        <p class="section-summary mx-auto">
+          Keep your wine profile in one place so search results and future recommendations stay
+          aligned with your taste.
+        </p>
       </div>
-    </template>
-  </div>
+
+      <div
+        class="glass-panel mx-auto flex max-h-150 w-full max-w-3xl flex-col justify-start gap-6 overflow-auto rounded-[2rem] p-8 text-[var(--text-main)]"
+      >
+        <template v-if="!isEditing">
+          <div class="section-intro mb-0 text-center">
+            <div class="micro-label">Current Setup</div>
+            <h2 class="text-[2rem]">Saved Preferences</h2>
+          </div>
+
+          <div class="grid gap-3 text-left text-[var(--text-muted)] md:grid-cols-2">
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Wine types:</span> {{ pretty(prefs.wineTypes) }}</div>
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Style:</span> {{ pretty(prefs.style) }}</div>
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Flavor profile:</span> {{ pretty(prefs.flavourProfile) }}</div>
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Region:</span> {{ pretty(prefs.regions) }}</div>
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Price range:</span> {{ pretty(prefs.priceRanges) }}</div>
+            <div class="soft-card rounded-2xl p-4"><span class="font-bold text-[var(--text-main)]">Alcohol level:</span> {{ pretty(prefs.alcoholLevels) }}</div>
+            <div class="soft-card rounded-2xl p-4 md:col-span-2"><span class="font-bold text-[var(--text-main)]">Food preferences:</span> {{ pretty(prefs.foodPreferences) }}</div>
+            <div class="soft-card rounded-2xl p-4 md:col-span-2"><span class="font-bold text-[var(--text-main)]">Wine year:</span> {{ prettyOne(prefs.wineYears) }}</div>
+          </div>
+
+          <BaseButton variant="primary" class="mx-auto mt-2" @click="startEdit">Edit</BaseButton>
+        </template>
+
+        <template v-else>
+          <div class="section-intro mb-0 text-center">
+            <div class="micro-label">Editing</div>
+            <h2 class="text-[2rem]">Update Your Preferences</h2>
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Wine type</div>
+            <BaseMultiselect
+              v-model="draft.wineTypes"
+              :options="wineTypeOptions"
+              :multiple="true"
+              placeholder="Select your favorite wine types"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Style</div>
+            <BaseMultiselect
+              v-model="draft.style"
+              :options="wineStyleOptions"
+              :multiple="true"
+              placeholder="Select your preferred styles"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Flavor profile</div>
+            <BaseMultiselect
+              v-model="draft.flavourProfile"
+              :options="flavourProfileOptions"
+              :multiple="true"
+              placeholder="Select your preferred flavor profiles"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Region</div>
+            <BaseMultiselect
+              v-model="draft.regions"
+              :options="regionsOptions"
+              :multiple="true"
+              placeholder="Select region(s)"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Price range</div>
+            <BaseMultiselect
+              v-model="draft.priceRanges"
+              :options="priceRangesOptions"
+              :multiple="true"
+              placeholder="Select price ranges"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Alcohol level</div>
+            <BaseMultiselect
+              v-model="draft.alcoholLevels"
+              :options="alcoholLevelsOptions"
+              :multiple="true"
+              placeholder="Select alcohol levels"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Food preferences</div>
+            <BaseMultiselect
+              v-model="draft.foodPreferences"
+              :options="foodTypePreferences"
+              :multiple="true"
+              placeholder="Select your food preferences"
+            />
+          </div>
+
+          <div class="space-y-1 text-left">
+            <div class="micro-label">Wine year</div>
+            <BaseMultiselect
+              v-model="draft.wineYears"
+              :options="yearPreferences"
+              :multiple="false"
+              placeholder="Select wine year"
+            />
+          </div>
+
+          <div class="mt-2 flex justify-center gap-3">
+            <BaseButton variant="primary" :disabled="saving" @click="saveEdit">
+              {{ saving ? 'Saving...' : 'Save' }}
+            </BaseButton>
+            <BaseButton variant="secondary" :disabled="saving" @click="cancelEdit">
+              Cancel
+            </BaseButton>
+          </div>
+        </template>
+      </div>
+    </div>
+  </section>
 </template>
 
 <script setup>
@@ -113,12 +148,12 @@ import { buildPreferenceOptionsFromWines } from '../services/preferenceOptions'
 const profileStore = useProfileStore()
 const winesStore = useWinesStore()
 
-// betöltés DB-ből
+// Load data from the database.
 onMounted(async () => {
   await Promise.all([profileStore.fetchProfile(), winesStore.getAllWines()])
 })
 
-// a STORE-ban lévő (betöltött) preferenciák
+// Preferences currently stored in the Pinia store.
 const prefs = computed(() => profileStore.selectedPreferences)
 
 const dynamicOptions = computed(() =>
@@ -145,7 +180,7 @@ const yearPreferences = computed(() => pickOptions('wineYears'))
 const isEditing = ref(false)
 const saving = ref(false)
 
-// draft szerkesztéshez
+// Draft state used while editing.
 const draft = reactive({
   wineTypes: [],
   style: [],
@@ -195,7 +230,7 @@ async function saveEdit() {
 
     await profileStore.updateProfile(payload)
 
-    // biztos ami biztos: frissítsük vissza a store-t is DB-ből
+    // Refresh the store from the database to keep everything in sync.
     await profileStore.fetchProfile()
 
     isEditing.value = false

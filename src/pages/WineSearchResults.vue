@@ -1,22 +1,22 @@
 <template>
   <div>
-    <!-- RENDEZÉS -->
+    <!-- Sorting -->
     <div v-if="results.length" class="mb-4 flex justify-end">
       <select v-model="sort" class="result-select">
-        <option value="">Rendezés</option>
-        <option value="name">Név (A-Z)</option>
-        <option value="priceAsc">Ár növekvő</option>
-        <option value="priceDesc">Ár csökkenő</option>
-        <option value="ratingDesc">Legjobb értékelés</option>
+        <option value="">Sort</option>
+        <option value="name">Name (A-Z)</option>
+        <option value="priceAsc">Price: Low to High</option>
+        <option value="priceDesc">Price: High to Low</option>
+        <option value="ratingDesc">Top Rated</option>
       </select>
     </div>
 
     <!-- LOADING -->
     <div v-if="loading" class="mb-4 animate-pulse text-sm font-medium text-[var(--text-main)]">
-      Betöltés...
+      Loading...
     </div>
 
-    <!-- TALÁLATOK -->
+    <!-- Results -->
     <div v-else-if="paginatedResults.length" class="space-y-4">
       <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
         <div
@@ -36,7 +36,7 @@
               v-else
               class="flex h-20 items-center justify-center bg-[linear-gradient(120deg,rgba(122,32,56,0.12),rgba(237,215,212,0.7))] text-sm font-medium text-[var(--wine)]"
             >
-              🍷 Kattints a részletekhez
+              🍷 Click to view details
             </div>
           </div>
 
@@ -44,7 +44,7 @@
             <div>
               <h3 class="text-lg font-semibold">{{ wine.name }}</h3>
               <p class="text-xs uppercase tracking-wide text-[var(--text-muted)]">
-                {{ wine.type || 'Ismeretlen típus' }} • {{ wine.style || 'N/A' }}
+                {{ wine.type || 'Unknown type' }} • {{ wine.style || 'N/A' }}
               </p>
             </div>
             <div
@@ -55,24 +55,24 @@
           </div>
 
           <p class="mt-2 text-sm text-[var(--text-muted)]">
-            {{ wine.description || 'Nyisd meg a részleteket a teljes borprofilhoz.' }}
+            {{ wine.description || 'Open the details page to view the full wine profile.' }}
           </p>
         </div>
       </div>
 
       <div v-if="totalPages > 1" class="flex items-center justify-between gap-4 pt-2">
         <button class="pager-btn" :disabled="currentPage === 1" @click="currentPage--">
-          Előző
+          Previous
         </button>
-        <p class="text-sm text-[var(--text-muted)]">{{ currentPage }} / {{ totalPages }} oldal</p>
+        <p class="text-sm text-[var(--text-muted)]">{{ currentPage }} / {{ totalPages }} pages</p>
         <button class="pager-btn" :disabled="currentPage === totalPages" @click="currentPage++">
-          Következő
+          Next
         </button>
       </div>
     </div>
 
-    <!-- NINCS TALÁLAT -->
-    <p v-else-if="showEmptyState" class="mb-4 text-sm text-[var(--text-muted)]">Nincs találat.</p>
+    <!-- Empty state -->
+    <p v-else-if="showEmptyState" class="mb-4 text-sm text-[var(--text-muted)]">No results found.</p>
   </div>
 </template>
 

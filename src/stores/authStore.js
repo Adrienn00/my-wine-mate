@@ -61,18 +61,15 @@ export const useAuthStore = defineStore('auth', () => {
       const data = await res.json()
       if (!res.ok) throw new Error(data.message || 'Login failed')
 
-      // 💡 Token mentés
       token.value = data.token
       localStorage.setItem('token', token.value)
 
-      // 💡 User azonnali beállítása (reaktivitás miatt)
       user.value = data
 
-      // 💡 Profil betöltés háttérben — ha elhasal, nem dob ki
       try {
         await loadProfile()
       } catch (err) {
-        console.warn('Profile load failed (nem gond):', err.message)
+        console.warn('Profile load failed:', err.message)
       }
     } catch (e) {
       console.error('❌ [login] Error:', e.message)
@@ -91,7 +88,7 @@ export const useAuthStore = defineStore('auth', () => {
       user.value = data
     } catch (e) {
       console.error('Profile load failed:', e.message)
-      error.value = e.message // logout() helyett csak hiba
+      error.value = e.message
     } finally {
       loading.value = false
     }

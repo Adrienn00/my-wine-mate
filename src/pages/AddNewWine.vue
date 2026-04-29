@@ -5,71 +5,71 @@
         class="glass-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
       >
         <div class="mb-1">
-          <BaseButton to="/" variant="secondary">Vissza</BaseButton>
+          <BaseButton to="/" variant="secondary">Back</BaseButton>
         </div>
 
         <h1
           class="mb-6 text-center text-3xl font-light leading-snug text-[var(--text-main)] md:text-5xl"
         >
-          Adj hozzá új bort
+          Add a New Wine
         </h1>
         <form class="flex flex-col gap-y-5" @submit.prevent="submitWine">
-          <BaseInput id="wineName" v-model="wine.name" placeholder="Bor neve *" required />
+          <BaseInput id="wineName" v-model="wine.name" placeholder="Wine name *" required />
 
-          <BaseInput id="winery" v-model="wine.winery" placeholder="Borászat neve" />
+          <BaseInput id="winery" v-model="wine.winery" placeholder="Winery name" />
 
-          <BaseInput id="description" v-model="wine.description" placeholder="Leírás" textarea />
+          <BaseInput id="description" v-model="wine.description" placeholder="Description" textarea />
 
           <BaseInput
             id="type"
             v-model="wine.type"
-            placeholder="Típus"
+            placeholder="Type"
             datalistId="type-options"
-            :datalist="['Vörös', 'Fehér', 'Rozé']"
+            :datalist="['Red', 'White', 'Rose']"
           />
 
           <BaseInput
             id="style"
             v-model="wine.style"
-            placeholder="Stílus"
+            placeholder="Style"
             datalistId="style-options"
-            :datalist="['Száraz', 'Félszáraz', 'Édes', 'Félédes']"
+            :datalist="['Dry', 'Semi-dry', 'Sweet', 'Semi-sweet']"
           />
 
           <BaseInput
             id="flavorProfiles"
             v-model="flavorProfilesText"
-            placeholder="Ízvilág (vesszővel elválasztva)"
+            placeholder="Flavor profiles (comma separated)"
             datalistId="flavor-options"
-            :datalist="['Gyümölcsös', 'Fűszeres', 'Virágos', 'Földes']"
+            :datalist="['Fruity', 'Spicy', 'Floral', 'Earthy']"
           />
 
           <BaseInput
             id="originCountry"
             v-model="wine.origin.country"
-            placeholder="Származási ország"
+            placeholder="Country of origin"
           />
 
           <BaseInput
             id="originRegion"
             v-model="wine.origin.region"
-            placeholder="Származási régió"
+            placeholder="Region of origin"
           />
 
           <BaseInput
             id="grapeVarieties"
             v-model="grapeVarietiesText"
-            placeholder="Szőlőfajták (vesszővel elválasztva)"
+            placeholder="Grape varieties (comma separated)"
           />
 
-          <BaseInput id="year" v-model="wine.year" placeholder="Évjárat" />
+          <BaseInput id="year" v-model="wine.year" placeholder="Vintage" />
 
-          <BaseInput id="alcohol" v-model="wine.alcohol" placeholder="Alkohol %" />
+          <BaseInput id="alcohol" v-model="wine.alcohol" placeholder="Alcohol %" />
 
           <BaseInput
             id="priceRange"
             v-model="wine.priceRange"
-            placeholder="Ártartomány"
+            placeholder="Price range"
             datalistId="price-options"
             :datalist="['20-50', '50-80', '80-130', '>130']"
           />
@@ -77,26 +77,26 @@
           <BaseInput
             id="foodPairingHints"
             v-model="foodPairingHintsText"
-            placeholder="Ételajánlás (vesszővel elválasztva)"
+            placeholder="Food pairing hints (comma separated)"
           />
 
           <BaseInput
             id="purchaseOptions"
             v-model="purchaseOptionsText"
-            placeholder="Vásárlási opciók (soronként: Bolt | Ár | URL)"
+            placeholder="Purchase options (one per line: Shop | Price | URL)"
             textarea
           />
 
-          <BaseInput id="imageUrl" v-model="wine.imageUrl" type="url" placeholder="Kép URL" />
+          <BaseInput id="imageUrl" v-model="wine.imageUrl" type="url" placeholder="Image URL" />
 
           <label class="flex items-center gap-x-3">
             <input type="checkbox" v-model="wine.is_award_winner" />
-            <span class="text-[var(--text-main)]">Díjnyertes bor</span>
+            <span class="text-[var(--text-main)]">Award-winning wine</span>
           </label>
 
-          <BaseInput id="tags" v-model="tagsText" placeholder="Címkék (vesszővel elválasztva)" />
+          <BaseInput id="tags" v-model="tagsText" placeholder="Tags (comma separated)" />
 
-          <BaseButton variant="secondary" type="submit">Bor hozzáadása</BaseButton>
+          <BaseButton variant="secondary" type="submit">Submit Wine</BaseButton>
         </form>
       </div>
     </div>
@@ -142,7 +142,7 @@ const purchaseOptionsText = ref('')
 
 async function submitWine() {
   if (!wine.value.name.trim()) {
-    alert('Kérlek, add meg a bor nevét!')
+    alert('Please enter the wine name.')
     return
   }
   wine.value.flavorProfiles = flavorProfilesText.value
@@ -184,7 +184,7 @@ async function submitWine() {
     .filter((option) => option.shopName || option.url)
   try {
     await winesStore.addNewWine({ ...wine.value })
-    alert('Sikeresen elküldve')
+    alert('Submitted successfully.')
     wine.value = {
       name: '',
       winery: '',
@@ -210,7 +210,7 @@ async function submitWine() {
     tagsText.value = ''
     purchaseOptionsText.value = ''
   } catch (error) {
-    alert('Hiba tortent a hozzaadaskor')
+    alert('An error occurred while adding the wine.')
     console.error(error)
   }
 }

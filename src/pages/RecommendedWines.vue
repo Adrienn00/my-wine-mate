@@ -1,14 +1,14 @@
 <template>
   <div class="mx-auto max-w-6xl p-6">
     <div class="mb-4">
-      <BaseButton to="/profile" variant="secondary">Vissza</BaseButton>
+      <BaseButton to="/profile" variant="secondary">Back</BaseButton>
     </div>
 
     <h2 class="mb-6 text-center text-3xl font-semibold text-[var(--text-main)]">
-      Ajánlott borok számodra
+      Recommended Wines for You
     </h2>
 
-    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Betöltés...</div>
+    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Loading...</div>
 
     <div
       v-else-if="recommendedWines.length"
@@ -30,6 +30,12 @@
           {{ wine.name }}
         </BaseButton>
 
+        <div
+          class="mt-2 inline-flex rounded-full border border-[var(--line)] bg-white/60 px-2.5 py-1 text-xs font-semibold text-[var(--wine)]"
+        >
+          {{ wine.recommendationLabel || 'Smart recommendation' }}
+        </div>
+
         <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
           <div>
             <span class="font-semibold">Match:</span>
@@ -37,27 +43,27 @@
           </div>
 
           <div>
-            <span class="font-semibold">Típus:</span>
+            <span class="font-semibold">Type:</span>
             {{ wine.type || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Stílus:</span>
+            <span class="font-semibold">Style:</span>
             {{ wine.style || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Ízprofil:</span>
+            <span class="font-semibold">Flavor profile:</span>
             {{ wine.flavorProfiles?.join(', ') || '—' }}
           </div>
 
           <div>
-            <span class="font-semibold">Ár:</span>
+            <span class="font-semibold">Price:</span>
             {{ wine.priceRange || '—' }}
           </div>
 
           <div v-if="wine.reasons?.length" class="pt-1 text-xs text-[var(--wine)]">
-            <span class="font-semibold">Miért ajánlott:</span>
+            <span class="font-semibold">Why it is recommended:</span>
             {{ wine.reasons.slice(0, 2).join(' • ') }}
           </div>
         </div>
@@ -65,35 +71,35 @@
     </div>
 
     <div v-else class="mt-4 text-center text-[var(--text-main)]">
-      <p>Nincs elérhető ajánlás a megadott preferenciák alapján.</p>
+      <p>No recommendations are available for the selected preferences.</p>
     </div>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted, ref } from 'vue'
-import { useWinesStore } from '../stores/winesStore'
+import { onMounted, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
-import { getRecommendedWines } from '../services/recommendationEngine'
-import { buildRecommendationCatalog } from '../services/recommendationCatalog'
+import client from '../components/httpService/client'
 
 const profileStore = useProfileStore()
-const winesStore = useWinesStore()
 
 const loading = ref(true)
+const recommendedWines = ref([])
 
 onMounted(async () => {
   try {
     await profileStore.fetchProfile()
-    await winesStore.getAllWines()
+    const response = await client.post('wines/recommendations', {
+      preferences: profileStore.selectedPreferences,
+      limit: 6,
+    })
+    recommendedWines.value = response.results || []
+  } catch (error) {
+    console.error('Error while loading recommended wines:', error)
+    recommendedWines.value = []
   } finally {
     loading.value = false
   }
-})
-
-const recommendedWines = computed(() => {
-  const catalog = buildRecommendationCatalog(winesStore.wines, profileStore.selectedPreferences)
-  return getRecommendedWines(profileStore.selectedPreferences, winesStore.wines, 6, catalog)
 })
 </script>

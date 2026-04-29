@@ -1,18 +1,18 @@
 <template>
   <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-[var(--text-main)]">
     <div class="mb-4">
-      <BaseButton to="/admin" variant="secondary">Vissza</BaseButton>
+      <BaseButton to="/admin" variant="secondary">Back</BaseButton>
     </div>
 
-    <h2 class="mb-6 text-2xl">Jogosultságkezelés</h2>
+    <h2 class="mb-6 text-2xl">Role Management</h2>
 
     <table class="w-full text-left">
       <thead>
         <tr class="border-b border-[var(--line)]">
-          <th>Név</th>
+          <th>Name</th>
           <th>Email</th>
           <th>Admin</th>
-          <th>Művelet</th>
+          <th>Action</th>
         </tr>
       </thead>
 
@@ -27,7 +27,7 @@
 
           <td>
             <BaseButton variant="secondary" @click="toggleAdmin(user)">
-              {{ user.isAdmin ? 'Admin jog elvétele' : 'Adminná tesz' }}
+              {{ user.isAdmin ? 'Remove Admin Rights' : 'Make Admin' }}
             </BaseButton>
           </td>
         </tr>

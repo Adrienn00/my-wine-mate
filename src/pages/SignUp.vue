@@ -4,35 +4,35 @@
       @submit.prevent="signup"
       class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
     >
-      <h1 class="mb-5 text-center text-3xl font-semibold">Regisztráció</h1>
+      <h1 class="mb-5 text-center text-3xl font-semibold">Sign Up</h1>
 
       <BaseInput
         id="email"
-        label="Add meg az e-mailed!"
+        label="Email"
         type="email"
         v-model="email"
         :error="emailError"
       />
       <BaseInput
         id="password"
-        label="Add meg a jelszavad!"
+        label="Password"
         type="password"
         v-model="password"
         :error="passwordError"
       />
       <BaseInput
         id="repeatedPassword"
-        label="Add meg újra a jelszavad"
+        label="Confirm password"
         type="password"
         v-model="repeatedPassword"
         :error="repeatedPasswordError"
       />
 
       <div class="w-full text-right">
-        <BaseButton to="/login" variant="simple"> Már regisztráltál? Jelentkezz be! </BaseButton>
+        <BaseButton to="/login" variant="simple"> Already have an account? Log in! </BaseButton>
       </div>
 
-      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Regisztrálok</BaseButton>
+      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Create Account</BaseButton>
     </form>
   </div>
 </template>
@@ -55,26 +55,26 @@ const passwordError = ref('')
 const repeatedPasswordError = ref('')
 
 async function signup() {
-  // Alap validálás
-  emailError.value = !email.value ? 'Add meg az emailed!' : ''
-  passwordError.value = !password.value ? 'Add meg a jelszavad!' : ''
+  // Basic validation.
+  emailError.value = !email.value ? 'Please enter your email.' : ''
+  passwordError.value = !password.value ? 'Please enter your password.' : ''
   repeatedPasswordError.value =
-    password.value && password.value !== repeatedPassword.value ? 'A két jelszó nem egyezik!' : ''
+    password.value && password.value !== repeatedPassword.value ? 'The two passwords do not match.' : ''
 
-  // Ha van bármilyen hiba, ne küldjük el
+  // Do not submit the form if any validation error is present.
   if (emailError.value || passwordError.value || repeatedPasswordError.value) {
     return
   }
 
   try {
     await auth.register({
-      username: email.value.split('@')[0], // ideiglenes username
+      username: email.value.split('@')[0],
       email: email.value,
       password: password.value,
     })
-    router.push('/login') // vagy mehet automatikusan bejelentkezés után pl. '/'
+    router.push('/login')
   } catch (err) {
-    console.error('❌ Regisztrációs hiba:', err.message)
+    console.error('Sign-up error:', err.message)
   }
 }
 </script>

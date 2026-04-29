@@ -3,7 +3,7 @@
     @submit.prevent="submit"
     class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
   >
-    <p class="mb-3 text-lg font-semibold">Közösségi értékelés 🍷</p>
+    <p class="mb-3 text-lg font-semibold">Community Review 🍷</p>
 
     <div class="space-y-3">
       <div
@@ -31,12 +31,12 @@
 
     <textarea
       v-model="comment"
-      placeholder="Írd ide a tapasztalatod..."
+      placeholder="Share your experience here..."
       class="mb-4 mt-4 w-full rounded border border-[var(--line)] bg-[rgba(255,251,246,0.94)] px-4 py-2 text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[rgba(202,163,103,0.22)]"
       rows="3"
     ></textarea>
 
-    <BaseButton type="submit" variant="secondary">Küldés</BaseButton>
+    <BaseButton type="submit" variant="secondary">Submit</BaseButton>
   </form>
 </template>
 
@@ -62,7 +62,7 @@ function setRating(key, value) {
 function submit() {
   const hasEveryCriteria = WINE_RATING_CRITERIA.every((criterion) => criteriaRatings[criterion.key] > 0)
   if (!hasEveryCriteria) {
-    alert('Kérlek értékeld az összes szempontot 1-5 között.')
+    alert('Please rate every category from 1 to 5.')
     return
   }
 

@@ -3,12 +3,12 @@
     <table class="w-full table-auto border-collapse text-left">
       <thead>
         <tr class="border-b border-[var(--line)] text-[var(--text-main)]">
-          <th class="pb-2">Név</th>
-          <th>Típus</th>
-          <th>Stílus</th>
-          <th>Ár</th>
-          <th>Ízjegyek</th>
-          <th>Műveletek</th>
+          <th class="pb-2">Name</th>
+          <th>Type</th>
+          <th>Style</th>
+          <th>Price</th>
+          <th>Flavor notes</th>
+          <th>Actions</th>
         </tr>
       </thead>
       <tbody>
@@ -23,8 +23,8 @@
           <td>{{ wine.priceRange }}</td>
           <td>{{ wine.flavorProfiles?.join(', ') }}</td>
           <td class="space-x-2">
-            <BaseButton variant="secondary" @click="$emit('edit', wine)">Szerkesztés</BaseButton>
-            <BaseButton variant="secondary" @click="$emit('delete', wine._id)">Törlés</BaseButton>
+            <BaseButton variant="secondary" @click="$emit('edit', wine)">Edit</BaseButton>
+            <BaseButton variant="secondary" @click="$emit('delete', wine._id)">Delete</BaseButton>
           </td>
         </tr>
       </tbody>

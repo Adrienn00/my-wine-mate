@@ -1,6 +1,15 @@
 <template>
-  <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <div class="mx-auto max-w-6xl space-y-8">
+  <div class="page-shell">
+    <div class="page-frame page-stack">
+      <section class="section-intro px-1">
+        <span class="section-kicker">Discover</span>
+        <h1 class="section-title">A steadier, more polished way to explore wine.</h1>
+        <p class="section-summary">
+          Search with a clear structure, revisit what you tried before, and keep the results area
+          feeling like part of the same experience instead of a separate screen.
+        </p>
+      </section>
+
       <div class="space-y-3">
         <transition name="fold-search">
           <div v-if="showSearchPanel">
@@ -18,7 +27,7 @@
             @click="isHistoryOpen = !isHistoryOpen"
           >
             <span class="text-base font-semibold md:text-lg">
-              Keresési előzmények ({{ searchHistory.length }})
+              Search History ({{ searchHistory.length }})
             </span>
             <span class="history-chevron">{{ isHistoryOpen ? '▴' : '▾' }}</span>
           </button>
@@ -26,7 +35,7 @@
           <div v-if="isHistoryOpen" class="border-t border-[var(--line)] p-4 md:p-5">
             <div class="mb-3 flex items-center justify-end gap-4">
               <button class="history-clear-btn" @click="removeSearchHistory">
-                Előzmények törlése
+                Clear History
               </button>
             </div>
 
@@ -41,7 +50,7 @@
                 </button>
                 <button
                   class="history-item-delete-btn"
-                  title="Előzmény törlése"
+                  title="Delete history entry"
                   @click.stop="removeSingleHistoryEntry(entry.id)"
                 >
                   ✕
@@ -52,15 +61,15 @@
         </section>
 
         <div v-if="hasSearched && !showSearchPanel" class="flex justify-end">
-          <button class="search-toggle-btn" @click="expandSearchPanel">Szűrők szerkesztése</button>
+          <button class="search-toggle-btn" @click="expandSearchPanel">Edit Filters</button>
         </div>
       </div>
 
-      <section ref="resultsSection" class="glass-panel rounded-2xl p-5 md:p-7">
+      <section ref="resultsSection" class="glass-panel rounded-[1.8rem] p-5 md:p-7">
         <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-2xl font-semibold md:text-3xl">Találatok 🍇</h2>
+          <h2 class="text-2xl font-semibold md:text-3xl">Results 🍇</h2>
           <span class="text-xs uppercase tracking-widest text-[var(--text-muted)]">
-            {{ results.length }} db
+            {{ results.length }} items
           </span>
         </div>
 
@@ -182,7 +191,7 @@ function formatSearchLabel(filters) {
   if (filters.style) labels.push(filters.style)
   if (filters.price) labels.push(filters.price)
   if (filters.flavor) labels.push(filters.flavor)
-  return labels.length ? labels.join(' • ') : 'Üres keresés'
+  return labels.length ? labels.join(' • ') : 'Empty search'
 }
 </script>
 

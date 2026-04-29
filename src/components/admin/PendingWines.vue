@@ -2,10 +2,10 @@
   <div
     class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
   >
-    <h2 class="mb-8 text-center text-3xl font-semibold">Jóváhagyásra váró borok</h2>
+    <h2 class="mb-8 text-center text-3xl font-semibold">Wines Awaiting Approval</h2>
 
     <div v-if="pendingWines.length === 0" class="text-center text-[var(--text-muted)]">
-      Nincs jóváhagyásra váró bor.
+      There are no wines awaiting approval.
     </div>
 
     <ul class="space-y-6">
@@ -15,53 +15,53 @@
         class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-6 shadow-sm"
       >
         <div v-if="editId === wine._id" class="space-y-4">
-          <BaseInput id="name" label="Bor neve" v-model="editWine.name" placeholder="Bor neve" />
-          <BaseInput id="type" label="Típus" v-model="editWine.type" placeholder="Típus" />
-          <BaseInput id="style" label="Stílus" v-model="editWine.style" placeholder="Stílus" />
-          <BaseInput id="price" label="Ár" v-model="editWine.price" placeholder="Ár" />
+          <BaseInput id="name" label="Wine name" v-model="editWine.name" placeholder="Wine name" />
+          <BaseInput id="type" label="Type" v-model="editWine.type" placeholder="Type" />
+          <BaseInput id="style" label="Style" v-model="editWine.style" placeholder="Style" />
+          <BaseInput id="price" label="Price" v-model="editWine.price" placeholder="Price" />
 
           <BaseInput
             id="flavorProfiles"
-            label="Ízvilág (vesszővel elválasztva)"
+            label="Flavor profile (comma separated)"
             v-model="editFlavorProfilesText"
-            placeholder="Ízvilág"
+            placeholder="Flavor profile"
           />
 
           <BaseInput
             id="grapeVarieties"
-            label="Szőlőfajták (vesszővel elválasztva)"
+            label="Grape varieties (comma separated)"
             v-model="editGrapeVarietiesText"
-            placeholder="Szőlőfajták"
+            placeholder="Grape varieties"
           />
 
           <BaseInput
             id="tags"
-            label="Címkék (vesszővel elválasztva)"
+            label="Tags (comma separated)"
             v-model="editTagsText"
-            placeholder="Címkék"
+            placeholder="Tags"
           />
 
           <div class="flex space-x-4">
-            <BaseButton variant="secondary" @click="saveEdit(wine._id)">Mentés</BaseButton>
-            <BaseButton variant="secondary" @click="cancelEdit">Mégse</BaseButton>
+            <BaseButton variant="secondary" @click="saveEdit(wine._id)">Save</BaseButton>
+            <BaseButton variant="secondary" @click="cancelEdit">Cancel</BaseButton>
           </div>
         </div>
 
         <div v-else class="flex justify-between items-start">
           <div>
             <h3 class="text-xl font-bold mb-2">{{ wine.name }}</h3>
-            <p><strong>Típus:</strong> {{ wine.type }}</p>
-            <p><strong>Stílus:</strong> {{ wine.style }}</p>
-            <p><strong>Ár:</strong> {{ wine.price }}</p>
-            <p><strong>Ízvilág:</strong> {{ wine.flavorProfiles?.join(', ') || '' }}</p>
-            <p><strong>Szőlőfajták:</strong> {{ wine.grapeVarieties?.join(', ') || '' }}</p>
-            <p><strong>Címkék:</strong> {{ wine.tags?.join(', ') || '' }}</p>
+            <p><strong>Type:</strong> {{ wine.type }}</p>
+            <p><strong>Style:</strong> {{ wine.style }}</p>
+            <p><strong>Price:</strong> {{ wine.price }}</p>
+            <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') || '' }}</p>
+            <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') || '' }}</p>
+            <p><strong>Tags:</strong> {{ wine.tags?.join(', ') || '' }}</p>
           </div>
 
           <div class="flex flex-col space-y-3">
-            <BaseButton variant="secondary" @click="startEdit(wine)">Szerkesztés</BaseButton>
-            <BaseButton variant="secondary" @click="approveWine(wine._id)">Jóváhagyás</BaseButton>
-            <BaseButton variant="secondary" @click="rejectWine(wine._id)">Elutasítás</BaseButton>
+            <BaseButton variant="secondary" @click="startEdit(wine)">Edit</BaseButton>
+            <BaseButton variant="secondary" @click="approveWine(wine._id)">Approve</BaseButton>
+            <BaseButton variant="secondary" @click="rejectWine(wine._id)">Reject</BaseButton>
           </div>
         </div>
       </li>

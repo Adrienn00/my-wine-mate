@@ -26,27 +26,27 @@ export const useProfileStore = defineStore('profile', () => {
   })
 
   const wineType = ref({
-    wineTypes: ['Vörös', 'Fehér', 'Rozé', 'Pezsgő'],
-    style: ['Száraz', 'Félszáraz', 'Félédes', 'Édes'],
-    flavourProfile: ['Virágos', 'Földes', 'Gyümölcsös', 'Fűszeres', 'Egyéb'],
+    wineTypes: ['Red', 'White', 'Rose', 'Sparkling'],
+    style: ['Dry', 'Semi-dry', 'Semi-sweet', 'Sweet'],
+    flavourProfile: ['Floral', 'Earthy', 'Fruity', 'Spicy', 'Other'],
     regions: ['Tokaj', 'Villány', 'Eger', 'Sopron'],
-    alcoholLevels: ['Alacsony', 'Közepes', 'Magas'],
-    foodPreferences: ['Vegetáriánus', 'Vegán', 'Hal', 'Desszert', 'Húsos'],
+    alcoholLevels: ['Low', 'Medium', 'High'],
+    foodPreferences: ['Vegetarian', 'Vegan', 'Fish', 'Dessert', 'Meaty'],
     recipeCategories: RECIPE_DIET_CATEGORIES,
     recipeMeatTypes: RECIPE_MEAT_TYPES,
-    recipeDishTypes: ['Leves', 'Főétel', 'Köret', 'Saláta', 'Reggeli', 'Desszert', 'Snack'],
+    recipeDishTypes: ['Soup', 'Main course', 'Side dish', 'Salad', 'Breakfast', 'Dessert', 'Snack'],
     recipeMainIngredients: [
-      'Csirke',
-      'Marha',
-      'Sertés',
-      'Hal',
-      'Burgonya',
-      'Rizs',
-      'Tészta',
-      'Zöldség',
-      'Gyümölcs',
-      'Sajt',
-      'Gomba',
+      'Chicken',
+      'Beef',
+      'Pork',
+      'Fish',
+      'Potato',
+      'Rice',
+      'Pasta',
+      'Vegetable',
+      'Fruit',
+      'Cheese',
+      'Mushroom',
     ],
     wineYears: [2023, 2022, 2021, 2020, 2019],
     priceRanges: ['0-50', '50-80', '80-130', '>130'],
@@ -57,10 +57,8 @@ export const useProfileStore = defineStore('profile', () => {
 
   const API_BASE = 'users'
 
-  // --- Helper függvény ---
   const toId = (x) => (x && (x._id || x.id)) || x
 
-  // --- PROFIL BETÖLTÉS ---
   async function fetchProfile() {
     if (!auth.token) return null
     loading.value = true
@@ -95,13 +93,11 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  // --- PROFIL FRISSÍTÉS ---
   async function updateProfile(updatedData) {
     try {
       const updated = await client.put(`${API_BASE}/profile`, updatedData)
       auth.user = updated
 
-      // SZINKRONIZÁLJUK a selectedPreferences-t is
       const prefs = updated.preferences || {}
       selectedPreferences.value = {
         wineTypes: prefs.wineTypes || [],
@@ -126,7 +122,6 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  // --- KEDVENC BOROK ---
   async function addFavoriteWine(wine) {
     try {
       const res = await client.post(`${API_BASE}/favorite/wines`, {
@@ -151,7 +146,6 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  // --- KEDVENC RECEPTEK ---
   async function addFavoriteRecipe(recipe) {
     try {
       const res = await client.post(`${API_BASE}/favorite/recipes`, {
@@ -176,7 +170,6 @@ export const useProfileStore = defineStore('profile', () => {
     }
   }
 
-  // --- HELPER FUNKCIÓK ---
   function isFavoriteWine(wine) {
     const id = toId(wine)
     return favoriteWines.value.some((w) => toId(w).toString() === id.toString())
