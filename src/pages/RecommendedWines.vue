@@ -30,6 +30,12 @@
           {{ wine.name }}
         </BaseButton>
 
+        <div
+          class="mt-2 inline-flex rounded-full border border-[var(--line)] bg-white/60 px-2.5 py-1 text-xs font-semibold text-[var(--wine)]"
+        >
+          {{ wine.recommendationLabel || 'Smart recommendation' }}
+        </div>
+
         <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
           <div>
             <span class="font-semibold">Match:</span>
