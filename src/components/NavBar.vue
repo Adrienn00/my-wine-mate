@@ -10,6 +10,9 @@
         <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink"
           >Recipes</BaseButton
         >
+        <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink"
+          >AI Pairing</BaseButton
+        >
         <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
 
         <!-- csak azon az oldalakon mutatunk auth gombokat, ahol eddig is -->

@@ -8,6 +8,10 @@
           Search with a clear structure, revisit what you tried before, and keep the results area
           feeling like part of the same experience instead of a separate screen.
         </p>
+        <div class="page-actions mt-3">
+          <BaseButton to="/pairing-assistant">Open AI Pairing Assistant</BaseButton>
+          <BaseButton to="/foodPairing" variant="secondary">Classic Pairing View</BaseButton>
+        </div>
       </section>
 
       <div class="space-y-3">
@@ -88,6 +92,7 @@
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useWinesStore } from '../stores/winesStore'
+import BaseButton from '../components/ui/BaseButton.vue'
 import WineSearchForm from './WineSearchForm.vue'
 import WineSearchResults from './WineSearchResults.vue'
 import {

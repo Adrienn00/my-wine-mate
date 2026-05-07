@@ -7,6 +7,7 @@ import Login from '../pages/Login.vue'
 import SignUp from '../pages/SignUp.vue'
 import ForgotPassword from '../pages/ForgotPassword.vue'
 import FoodPairing from '../pages/FoodPairing.vue'
+import ConversationalPairing from '../pages/ConversationalPairing.vue'
 import Recipes from '../pages/Recipes.vue'
 import RecommendedWines from '../pages/RecommendedWines.vue'
 import AddNewWine from '../pages/AddNewWine.vue'
@@ -35,6 +36,7 @@ const routes = [
       { path: '/signup', component: SignUp },
       { path: '/forgotPassword', component: ForgotPassword },
       { path: '/foodPairing', component: FoodPairing },
+      { path: '/pairing-assistant', component: ConversationalPairing },
       { path: '/recipes', component: Recipes },
       { path: '/recipe/:id', name: 'recipe-details', component: RecipeCard },
       { path: '/addRecipe', component: AddNewRecipe },
