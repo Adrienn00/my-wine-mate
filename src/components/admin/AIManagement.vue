@@ -69,25 +69,53 @@
           </div>
         </div>
 
+        <!-- LLM auto-training szekció -->
+        <div class="mt-6 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/5 p-4">
+          <h4 class="font-semibold">LLM feedback &amp; auto-training</h4>
+          <p class="mt-1 text-xs text-[var(--text-muted)]">
+            Az LLM ajánlásaiból automatikusan gyűlnek a tanítócímkék. Ha elég új auto-approved
+            label összegyűlik, a rendszer magától elindítja az újratanítást.
+          </p>
+          <div class="mt-4 grid gap-3 sm:grid-cols-3">
+            <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
+              <div class="text-xs text-[var(--text-muted)]">LLM silver labels (össz)</div>
+              <div class="mt-1 text-2xl font-semibold text-[var(--wine)]">{{ llmTotal }}</div>
+            </div>
+            <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
+              <div class="text-xs text-[var(--text-muted)]">Auto-approved (≥{{ autoApproveThreshold * 100 }}% conf.)</div>
+              <div class="mt-1 text-2xl font-semibold text-[#215d31]">{{ llmAutoApproved }}</div>
+            </div>
+            <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
+              <div class="text-xs text-[var(--text-muted)]">Pending LLM (admin dönt)</div>
+              <div class="mt-1 text-2xl font-semibold text-[#7b5a12]">{{ llmPending }}</div>
+            </div>
+          </div>
+          <div class="mt-3 space-y-1 text-xs text-[var(--text-muted)]">
+            <p>Auto-train küszöb: <strong>{{ autoTrainThreshold }} új approved label</strong></p>
+            <p>Cooldown: <strong>{{ autoTrainCooldownHours }}h</strong></p>
+            <p v-if="nextAutoTrainAt">Következő lehetséges auto-train: <strong>{{ formatDate(nextAutoTrainAt) }}</strong></p>
+          </div>
+        </div>
+
         <div class="mt-6 rounded-xl border border-[var(--line)] bg-white/45 p-4">
           <div class="flex flex-wrap items-center justify-between gap-2">
             <h4 class="font-semibold">Last training run</h4>
-            <span
-              class="rounded-full px-3 py-1 text-xs font-semibold"
-              :class="trainingStatusClass(lastRun?.status)"
-            >
-              {{ lastRun?.status || 'No run yet' }}
-            </span>
+            <div class="flex items-center gap-2">
+              <span
+                v-if="lastRun?.triggerSource === 'auto'"
+                class="rounded-full bg-[rgba(210,239,214,0.95)] px-2 py-0.5 text-xs font-semibold text-[#215d31]"
+              >auto</span>
+              <span
+                class="rounded-full px-3 py-1 text-xs font-semibold"
+                :class="trainingStatusClass(lastRun?.status)"
+              >
+                {{ lastRun?.status || 'No run yet' }}
+              </span>
+            </div>
           </div>
           <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
-            <p>
-              Started:
-              {{ formatDate(lastRun?.startedAt) }}
-            </p>
-            <p>
-              Completed:
-              {{ formatDate(lastRun?.completedAt) }}
-            </p>
+            <p>Started: {{ formatDate(lastRun?.startedAt) }}</p>
+            <p>Completed: {{ formatDate(lastRun?.completedAt) }}</p>
             <p>Approved rows used: {{ lastRun?.approvedFeedbackCount ?? 0 }}</p>
             <p v-if="lastRun?.metrics?.roc_auc !== undefined">
               ROC AUC: {{ lastRun.metrics.roc_auc }}
@@ -134,8 +162,18 @@
           >
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <div class="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">
-                  {{ item.direction === 'wine_to_recipe' ? 'Wine to recipe' : 'Recipe to wine' }}
+                <div class="flex flex-wrap items-center gap-2">
+                  <div class="text-sm uppercase tracking-[0.16em] text-[var(--text-muted)]">
+                    {{ item.direction === 'wine_to_recipe' ? 'Wine to recipe' : 'Recipe to wine' }}
+                  </div>
+                  <span
+                    class="rounded-full px-2 py-0.5 text-xs font-semibold"
+                    :class="item.source === 'llm'
+                      ? 'bg-[rgba(122,32,56,0.1)] text-[var(--wine)]'
+                      : 'bg-[rgba(210,239,214,0.8)] text-[#215d31]'"
+                  >
+                    {{ item.source === 'llm' ? 'LLM' : 'User' }}
+                  </span>
                 </div>
                 <h4 class="mt-1 text-lg font-semibold">
                   {{ item.feedback === 'good' ? 'Good match' : 'Bad match' }}
@@ -152,8 +190,9 @@
             <div class="mt-3 grid gap-2 text-sm text-[var(--text-muted)]">
               <p>Recipe ID: {{ item.recipeId }}</p>
               <p>Wine ID: {{ item.wineId }}</p>
-              <p>User: {{ item.userId?.username || item.userId?.email || 'Anonymous' }}</p>
-              <p>Recommendation score: {{ formatScore(item.recommendationScore) }}</p>
+              <p v-if="item.source !== 'llm'">User: {{ item.userId?.username || item.userId?.email || 'Anonymous' }}</p>
+              <p v-if="item.confidence != null">Confidence: {{ Math.round(item.confidence * 100) }}%</p>
+              <p v-else>Recommendation score: {{ formatScore(item.recommendationScore) }}</p>
               <p>Submitted: {{ formatDate(item.createdAt) }}</p>
               <p v-if="item.reviewedAt">
                 Reviewed: {{ formatDate(item.reviewedAt) }} by
@@ -217,6 +256,7 @@ const feedbackItems = computed(() => adminStore.pairingFeedback || [])
 const summary = computed(() => adminStore.pairingTrainingSummary || {})
 const feedbackSummary = computed(() => summary.value.feedback || {})
 const trainingSummary = computed(() => summary.value.training || {})
+const llmSummary = computed(() => summary.value.llmFeedback || {})
 const lastRun = computed(() => trainingSummary.value.lastRun || null)
 const pendingCount = computed(() => feedbackSummary.value.pending || 0)
 const approvedCount = computed(() => feedbackSummary.value.approved || 0)
@@ -224,6 +264,13 @@ const rejectedCount = computed(() => feedbackSummary.value.rejected || 0)
 const approvedGoodCount = computed(() => feedbackSummary.value.approvedGood || 0)
 const approvedBadCount = computed(() => feedbackSummary.value.approvedBad || 0)
 const approvedSinceLastTraining = computed(() => trainingSummary.value.approvedSinceLastTraining || 0)
+const llmTotal = computed(() => llmSummary.value.total || 0)
+const llmAutoApproved = computed(() => llmSummary.value.autoApproved || 0)
+const llmPending = computed(() => llmSummary.value.pending || 0)
+const autoApproveThreshold = computed(() => llmSummary.value.autoApproveThreshold ?? 0.85)
+const autoTrainThreshold = computed(() => trainingSummary.value.autoTrainThreshold ?? 20)
+const autoTrainCooldownHours = computed(() => trainingSummary.value.autoTrainCooldownHours ?? 24)
+const nextAutoTrainAt = computed(() => trainingSummary.value.nextAutoTrainAt || null)
 
 async function loadSummary() {
   summaryLoading.value = true
