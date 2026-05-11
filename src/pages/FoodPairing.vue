@@ -15,7 +15,7 @@
 
     <template v-else-if="sourceItem">
       <section
-        class="glass-panel mb-6 rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)]"
+        class="dashboard-panel mb-6 rounded-xl p-6 text-[var(--text-main)]"
       >
         <p class="text-sm uppercase tracking-[0.2em] text-[var(--text-muted)]">
           {{ sourceLabel }}
@@ -38,7 +38,7 @@
           <article
             v-for="item in recommendations"
             :key="item.wine_id || item.recipe_id || item._id"
-            class="glass-panel rounded-xl border border-[var(--line)] p-4 text-[var(--text-main)]"
+            class="dashboard-panel rounded-xl p-4 text-[var(--text-main)]"
           >
             <div
               v-if="item.probability >= 0.8"
@@ -126,7 +126,7 @@
           <article
             v-for="item in preferenceRecommendations"
             :key="`pref-${item.recipe_id || item.wine_id || item._id}`"
-            class="glass-panel rounded-xl border border-[var(--gold)]/40 p-4 text-[var(--text-main)]"
+            class="dashboard-panel rounded-xl border-2 border-[rgba(184,149,90,0.3)] p-4 text-[var(--text-main)]"
           >
             <div
               class="mb-3 inline-flex rounded-full bg-[var(--gold)] px-2.5 py-1 text-xs font-semibold text-[#2d1f1c]"
@@ -195,7 +195,7 @@
 
       <section
         v-else-if="authStore.user && !hasPreferenceSelections"
-        class="mt-10 rounded-2xl border border-[var(--line)] bg-white/50 p-5 text-center text-[var(--text-main)]"
+        class="mt-10 rounded-xl border border-[var(--line)] bg-white p-5 text-center text-[var(--text-main)]"
       >
         <h3 class="text-xl font-semibold">Based on your preferences</h3>
         <p class="mt-2 text-sm text-[var(--text-muted)]">
@@ -239,7 +239,10 @@ const feedbackStatus = ref({})
 
 onMounted(async () => {
   try {
-    await Promise.all([ensureSourceItem(), authStore.token ? profileStore.fetchProfile() : Promise.resolve(null)])
+    await Promise.all([
+      ensureSourceItem(),
+      authStore.token ? profileStore.fetchProfile() : Promise.resolve(null),
+    ])
     await loadRecommendations()
   } catch {
     errorMessage.value = 'Could not load AI recommendations. Please try again later.'
@@ -321,7 +324,11 @@ function itemLink(item) {
 }
 
 async function loadRecommendations() {
-  const sourceQuery = wineId.value ? `wineId=${wineId.value}` : recipeId.value ? `recipeId=${recipeId.value}` : ''
+  const sourceQuery = wineId.value
+    ? `wineId=${wineId.value}`
+    : recipeId.value
+      ? `recipeId=${recipeId.value}`
+      : ''
 
   if (sourceQuery) {
     const response = await client.get(

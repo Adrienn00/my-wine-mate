@@ -7,7 +7,7 @@
 
       <div
         v-else-if="currentRecipe"
-        class="glass-panel w-full max-w-2xl rounded-2xl border border-[var(--line)] p-6 text-left text-[var(--text-main)] shadow-lg"
+        class="dashboard-panel w-full max-w-2xl rounded-xl p-6 text-left text-[var(--text-main)]"
       >
         <h3 class="mb-4 text-3xl font-bold text-[var(--wine)]">{{ currentRecipe.name }}</h3>
 
@@ -18,7 +18,7 @@
           <span
             v-for="category in currentRecipe.recipeCategories"
             :key="category"
-            class="rounded-full bg-[rgba(122,32,56,0.1)] px-3 py-1 text-[var(--wine)]"
+            class="rounded-full bg-[rgba(107,45,62,0.08)] px-3 py-1 text-[var(--wine)]"
           >
             {{ category }}
           </span>
@@ -75,7 +75,7 @@
 
       <div
         v-else
-        class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.92)] p-6 text-[var(--danger)]"
+        class="rounded-xl border border-[var(--line)] bg-white p-6 text-[var(--danger)]"
       >
         The recipe could not be found or an error occurred while loading it.
       </div>

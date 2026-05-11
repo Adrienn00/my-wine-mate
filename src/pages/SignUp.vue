@@ -1,39 +1,35 @@
 <template>
-  <div class="flex min-h-screen w-full items-center justify-center px-4 py-10">
-    <form
-      @submit.prevent="signup"
-      class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
-    >
-      <h1 class="mb-5 text-center text-3xl font-semibold">Sign Up</h1>
-
-      <BaseInput
-        id="email"
-        label="Email"
-        type="email"
-        v-model="email"
-        :error="emailError"
-      />
-      <BaseInput
-        id="password"
-        label="Password"
-        type="password"
-        v-model="password"
-        :error="passwordError"
-      />
-      <BaseInput
-        id="repeatedPassword"
-        label="Confirm password"
-        type="password"
-        v-model="repeatedPassword"
-        :error="repeatedPasswordError"
-      />
-
-      <div class="w-full text-right">
-        <BaseButton to="/login" variant="simple"> Already have an account? Log in! </BaseButton>
+  <div class="flex min-h-[80vh] w-full items-center justify-center px-4 py-10">
+    <div class="w-full max-w-md">
+      <div class="mb-8 text-center">
+        <p class="font-['Cormorant_Garamond'] text-3xl font-semibold text-[var(--wine)]">Vinology Cook</p>
+        <p class="mt-1 text-sm text-[var(--text-muted)]">Create your free account</p>
       </div>
 
-      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Create Account</BaseButton>
-    </form>
+      <form
+        @submit.prevent="signup"
+        class="dashboard-panel rounded-2xl px-6 py-8 md:px-8"
+      >
+        <h1 class="mb-6 text-2xl font-semibold">Sign Up</h1>
+
+        <BaseInput id="email" label="Email" type="email" v-model="email" :error="emailError" />
+        <BaseInput id="password" label="Password" type="password" v-model="password" :error="passwordError" />
+        <BaseInput
+          id="repeatedPassword"
+          label="Confirm password"
+          type="password"
+          v-model="repeatedPassword"
+          :error="repeatedPasswordError"
+        />
+
+        <BaseButton variant="primary" type="submit" class="mt-2 w-full">Create Account</BaseButton>
+
+        <div class="mt-4 text-center text-sm text-[var(--text-muted)]">
+          Already have an account?
+          <BaseButton to="/login" variant="simple" class="ml-1">Log in</BaseButton>
+        </div>
+      </form>
+    </div>
   </div>
 </template>
 
@@ -55,16 +51,12 @@ const passwordError = ref('')
 const repeatedPasswordError = ref('')
 
 async function signup() {
-  // Basic validation.
   emailError.value = !email.value ? 'Please enter your email.' : ''
   passwordError.value = !password.value ? 'Please enter your password.' : ''
   repeatedPasswordError.value =
     password.value && password.value !== repeatedPassword.value ? 'The two passwords do not match.' : ''
 
-  // Do not submit the form if any validation error is present.
-  if (emailError.value || passwordError.value || repeatedPasswordError.value) {
-    return
-  }
+  if (emailError.value || passwordError.value || repeatedPasswordError.value) return
 
   try {
     await auth.register({

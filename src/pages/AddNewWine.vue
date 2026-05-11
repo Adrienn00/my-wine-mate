@@ -2,7 +2,7 @@
   <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <div class="mx-auto flex max-w-6xl items-center justify-center">
       <div
-        class="glass-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
+        class="dashboard-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
       >
         <div class="mb-1">
           <BaseButton to="/" variant="secondary">Back</BaseButton>

@@ -1,8 +1,13 @@
 <template>
-  <div class="flex min-h-screen text-[var(--text-main)]">
-    <aside class="glass-panel m-4 hidden w-72 flex-col justify-between rounded-2xl p-6 lg:flex">
+  <div class="mx-auto flex min-h-screen max-w-7xl gap-5 px-4 py-6 text-[var(--text-main)] md:px-6">
+    <aside
+      class="dashboard-panel paper-grid hidden w-72 flex-col justify-between rounded-[1.6rem] p-6 lg:flex"
+    >
       <div>
-        <h2 class="mb-8 text-2xl font-semibold">Profile</h2>
+        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--wine)]">
+          My Cellar
+        </p>
+        <h2 class="mb-8 text-3xl font-semibold">Profile</h2>
         <ul class="space-y-4">
           <li><BaseButton to="/profile" variant="simpleRose">User</BaseButton></li>
           <li><BaseButton to="/favorite" variant="simpleRose">Favorites</BaseButton></li>
@@ -23,7 +28,7 @@
       <BaseButton variant="secondary" @click="logoutUser">Log Out</BaseButton>
     </aside>
 
-    <main class="min-h-screen flex-1 p-4 lg:p-10">
+    <main class="min-h-screen flex-1 pb-6 lg:pt-4">
       <router-view />
     </main>
   </div>

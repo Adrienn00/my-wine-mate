@@ -2,7 +2,7 @@
   <div v-if="wine" class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <main class="mx-auto flex w-full max-w-6xl justify-start">
       <div
-        class="glass-panel w-full max-w-2xl space-y-4 rounded-2xl border border-[var(--line)] p-6 text-left text-[var(--text-main)]"
+        class="dashboard-panel w-full max-w-2xl space-y-4 rounded-xl p-6 text-left text-[var(--text-main)]"
       >
         <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
         <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
@@ -29,7 +29,7 @@
 
         <div class="mt-6 space-y-3">
           <details
-            class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2"
+            class="rounded-xl border border-[var(--line)] bg-white p-2"
             open
           >
             <summary
@@ -50,7 +50,7 @@
             </div>
           </details>
 
-          <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2">
+          <details class="rounded-xl border border-[var(--line)] bg-white p-2">
             <summary
               class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
             >

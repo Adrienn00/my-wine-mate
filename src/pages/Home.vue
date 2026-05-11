@@ -1,89 +1,161 @@
 <template>
   <div class="page-shell">
-    <div class="page-frame page-stack">
-      <section class="section-intro px-1">
-        <span class="section-kicker">Discover</span>
-        <h1 class="section-title">A steadier, more polished way to explore wine.</h1>
-        <p class="section-summary">
-          Search with a clear structure, revisit what you tried before, and keep the results area
-          feeling like part of the same experience instead of a separate screen.
-        </p>
-        <div class="page-actions mt-3">
-          <BaseButton to="/pairing-assistant">Open AI Pairing Assistant</BaseButton>
-          <BaseButton to="/foodPairing" variant="secondary">Classic Pairing View</BaseButton>
-        </div>
-      </section>
-
-      <div class="space-y-3">
-        <transition name="fold-search">
-          <div v-if="showSearchPanel">
-            <WineSearchForm :filter-options="filterOptions" @search="handleSearch" />
-          </div>
-        </transition>
-
-        <section
-          v-if="searchHistory.length"
-          class="glass-panel rounded-2xl border border-[var(--line)]"
-        >
-          <button
-            class="history-toggle-btn"
-            :aria-expanded="isHistoryOpen"
-            @click="isHistoryOpen = !isHistoryOpen"
+    <div class="page-frame grid gap-5 xl:grid-cols-[290px_minmax(0,1fr)]">
+      <aside class="dashboard-panel paper-grid h-fit rounded-[1.7rem] p-5 md:p-6">
+        <div class="flex items-center gap-4">
+          <div
+            class="flex h-14 w-14 items-center justify-center rounded-full border border-[var(--line)] bg-white/85 text-lg font-semibold text-[var(--wine)]"
           >
-            <span class="text-base font-semibold md:text-lg">
-              Search History ({{ searchHistory.length }})
-            </span>
-            <span class="history-chevron">{{ isHistoryOpen ? '▴' : '▾' }}</span>
-          </button>
+            {{ profileInitials }}
+          </div>
+          <div>
+            <p class="text-sm text-[var(--text-muted)]">Welcome back,</p>
+            <h2 class="text-2xl font-semibold">{{ profileName }}</h2>
+          </div>
+        </div>
 
-          <div v-if="isHistoryOpen" class="border-t border-[var(--line)] p-4 md:p-5">
-            <div class="mb-3 flex items-center justify-end gap-4">
-              <button class="history-clear-btn" @click="removeSearchHistory">
-                Clear History
-              </button>
+        <div class="dashboard-divider my-5"></div>
+
+        <section>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--wine)]">
+            My Wine Cellar
+          </p>
+          <div class="space-y-2">
+            <BaseButton to="/recipes" variant="simpleRose">Saved Recipes</BaseButton>
+            <BaseButton to="/favorite" variant="simpleRose">Favorite Wines</BaseButton>
+            <BaseButton to="/recommended" variant="simpleRose">Past Pairings</BaseButton>
+          </div>
+        </section>
+
+        <div class="dashboard-divider my-5"></div>
+
+        <section>
+          <p class="mb-3 text-sm font-semibold uppercase tracking-[0.18em] text-[var(--wine)]">
+            Snapshot
+          </p>
+          <div class="grid gap-3">
+            <div class="rounded-2xl border border-[var(--line)] bg-white/80 p-4">
+              <p class="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Wines</p>
+              <p class="mt-2 text-3xl font-semibold">{{ confirmedWineCount }}</p>
             </div>
-
-            <div class="space-y-2">
-              <div
-                v-for="entry in searchHistory"
-                :key="entry.id"
-                class="flex items-center justify-between gap-2 rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.94)] p-2"
-              >
-                <button class="history-item-btn" @click="repeatSearch(entry.filters)">
-                  {{ formatSearchLabel(entry.filters) }}
-                </button>
-                <button
-                  class="history-item-delete-btn"
-                  title="Delete history entry"
-                  @click.stop="removeSingleHistoryEntry(entry.id)"
-                >
-                  ✕
-                </button>
-              </div>
+            <div class="rounded-2xl border border-[var(--line)] bg-white/80 p-4">
+              <p class="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Recipes</p>
+              <p class="mt-2 text-3xl font-semibold">{{ confirmedRecipeCount }}</p>
             </div>
           </div>
         </section>
 
-        <div v-if="hasSearched && !showSearchPanel" class="flex justify-end">
-          <button class="search-toggle-btn" @click="expandSearchPanel">Edit Filters</button>
+        <div class="dashboard-divider my-5"></div>
+
+        <section class="rounded-[1.35rem] bg-[linear-gradient(180deg,#5d1f32_0%,#6e2c43_100%)] p-4 text-[#f9ead7] shadow-[0_18px_28px_rgba(93,31,50,0.26)]">
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-[#f4dcb6]">
+            AI Sommelier
+          </p>
+          <p class="mt-3 text-sm leading-6 text-[#faefe3]">
+            Tell me a wine, a mood, or a dish, and I’ll point you to the best pairing route.
+          </p>
+          <BaseButton to="/pairing-assistant" variant="navPrimary" class="mt-4 w-full">
+            Open Assistant
+          </BaseButton>
+        </section>
+      </aside>
+
+      <div class="page-stack">
+        <section class="dashboard-panel hero-sheen rounded-[1.7rem] p-5 md:p-7">
+          <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+              <span class="section-kicker">Explore</span>
+              <h1 class="section-title max-w-3xl">A richer wine-and-recipe experience across the whole app.</h1>
+              <p class="section-summary mt-3">
+                Elegant navigation, warmer tones, dashboard structure, and faster scanning inspired
+                by the reference layout.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <span class="dashboard-chip dashboard-chip--active">Curated Search</span>
+              <span class="dashboard-chip">Recipes</span>
+              <span class="dashboard-chip">Pairing</span>
+            </div>
+          </div>
+
+          <div class="mt-5 flex flex-wrap gap-3">
+            <BaseButton to="/pairing-assistant">Open AI Pairing Assistant</BaseButton>
+            <BaseButton to="/foodPairing" variant="secondary">Classic Pairing View</BaseButton>
+          </div>
+        </section>
+
+        <div class="space-y-3">
+          <transition name="fold-search">
+            <div v-if="showSearchPanel">
+              <WineSearchForm :filter-options="filterOptions" @search="handleSearch" />
+            </div>
+          </transition>
+
+          <section
+            v-if="searchHistory.length"
+            class="dashboard-panel rounded-[1.45rem] border border-[var(--line)]"
+          >
+            <button
+              class="history-toggle-btn"
+              :aria-expanded="isHistoryOpen"
+              @click="isHistoryOpen = !isHistoryOpen"
+            >
+              <span class="text-base font-semibold md:text-lg">
+                Search History ({{ searchHistory.length }})
+              </span>
+              <span class="history-chevron">{{ isHistoryOpen ? '▴' : '▾' }}</span>
+            </button>
+
+            <div v-if="isHistoryOpen" class="border-t border-[var(--line)] p-4 md:p-5">
+              <div class="mb-3 flex items-center justify-end gap-4">
+                <button class="history-clear-btn" @click="removeSearchHistory">
+                  Clear History
+                </button>
+              </div>
+
+              <div class="space-y-2">
+                <div
+                  v-for="entry in searchHistory"
+                  :key="entry.id"
+                  class="flex items-center justify-between gap-2 rounded-xl border border-[var(--line)] bg-white/80 p-2"
+                >
+                  <button class="history-item-btn" @click="repeatSearch(entry.filters)">
+                    {{ formatSearchLabel(entry.filters) }}
+                  </button>
+                  <button
+                    class="history-item-delete-btn"
+                    title="Delete history entry"
+                    @click.stop="removeSingleHistoryEntry(entry.id)"
+                  >
+                    ✕
+                  </button>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <div v-if="hasSearched && !showSearchPanel" class="flex justify-end">
+            <button class="search-toggle-btn" @click="expandSearchPanel">Edit Filters</button>
+          </div>
         </div>
+
+        <section ref="resultsSection" class="dashboard-panel rounded-[1.65rem] p-5 md:p-7">
+          <div class="mb-4 flex flex-wrap items-center justify-between gap-3">
+            <div>
+              <p class="text-xs uppercase tracking-[0.22em] text-[var(--text-muted)]">Wine List</p>
+              <h2 class="text-2xl font-semibold md:text-3xl">Results</h2>
+            </div>
+            <span class="dashboard-chip">{{ results.length }} items</span>
+          </div>
+
+          <WineSearchResults
+            :results="results"
+            :loading="winesStore.loading"
+            :show-empty-state="hasSearched && hasAnyFilter"
+            @select-wine="goToDetails"
+          />
+        </section>
       </div>
-
-      <section ref="resultsSection" class="glass-panel rounded-[1.8rem] p-5 md:p-7">
-        <div class="mb-4 flex items-center justify-between">
-          <h2 class="text-2xl font-semibold md:text-3xl">Results 🍇</h2>
-          <span class="text-xs uppercase tracking-widest text-[var(--text-muted)]">
-            {{ results.length }} items
-          </span>
-        </div>
-
-        <WineSearchResults
-          :results="results"
-          :loading="winesStore.loading"
-          :show-empty-state="hasSearched && hasAnyFilter"
-          @select-wine="goToDetails"
-        />
-      </section>
     </div>
   </div>
 </template>
@@ -91,6 +163,9 @@
 <script setup>
 import { computed, nextTick, onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '../stores/authStore'
+import { useProfileStore } from '../stores/profileStore'
+import { useRecipesStore } from '../stores/recipesStore'
 import { useWinesStore } from '../stores/winesStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 import WineSearchForm from './WineSearchForm.vue'
@@ -103,6 +178,9 @@ import {
 } from '../services/searchHistory'
 
 const winesStore = useWinesStore()
+const recipesStore = useRecipesStore()
+const authStore = useAuthStore()
+const profileStore = useProfileStore()
 const router = useRouter()
 
 const results = ref([])
@@ -125,10 +203,25 @@ const filterOptions = computed(() => {
   }
 })
 
+const profileName = computed(() => profileStore.fullName || authStore.user?.firstName || 'Guest')
+const profileInitials = computed(() => {
+  const value = profileName.value.trim()
+  if (!value) return 'G'
+  return value
+    .split(/\s+/)
+    .slice(0, 2)
+    .map((part) => part[0]?.toUpperCase() || '')
+    .join('')
+})
+const confirmedWineCount = computed(() => winesStore.confirmedWines.length)
+const confirmedRecipeCount = computed(() => recipesStore.confirmedRecipes.length)
+
 onMounted(async () => {
-  if (!winesStore.wines.length) {
-    await winesStore.getAllWines()
-  }
+  await Promise.all([
+    winesStore.wines.length ? Promise.resolve() : winesStore.getAllWines(),
+    recipesStore.recipes.length ? Promise.resolve() : recipesStore.getAllRecipes(),
+    authStore.token ? profileStore.fetchProfile() : Promise.resolve(),
+  ])
   searchHistory.value = getSearchHistory()
 })
 

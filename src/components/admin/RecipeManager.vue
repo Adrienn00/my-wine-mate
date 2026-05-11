@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.82)] p-8 text-[var(--text-main)] shadow-sm"
+    class="rounded-xl border border-[var(--line)] bg-white p-8 text-[var(--text-main)] shadow-sm"
   >
     <h2 class="mb-6 text-2xl font-semibold">Recipe Management</h2>
 
@@ -8,7 +8,7 @@
 
     <div
       v-if="isEditing"
-      class="mb-8 rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-6"
+      class="mb-8 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-6"
     >
       <h3 class="mb-4 text-xl text-[var(--wine)]">
         {{ editRecipe._id ? 'Edit Recipe' : 'Add New Recipe' }}
@@ -51,7 +51,7 @@
       <table class="w-full table-auto border-collapse text-left">
         <thead>
           <tr
-            class="border-b border-[var(--line)] bg-[rgba(255,251,246,0.95)] text-[var(--text-main)]"
+            class="border-b border-[var(--line)] bg-[var(--surface)] text-[var(--text-main)]"
           >
             <th class="p-3">Name</th>
             <th class="p-3">Ingredients</th>

@@ -22,7 +22,7 @@
         <div
           v-for="wine in paginatedResults"
           :key="wine._id"
-          class="group cursor-pointer rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.85)] p-4 transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(140,45,65,0.55)] hover:shadow-[0_12px_28px_rgba(122,32,56,0.16)]"
+          class="group cursor-pointer rounded-xl border border-[var(--line)] bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(107,45,62,0.4)] hover:shadow-[0_8px_24px_rgba(28,15,19,0.1)]"
           @click="emitSelect(wine._id)"
         >
           <div class="mb-3 overflow-hidden rounded-lg border border-[var(--line)]">
@@ -34,9 +34,9 @@
             />
             <div
               v-else
-              class="flex h-20 items-center justify-center bg-[linear-gradient(120deg,rgba(122,32,56,0.12),rgba(237,215,212,0.7))] text-sm font-medium text-[var(--wine)]"
+              class="flex h-20 items-center justify-center bg-[rgba(107,45,62,0.05)] text-sm font-medium text-[var(--text-muted)]"
             >
-              🍷 Click to view details
+              Click to view details
             </div>
           </div>
 
@@ -48,7 +48,7 @@
               </p>
             </div>
             <div
-              class="rounded-full border border-[var(--line)] bg-[rgba(255,251,246,0.85)] px-2 py-1 text-xs text-[var(--accent)]"
+              class="rounded-full border border-[var(--line)] bg-[var(--surface)] px-2 py-1 text-xs text-[var(--accent)]"
             >
               {{ wine.priceRange || 'N/A' }}
             </div>
@@ -170,9 +170,9 @@ watch(totalPages, (nextTotal) => {
 
 <style scoped>
 .result-select {
-  border-radius: 0.75rem;
+  border-radius: 0.65rem;
   border: 1px solid var(--line);
-  background: rgba(255, 251, 246, 0.92);
+  background: var(--surface);
   color: var(--text-main);
   padding: 0.45rem 0.7rem;
   font-size: 0.875rem;
@@ -180,27 +180,28 @@ watch(totalPages, (nextTotal) => {
 }
 
 .result-select:focus {
-  border-color: var(--accent);
-  box-shadow: 0 0 0 2px rgba(200, 154, 83, 0.25);
+  border-color: var(--wine);
+  box-shadow: 0 0 0 2px rgba(93, 31, 50, 0.12);
 }
 
 .pager-btn {
-  border-radius: 0.75rem;
+  border-radius: 0.65rem;
   border: 1px solid var(--line);
-  background: rgba(255, 251, 246, 0.94);
+  background: var(--surface);
   color: var(--text-main);
   padding: 0.45rem 0.9rem;
   font-size: 0.875rem;
+  font-weight: 600;
   transition: 0.2s ease;
 }
 
 .pager-btn:hover:enabled {
-  border-color: var(--accent);
-  background: rgba(237, 215, 212, 0.52);
+  border-color: var(--wine);
+  color: var(--wine);
 }
 
 .pager-btn:disabled {
   cursor: not-allowed;
-  opacity: 0.45;
+  opacity: 0.4;
 }
 </style>

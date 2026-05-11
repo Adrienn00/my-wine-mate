@@ -1,7 +1,7 @@
 <template>
   <div class="relative inline-block">
     <button
-      class="cursor-pointer rounded-full border border-[var(--line)] bg-[rgba(255,248,239,0.88)] px-3.5 py-2 text-lg shadow-[0_10px_24px_rgba(122,32,56,0.14)] transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(122,32,56,0.28)]"
+      class="cursor-pointer rounded-full border border-[var(--line)] bg-[var(--surface)] px-3.5 py-2 text-lg shadow-[0_10px_24px_rgba(93,31,50,0.14)] transition duration-200 hover:-translate-y-0.5 hover:border-[rgba(93,31,50,0.28)]"
       @click="toggleNotifications"
     >
       🔔
@@ -15,7 +15,7 @@
 
     <div
       v-if="showNotifications"
-      class="glass-panel absolute right-0 z-50 mt-2 w-80 rounded-xl p-3 shadow-lg"
+      class="dashboard-panel absolute right-0 z-50 mt-2 w-80 rounded-xl p-3 shadow-lg"
     >
       <div class="mb-2 font-semibold text-[var(--text-main)]">Notifications</div>
 

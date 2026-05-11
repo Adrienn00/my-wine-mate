@@ -1,9 +1,13 @@
 <template>
-  <NavBar />
-  <div class="min-h-screen pt-28 text-[var(--text-main)] md:pt-32">
-    <router-view />
+  <div class="app-canvas">
+    <div class="app-shell">
+      <NavBar />
+      <div class="min-h-screen text-[var(--text-main)]">
+        <router-view />
+      </div>
+    </div>
+    <BaseFooter />
   </div>
-  <BaseFooter />
 </template>
 
 <script setup>

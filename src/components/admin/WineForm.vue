@@ -1,5 +1,5 @@
 <template>
-  <div class="mb-6 mt-4 rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.92)] p-4">
+  <div class="mb-6 mt-4 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4">
     <h3 class="mb-2 text-xl text-[var(--wine)]">
       {{ localWine._id ? 'Edit Wine' : 'Add New Wine' }}
     </h3>

@@ -1,7 +1,7 @@
 <template>
   <div class="page-shell">
     <div class="page-frame page-stack">
-      <section class="glass-panel hero-sheen overflow-hidden rounded-[2rem] p-6 md:p-8">
+      <section class="dashboard-panel hero-sheen overflow-hidden rounded-xl p-6 md:p-8">
         <div class="relative z-10 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
           <div class="max-w-3xl">
             <span class="section-kicker">Conversational AI</span>
@@ -16,7 +16,7 @@
             </p>
           </div>
 
-          <div class="rounded-2xl border border-[var(--line)] bg-[rgba(255,251,246,0.82)] p-4 text-sm text-[var(--text-muted)] shadow-[0_12px_30px_rgba(80,42,23,0.1)]">
+          <div class="rounded-xl border border-[var(--line)] bg-white p-4 text-sm text-[var(--text-muted)] shadow-[0_4px_20px_rgba(28,15,19,0.07)]">
             <div class="font-semibold text-[var(--text-main)]">Tips</div>
             <div class="mt-2">Mention a wine style, dish type, ingredient, or occasion.</div>
             <div class="mt-1">If you are logged in, saved preferences are considered too.</div>
@@ -24,7 +24,7 @@
         </div>
       </section>
 
-      <section class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+      <section class="dashboard-panel rounded-xl p-5 md:p-7">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h2 class="text-2xl font-semibold md:text-3xl">Start the conversation</h2>
@@ -45,7 +45,7 @@
           <button
             v-for="suggestion in quickPrompts"
             :key="suggestion"
-            class="rounded-full border border-[var(--line)] bg-[rgba(255,251,246,0.92)] px-4 py-2 text-sm font-semibold text-[var(--text-main)] transition hover:-translate-y-0.5 hover:border-[rgba(122,32,56,0.26)] hover:bg-[rgba(237,215,212,0.32)]"
+            class="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm font-medium text-[var(--text-muted)] transition hover:-translate-y-px hover:border-[rgba(107,45,62,0.3)] hover:text-[var(--wine)]"
             @click="useSuggestion(suggestion)"
           >
             {{ suggestion }}
@@ -78,7 +78,7 @@
 
       <section class="grid gap-6 xl:grid-cols-[1.15fr_0.85fr]">
         <!-- Chat panel -->
-        <div class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+        <div class="dashboard-panel rounded-xl p-5 md:p-7">
           <div class="mb-4 flex items-center justify-between">
             <h2 class="text-2xl font-semibold md:text-3xl">Conversation</h2>
             <span class="micro-label">{{ messages.length }} messages</span>
@@ -116,7 +116,7 @@
 
         <!-- Results panel -->
         <div class="space-y-6">
-          <section class="glass-panel rounded-[1.8rem] p-5 md:p-6">
+          <section class="dashboard-panel rounded-xl p-5 md:p-6">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="text-2xl font-semibold">Matching wines</h3>
               <span class="text-xs uppercase tracking-[0.16em] text-[var(--text-muted)]">
@@ -128,7 +128,7 @@
               <article
                 v-for="wine in latestResult.wines"
                 :key="wine.wine_id"
-                class="rounded-2xl border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-4"
+                class="rounded-2xl border border-[var(--line)] bg-white p-4"
               >
                 <div class="flex items-start gap-3">
                   <img
@@ -171,7 +171,7 @@
             </p>
           </section>
 
-          <section class="glass-panel rounded-[1.8rem] p-5 md:p-6">
+          <section class="dashboard-panel rounded-xl p-5 md:p-6">
             <div class="mb-4 flex items-center justify-between">
               <h3 class="text-2xl font-semibold">Matching recipes</h3>
               <span class="text-xs uppercase tracking-[0.16em] text-[var(--text-muted)]">
@@ -183,7 +183,7 @@
               <article
                 v-for="recipe in latestResult.recipes"
                 :key="recipe.recipe_id"
-                class="rounded-2xl border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-4"
+                class="rounded-2xl border border-[var(--line)] bg-white p-4"
               >
                 <div class="flex items-start gap-3">
                   <img
@@ -225,14 +225,14 @@
 
           <section
             v-if="latestResult?.followUpSuggestions?.length"
-            class="glass-panel rounded-[1.8rem] p-5 md:p-6"
+            class="dashboard-panel rounded-xl p-5 md:p-6"
           >
             <h3 class="text-2xl font-semibold">Try next</h3>
             <div class="mt-4 flex flex-wrap gap-2.5">
               <button
                 v-for="suggestion in latestResult.followUpSuggestions"
                 :key="suggestion"
-                class="rounded-full border border-[var(--line)] bg-[rgba(255,251,246,0.92)] px-4 py-2 text-sm font-semibold text-[var(--text-main)] transition hover:-translate-y-0.5 hover:border-[rgba(122,32,56,0.26)] hover:bg-[rgba(237,215,212,0.32)]"
+                class="rounded-full border border-[var(--line)] bg-white px-4 py-2 text-sm font-medium text-[var(--text-muted)] transition hover:-translate-y-px hover:border-[rgba(107,45,62,0.3)] hover:text-[var(--wine)]"
                 @click="useSuggestion(suggestion)"
               >
                 {{ suggestion }}
@@ -443,20 +443,20 @@ function resetConversation() {
 
 .chat-bubble {
   max-width: min(100%, 42rem);
-  border-radius: 1.4rem;
-  padding: 1rem 1.1rem;
+  border-radius: 1rem;
+  padding: 0.9rem 1.1rem;
   border: 1px solid var(--line);
-  box-shadow: 0 14px 30px rgba(80, 42, 23, 0.08);
+  box-shadow: 0 2px 12px rgba(28, 15, 19, 0.06);
 }
 
 .chat-bubble.user {
-  background: linear-gradient(135deg, rgba(122, 32, 56, 0.94), rgba(169, 68, 93, 0.88));
-  color: #fff7ef;
-  border-color: rgba(122, 32, 56, 0.25);
+  background: var(--wine);
+  color: #fff;
+  border-color: transparent;
 }
 
 .chat-bubble.ai {
-  background: rgba(255, 251, 246, 0.92);
+  background: #ffffff;
   color: var(--text-main);
 }
 

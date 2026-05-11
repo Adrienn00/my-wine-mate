@@ -15,7 +15,7 @@
       </div>
 
       <div
-        class="glass-panel rounded-[1.8rem] border border-[var(--line)] p-8 text-[var(--text-main)]"
+        class="dashboard-panel rounded-2xl p-8 text-[var(--text-main)]"
       >
         <!-- View mode -->
         <div v-if="!isEditing">
@@ -81,14 +81,14 @@
       <!-- Notifications -->
       <div
         v-if="profileStore.profile?.notifications"
-        class="glass-panel rounded-[1.8rem] border border-[var(--line)] p-6 text-[var(--text-main)]"
+        class="dashboard-panel rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)]"
       >
         <h2 class="mb-4 text-xl font-bold">Notifications</h2>
 
         <div
           v-for="n in profileStore.profile.notifications"
           :key="n._id"
-          class="mb-3 flex items-center gap-2 rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.88)] p-3"
+          class="mb-3 flex items-center gap-2 rounded-lg border border-[var(--line)] bg-[var(--surface)] p-3"
         >
           <span v-if="n.type === 'approved'" class="text-green-600">✔</span>
           <span v-if="n.type === 'rejected'" class="text-[var(--danger)]">✖</span>

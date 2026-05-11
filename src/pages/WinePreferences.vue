@@ -15,7 +15,7 @@
       </div>
 
       <div
-        class="glass-panel mx-auto flex max-h-150 w-full max-w-3xl flex-col justify-start gap-6 overflow-auto rounded-[2rem] p-8 text-[var(--text-main)]"
+        class="dashboard-panel mx-auto flex max-h-150 w-full max-w-3xl flex-col justify-start gap-6 overflow-auto rounded-2xl p-8 text-[var(--text-main)]"
       >
         <template v-if="!isEditing">
           <div class="section-intro mb-0 text-center">

@@ -1,14 +1,14 @@
 <template>
   <div class="page-shell">
     <div class="page-frame">
-      <div class="glass-panel hero-sheen rounded-[1.9rem] p-6 md:p-10">
+      <div class="dashboard-panel hero-sheen rounded-2xl p-6 md:p-10">
         <div class="section-intro">
           <span class="section-kicker">Project Story</span>
           <h1 class="section-title">About</h1>
         </div>
         <div class="space-y-4 text-[var(--text-muted)]">
         <p>
-          <strong class="text-[var(--text-main)]">My Wine Mate</strong> is a final-year project
+          <strong class="text-[var(--text-main)]">Vinology Cook</strong> is a final-year project
           created to make choosing wine feel enjoyable instead of stressful.
         </p>
         <p>

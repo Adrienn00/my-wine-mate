@@ -1,21 +1,26 @@
 <template>
   <div class="page-shell">
     <section class="page-frame page-stack">
-      <div class="section-intro px-1">
-        <span class="section-kicker">Kitchen</span>
-        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-          <div>
-            <h1 class="section-title">Recipes</h1>
-            <p class="section-summary">
-              Browse recipes inside the same visual language as the wine explorer, with cleaner
-              cards, steadier spacing, and easier scanning.
-            </p>
+      <div class="dashboard-panel hero-sheen rounded-[1.7rem] p-5 md:p-7">
+        <div class="section-intro px-1">
+          <span class="section-kicker">Kitchen</span>
+          <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div>
+              <h1 class="section-title">Recipes</h1>
+              <p class="section-summary">
+                A warmer editorial look for the recipe library, with richer cards and better visual
+                hierarchy.
+              </p>
+            </div>
+            <div class="flex flex-wrap gap-3">
+              <span class="dashboard-chip">{{ confirmedRecipes.length }} curated recipes</span>
+              <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
+            </div>
           </div>
-          <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
         </div>
       </div>
 
-      <section class="glass-panel rounded-[1.8rem] p-5 md:p-8">
+      <section class="dashboard-panel rounded-2xl p-5 md:p-8">
 
       <div
         v-if="recipesStore.loading"
@@ -24,30 +29,53 @@
         Loading recipes...
       </div>
 
-      <ul v-else class="grid grid-cols-1 gap-3 md:grid-cols-2">
+      <ul v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         <li
           v-for="recipe in paginatedRecipes"
           :key="recipe._id"
-          class="rounded-xl border border-[var(--line)] bg-[rgba(255,248,239,0.84)] p-4 transition hover:-translate-y-0.5 hover:border-[rgba(202,163,103,0.55)] hover:shadow-[0_12px_24px_rgba(122,32,56,0.14)]"
+          class="group overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--surface)] transition hover:-translate-y-0.5 hover:border-[rgba(93,31,50,0.4)] hover:shadow-[0_12px_28px_rgba(66,31,32,0.12)]"
         >
-          <BaseButton
-            variant="simple"
-            :to="`/recipe/${recipe._id}`"
-            class="block text-lg font-semibold"
-          >
-            {{ recipe.name }}
-          </BaseButton>
           <div
-            v-if="recipe.recipeCategories?.length"
-            class="mt-3 flex flex-wrap gap-2 text-xs font-semibold"
+            class="flex h-48 items-end bg-[linear-gradient(135deg,rgba(93,31,50,0.92),rgba(199,163,103,0.58))] p-5 text-white"
           >
-            <span
-              v-for="category in recipe.recipeCategories"
-              :key="category"
-              class="rounded-full bg-[rgba(122,32,56,0.1)] px-2.5 py-1 text-[var(--wine)]"
+            <div class="w-full rounded-xl bg-black/20 p-4 backdrop-blur-sm">
+              <p class="text-xs uppercase tracking-[0.2em] text-[#f4dcb6]">
+                {{ recipe.recipeCategories?.[0] || 'Chef Selection' }}
+              </p>
+              <BaseButton
+                variant="simple"
+                :to="`/recipe/${recipe._id}`"
+                class="mt-2 block px-0 py-0 text-left text-2xl font-semibold text-white hover:bg-transparent hover:text-white"
+              >
+                {{ recipe.name }}
+              </BaseButton>
+            </div>
+          </div>
+
+          <div class="p-5">
+            <div
+              v-if="recipe.recipeCategories?.length"
+              class="flex flex-wrap gap-2 text-xs font-semibold"
             >
-              {{ category }}
-            </span>
+              <span
+                v-for="category in recipe.recipeCategories.slice(0, 3)"
+                :key="category"
+                class="rounded-full bg-[rgba(93,31,50,0.08)] px-2.5 py-1 text-[var(--wine)]"
+              >
+                {{ category }}
+              </span>
+            </div>
+
+            <p class="mt-4 line-clamp-3 text-sm leading-6 text-[var(--text-muted)]">
+              {{ recipePreview(recipe) }}
+            </p>
+
+            <div class="mt-5 flex items-center justify-between gap-3">
+              <span class="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">
+                {{ recipe.ingredients?.length || 0 }} ingredients
+              </span>
+              <BaseButton :to="`/recipe/${recipe._id}`" variant="secondary">Open Recipe</BaseButton>
+            </div>
           </div>
         </li>
       </ul>
@@ -99,6 +127,16 @@ watch(totalPages, (nextTotal) => {
     currentPage.value = nextTotal
   }
 })
+
+function recipePreview(recipe) {
+  if (Array.isArray(recipe.ingredients) && recipe.ingredients.length) {
+    return recipe.ingredients.slice(0, 5).join(', ')
+  }
+  if (Array.isArray(recipe.instructions) && recipe.instructions.length) {
+    return recipe.instructions[0]
+  }
+  return 'Explore the full preparation steps and pairing ideas inside the recipe details.'
+}
 </script>
 
 <style scoped>

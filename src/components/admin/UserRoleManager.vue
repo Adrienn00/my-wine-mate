@@ -1,5 +1,5 @@
 <template>
-  <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-[var(--text-main)]">
+  <div class="dashboard-panel rounded-xl border border-[var(--line)] p-6 text-[var(--text-main)]">
     <div class="mb-4">
       <BaseButton to="/admin" variant="secondary">Back</BaseButton>
     </div>

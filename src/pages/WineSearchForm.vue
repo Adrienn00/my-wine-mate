@@ -1,5 +1,5 @@
 <template>
-  <section class="glass-panel hero-sheen rounded-3xl p-6 text-left md:p-10">
+  <section class="dashboard-panel hero-sheen rounded-3xl p-6 text-left md:p-10">
     <div class="mb-6 flex items-start justify-between gap-6">
       <div>
         <p class="micro-label">Smart Search</p>
@@ -10,7 +10,7 @@
         </p>
       </div>
       <span
-        class="hidden rounded-full border border-[var(--line)] bg-[rgba(237,215,212,0.72)] px-3 py-1 text-xs font-semibold text-[var(--wine)] md:inline-flex"
+        class="hidden rounded-full border border-[var(--line)] bg-[var(--rose)] px-3 py-1 text-xs font-semibold text-[var(--wine)] md:inline-flex"
       >
         Smart Search 🍷
       </span>

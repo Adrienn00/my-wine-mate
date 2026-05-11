@@ -2,7 +2,7 @@
   <div class="page-shell">
     <div class="page-frame page-stack">
 
-      <section class="glass-panel hero-sheen overflow-hidden rounded-[2rem] p-6 md:p-8">
+      <section class="dashboard-panel hero-sheen overflow-hidden rounded-xl p-6 md:p-8">
         <div class="relative z-10">
           <span class="section-kicker">Recommendations</span>
           <h1 class="section-title">Wines picked for you</h1>
@@ -21,7 +21,7 @@
       <template v-else>
 
         <!-- Personalized section -->
-        <section class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+        <section class="dashboard-panel rounded-xl p-5 md:p-7">
           <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 class="text-2xl font-semibold md:text-3xl">Personalized for you</h2>
@@ -51,7 +51,7 @@
         </section>
 
         <!-- Popular section -->
-        <section class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+        <section class="dashboard-panel rounded-xl p-5 md:p-7">
           <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
             <div>
               <h2 class="text-2xl font-semibold md:text-3xl">Popular wines</h2>

@@ -11,7 +11,7 @@
       </div>
 
       <div
-        class="glass-panel w-full rounded-[1.8rem] border border-[var(--line)] p-8 text-[var(--text-main)]"
+        class="dashboard-panel w-full rounded-2xl p-8 text-[var(--text-main)]"
       >
 
       <div class="mb-6 flex justify-center gap-4">

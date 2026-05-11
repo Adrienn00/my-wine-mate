@@ -1,5 +1,5 @@
 <template>
-  <div class="glass-panel relative rounded-2xl border border-[var(--line)] p-4 text-[var(--text-main)]">
+  <div class="dashboard-panel relative rounded-xl p-4 text-[var(--text-main)]">
     <!-- Badge -->
     <div
       class="absolute top-3 right-3 rounded-full px-2.5 py-1 text-xs font-semibold"
@@ -58,6 +58,6 @@ const badgeClass = computed(() => {
   if (props.badgeColor === 'gold') {
     return 'bg-[var(--gold)] text-[#2d1f1c]'
   }
-  return 'bg-[rgba(122,32,56,0.12)] text-[var(--wine)]'
+  return 'bg-[rgba(107,45,62,0.1)] text-[var(--wine)]'
 })
 </script>

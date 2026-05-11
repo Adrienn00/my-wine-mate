@@ -1,6 +1,6 @@
 <template>
   <div
-    class="glass-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
+    class="dashboard-panel mx-auto max-w-4xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
   >
     <h2 class="mb-8 text-center text-3xl font-semibold">Wines Awaiting Approval</h2>
 
@@ -12,7 +12,7 @@
       <li
         v-for="wine in pendingWines"
         :key="wine._id"
-        class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.9)] p-6 shadow-sm"
+        class="rounded-xl border border-[var(--line)] bg-white p-6 shadow-sm"
       >
         <div v-if="editId === wine._id" class="space-y-4">
           <BaseInput id="name" label="Wine name" v-model="editWine.name" placeholder="Wine name" />
