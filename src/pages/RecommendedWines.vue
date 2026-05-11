@@ -1,77 +1,81 @@
 <template>
-  <div class="mx-auto max-w-6xl p-6">
-    <div class="mb-4">
-      <BaseButton to="/profile" variant="secondary">Back</BaseButton>
-    </div>
+  <div class="page-shell">
+    <div class="page-frame page-stack">
 
-    <h2 class="mb-6 text-center text-3xl font-semibold text-[var(--text-main)]">
-      Recommended Wines for You
-    </h2>
-
-    <div v-if="loading" class="mt-4 text-center text-[var(--text-main)]">Loading...</div>
-
-    <div
-      v-else-if="recommendedWines.length"
-      class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
-    >
-      <div
-        v-for="wine in recommendedWines"
-        :key="wine._id"
-        class="glass-panel relative rounded-xl border border-[var(--line)] p-4 text-[var(--text-main)]"
-      >
-        <div
-          v-if="wine.matchPercent >= 80"
-          class="absolute top-2 right-2 rounded bg-[var(--gold)] px-2 py-1 text-xs font-semibold text-[#2d1f1c]"
-        >
-          Best Match
+      <section class="glass-panel hero-sheen overflow-hidden rounded-[2rem] p-6 md:p-8">
+        <div class="relative z-10">
+          <span class="section-kicker">Recommendations</span>
+          <h1 class="section-title">Wines picked for you</h1>
+          <p class="section-summary mt-3">
+            Your personalized picks are based on the preferences you set in your profile. The
+            popular section shows top-rated wines from the whole catalog.
+          </p>
         </div>
-
-        <BaseButton :to="`/wine/${wine._id}?from=recommended`" variant="simple">
-          {{ wine.name }}
-        </BaseButton>
-
-        <div
-          class="mt-2 inline-flex rounded-full border border-[var(--line)] bg-white/60 px-2.5 py-1 text-xs font-semibold text-[var(--wine)]"
-        >
-          {{ wine.recommendationLabel || 'Smart recommendation' }}
+        <div class="mt-4">
+          <BaseButton to="/profile" variant="secondary">Back to Profile</BaseButton>
         </div>
+      </section>
 
-        <div class="mt-3 space-y-1 text-sm text-[var(--text-muted)]">
-          <div>
-            <span class="font-semibold">Match:</span>
-            {{ wine.matchPercent }}%
+      <div v-if="loading" class="py-16 text-center text-[var(--text-muted)]">Loading…</div>
+
+      <template v-else>
+
+        <!-- Personalized section -->
+        <section class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+          <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="text-2xl font-semibold md:text-3xl">Personalized for you</h2>
+              <p class="mt-1 text-sm text-[var(--text-muted)]">
+                {{ personal.length ? 'Based on your saved preferences.' : 'Set preferences in your profile to get personalized picks.' }}
+              </p>
+            </div>
+            <span class="micro-label">{{ personal.length }} wines</span>
           </div>
 
-          <div>
-            <span class="font-semibold">Type:</span>
-            {{ wine.type || '—' }}
+          <div v-if="personal.length" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <WineRecommendationCard
+              v-for="wine in personal"
+              :key="wine._id"
+              :wine="wine"
+              badge-label="For you"
+              badge-color="wine"
+            />
           </div>
 
-          <div>
-            <span class="font-semibold">Style:</span>
-            {{ wine.style || '—' }}
+          <div v-else class="rounded-2xl border border-dashed border-[var(--line)] p-8 text-center">
+            <p class="text-[var(--text-muted)]">No personalized results yet.</p>
+            <BaseButton to="/preferences" variant="secondary" class="mt-4">
+              Set my preferences
+            </BaseButton>
+          </div>
+        </section>
+
+        <!-- Popular section -->
+        <section class="glass-panel rounded-[1.8rem] p-5 md:p-7">
+          <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
+            <div>
+              <h2 class="text-2xl font-semibold md:text-3xl">Popular wines</h2>
+              <p class="mt-1 text-sm text-[var(--text-muted)]">
+                Top-rated wines from the catalog{{ personal.length ? ', not shown above' : '' }}.
+              </p>
+            </div>
+            <span class="micro-label">{{ general.length }} wines</span>
           </div>
 
-          <div>
-            <span class="font-semibold">Flavor profile:</span>
-            {{ wine.flavorProfiles?.join(', ') || '—' }}
+          <div v-if="general.length" class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+            <WineRecommendationCard
+              v-for="wine in general"
+              :key="wine._id"
+              :wine="wine"
+              badge-label="Popular"
+              badge-color="gold"
+            />
           </div>
 
-          <div>
-            <span class="font-semibold">Price:</span>
-            {{ wine.priceRange || '—' }}
-          </div>
+          <p v-else class="text-sm text-[var(--text-muted)]">No wines in the catalog yet.</p>
+        </section>
 
-          <div v-if="wine.reasons?.length" class="pt-1 text-xs text-[var(--wine)]">
-            <span class="font-semibold">Why it is recommended:</span>
-            {{ wine.reasons.slice(0, 2).join(' • ') }}
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <div v-else class="mt-4 text-center text-[var(--text-main)]">
-      <p>No recommendations are available for the selected preferences.</p>
+      </template>
     </div>
   </div>
 </template>
@@ -80,24 +84,26 @@
 import { onMounted, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import WineRecommendationCard from '../components/WineRecommendationCard.vue'
 import client from '../components/httpService/client'
 
 const profileStore = useProfileStore()
 
 const loading = ref(true)
-const recommendedWines = ref([])
+const personal = ref([])
+const general = ref([])
 
 onMounted(async () => {
   try {
     await profileStore.fetchProfile()
-    const response = await client.post('wines/recommendations', {
+    const response = await client.post('wines/recommendations/split', {
       preferences: profileStore.selectedPreferences,
       limit: 6,
     })
-    recommendedWines.value = response.results || []
+    personal.value = response.personal || []
+    general.value = response.general || []
   } catch (error) {
-    console.error('Error while loading recommended wines:', error)
-    recommendedWines.value = []
+    console.error('Error loading recommendations:', error)
   } finally {
     loading.value = false
   }
