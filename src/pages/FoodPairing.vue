@@ -241,8 +241,8 @@ onMounted(async () => {
   try {
     await Promise.all([ensureSourceItem(), authStore.token ? profileStore.fetchProfile() : Promise.resolve(null)])
     await loadRecommendations()
-  } catch (error) {
-    errorMessage.value = error.message || 'Failed to load AI recommendations.'
+  } catch {
+    errorMessage.value = 'Could not load AI recommendations. Please try again later.'
   } finally {
     loading.value = false
   }
