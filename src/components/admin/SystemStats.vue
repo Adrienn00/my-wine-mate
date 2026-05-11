@@ -13,7 +13,7 @@
 
     <template v-else>
 
-      <!-- 1. Katalógus áttekintő -->
+      <!-- 1. Catalog overview -->
       <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
         <h2 class="mb-5 text-xl font-semibold">Catalog overview</h2>
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
@@ -26,11 +26,11 @@
         </div>
       </section>
 
-      <!-- 2. Ajánlási minőség -->
+      <!-- 2. Recommendation quality -->
       <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
         <h2 class="mb-1 text-xl font-semibold">Recommendation quality</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
-          Felhasználói „Good match / Bad match" szavazatok alapján — csak jóváhagyott feedback számít.
+          Based on user "Good match / Bad match" votes — only admin-approved feedback is counted.
         </p>
 
         <div class="grid gap-4 sm:grid-cols-3">
@@ -60,11 +60,11 @@
         </div>
       </section>
 
-      <!-- 3. Modell teljesítmény -->
+      <!-- 3. Model performance -->
       <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
         <h2 class="mb-1 text-xl font-semibold">Model performance</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
-          XGBoost párosítási modell — legutóbbi tanítás metrikái és históriája.
+          XGBoost pairing model — metrics and history from the latest training runs.
         </p>
 
         <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -166,15 +166,15 @@
         </div>
       </section>
 
-      <!-- 4. Borértékelések Top 5 -->
+      <!-- 4. Wine ratings Top 5 -->
       <section class="glass-panel rounded-[1.8rem] p-6">
         <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 class="text-xl font-semibold">Wine ratings</h2>
             <p class="mt-1 text-sm text-[var(--text-muted)]">
-              Top 5 legtöbbet értékelt bor · átlagos értékelés:
+              Top 5 most-rated wines · average rating:
               <strong>{{ ratings.avgRating != null ? ratings.avgRating + ' / 5' : '—' }}</strong>
-              ({{ ratings.totalRatings }} rating összesen)
+              ({{ ratings.totalRatings }} ratings total)
             </p>
           </div>
         </div>

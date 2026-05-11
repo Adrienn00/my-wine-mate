@@ -69,16 +69,16 @@
           </div>
         </div>
 
-        <!-- LLM auto-training szekció -->
+        <!-- LLM auto-training section -->
         <div class="mt-6 rounded-xl border border-[var(--gold)]/40 bg-[var(--gold)]/5 p-4">
           <h4 class="font-semibold">LLM feedback &amp; auto-training</h4>
           <p class="mt-1 text-xs text-[var(--text-muted)]">
-            Az LLM ajánlásaiból automatikusan gyűlnek a tanítócímkék. Ha elég új auto-approved
-            label összegyűlik, a rendszer magától elindítja az újratanítást.
+            Training labels are collected automatically from LLM recommendations. Once enough
+            new auto-approved labels accumulate, the system triggers retraining on its own.
           </p>
           <div class="mt-4 grid gap-3 sm:grid-cols-3">
             <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
-              <div class="text-xs text-[var(--text-muted)]">LLM silver labels (össz)</div>
+              <div class="text-xs text-[var(--text-muted)]">LLM silver labels (total)</div>
               <div class="mt-1 text-2xl font-semibold text-[var(--wine)]">{{ llmTotal }}</div>
             </div>
             <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
@@ -86,14 +86,14 @@
               <div class="mt-1 text-2xl font-semibold text-[#215d31]">{{ llmAutoApproved }}</div>
             </div>
             <div class="rounded-lg border border-[var(--line)] bg-white/60 p-3">
-              <div class="text-xs text-[var(--text-muted)]">Pending LLM (admin dönt)</div>
+              <div class="text-xs text-[var(--text-muted)]">Pending LLM (awaiting review)</div>
               <div class="mt-1 text-2xl font-semibold text-[#7b5a12]">{{ llmPending }}</div>
             </div>
           </div>
           <div class="mt-3 space-y-1 text-xs text-[var(--text-muted)]">
-            <p>Auto-train küszöb: <strong>{{ autoTrainThreshold }} új approved label</strong></p>
+            <p>Auto-train threshold: <strong>{{ autoTrainThreshold }} new approved labels</strong></p>
             <p>Cooldown: <strong>{{ autoTrainCooldownHours }}h</strong></p>
-            <p v-if="nextAutoTrainAt">Következő lehetséges auto-train: <strong>{{ formatDate(nextAutoTrainAt) }}</strong></p>
+            <p v-if="nextAutoTrainAt">Next possible auto-train: <strong>{{ formatDate(nextAutoTrainAt) }}</strong></p>
           </div>
         </div>
 
