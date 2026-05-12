@@ -42,17 +42,24 @@ function handleSearch(filters) {
   loading.value = true
 
   const { query, type, style, price, flavor } = filters
-  const q = query?.toLowerCase() || ''
+  const tokens = (query || '')
+    .toLowerCase()
+    .split(/[\s,]+/)
+    .filter(Boolean)
 
   searchResults.value = winesStore.confirmedWines.filter((wine) => {
-    if (
-      q &&
-      !wine.name?.toLowerCase().includes(q) &&
-      !wine.winery?.toLowerCase().includes(q) &&
-      !wine.origin?.region?.toLowerCase().includes(q) &&
-      !wine.origin?.country?.toLowerCase().includes(q)
-    ) {
-      return false
+    if (tokens.length) {
+      const haystack = [
+        wine.name,
+        wine.winery,
+        wine.origin?.region,
+        wine.origin?.country,
+        String(wine.year ?? ''),
+      ]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase()
+      if (!tokens.every((t) => haystack.includes(t))) return false
     }
     if (type && wine.type !== type) return false
     if (style && wine.style !== style) return false
