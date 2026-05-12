@@ -102,11 +102,31 @@
               @keydown.ctrl.enter="sendMessage"
             />
 
+            <!-- Pending image indicator -->
+            <div v-if="pendingImage" class="mt-2 flex items-center gap-2 text-sm text-[var(--wine)]">
+              <span>📸 Photo attached</span>
+              <button class="text-xs underline opacity-70 hover:opacity-100" @click="pendingImage = null">Remove</button>
+            </div>
+
+            <input
+              ref="photoInput"
+              type="file"
+              accept="image/*"
+              capture="environment"
+              class="hidden"
+              @change="onPhotoSelected"
+            />
+
             <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
-              <p class="text-sm text-[var(--text-muted)]">
-                The reply uses wines and recipes already stored in your own database.
-              </p>
-              <BaseButton :disabled="loading || !trimmedDraft" @click="sendMessage">
+              <div class="flex gap-2">
+                <BaseButton variant="secondary" :disabled="loading" @click="photoInput.click()">
+                  📸 Scan label
+                </BaseButton>
+                <p class="self-center text-sm text-[var(--text-muted)]">
+                  or type your request
+                </p>
+              </div>
+              <BaseButton :disabled="loading || (!trimmedDraft && !pendingImage)" @click="sendMessage">
                 {{ loading ? 'Searching…' : 'Ask the assistant' }}
               </BaseButton>
             </div>
@@ -268,6 +288,8 @@ const draft = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
 const chatContainer = ref(null)
+const photoInput = ref(null)
+const pendingImage = ref(null)
 const messages = ref([
   { id: crypto.randomUUID(), role: 'ai', text: INITIAL_AI_TEXT, isTyping: false },
 ])
@@ -326,10 +348,32 @@ async function toggleRecipeFav(recipe) {
   }
 }
 
-async function sendMessage() {
-  if (!trimmedDraft.value || loading.value) return
+function onPhotoSelected(event) {
+  const file = event.target.files?.[0]
+  if (!file) return
+  const reader = new FileReader()
+  reader.onload = (e) => {
+    const img = new Image()
+    img.onload = () => {
+      const MAX = 1200
+      const scale = Math.min(1, MAX / Math.max(img.width, img.height))
+      const canvas = document.createElement('canvas')
+      canvas.width = Math.round(img.width * scale)
+      canvas.height = Math.round(img.height * scale)
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+      pendingImage.value = canvas.toDataURL('image/jpeg', 0.82).split(',')[1]
+    }
+    img.src = e.target.result
+  }
+  reader.readAsDataURL(file)
+  photoInput.value.value = ''
+}
 
-  const message = trimmedDraft.value
+async function sendMessage() {
+  if ((!trimmedDraft.value && !pendingImage.value) || loading.value) return
+
+  const message = trimmedDraft.value || '📸 What wine is this? Suggest similar wines and food pairings.'
+  const imageToSend = pendingImage.value
   errorMessage.value = ''
 
   // Add user bubble
@@ -341,6 +385,7 @@ async function sendMessage() {
   history.value = trimmedHistory
 
   draft.value = ''
+  pendingImage.value = null
   loading.value = true
 
   // Add typing indicator bubble
@@ -358,7 +403,11 @@ async function sendMessage() {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
       },
-      body: JSON.stringify({ messages: history.value, topK: 4 }),
+      body: JSON.stringify({
+        messages: history.value,
+        topK: 4,
+        ...(imageToSend ? { image: imageToSend, mimeType: 'image/jpeg' } : {}),
+      }),
     })
 
     if (!response.ok) {
@@ -389,7 +438,11 @@ async function sendMessage() {
 
         try {
           const event = JSON.parse(dataStr)
-          if (event.type === 'chunk') {
+          if (event.type === 'ocr') {
+            const msg = messages.value.find((m) => m.id === aiMsgId)
+            if (msg) { msg.text = event.content; msg.isTyping = false }
+            await scrollToBottom()
+          } else if (event.type === 'chunk') {
             const msg = messages.value.find((m) => m.id === aiMsgId)
             if (msg) msg.text += event.content
             fullReply += event.content
