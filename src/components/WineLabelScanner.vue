@@ -86,8 +86,7 @@ async function onFileSelected(event) {
 
   try {
     const base64 = await toBase64(file)
-    const mimeType = file.type || 'image/jpeg'
-    result.value = await client.post('wines/ocr-scan', { image: base64, mimeType })
+    result.value = await client.post('wines/ocr-scan', { image: base64, mimeType: 'image/jpeg' })
   } catch (err) {
     error.value = err.message || 'Could not read the label. Please try a clearer photo.'
   } finally {
@@ -104,8 +103,22 @@ function reset() {
 function toBase64(file) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
-    reader.onload = (e) => resolve(e.target.result.split(',')[1])
     reader.onerror = reject
+    reader.onload = (e) => {
+      const img = new Image()
+      img.onerror = reject
+      img.onload = () => {
+        const MAX = 1200
+        const scale = Math.min(1, MAX / Math.max(img.width, img.height))
+        const canvas = document.createElement('canvas')
+        canvas.width = Math.round(img.width * scale)
+        canvas.height = Math.round(img.height * scale)
+        canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+        const dataUrl = canvas.toDataURL('image/jpeg', 0.82)
+        resolve(dataUrl.split(',')[1])
+      }
+      img.src = e.target.result
+    }
     reader.readAsDataURL(file)
   })
 }
