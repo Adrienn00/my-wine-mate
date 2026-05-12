@@ -50,7 +50,7 @@
 
     <div class="mt-6 flex flex-wrap gap-3">
       <BaseButton variant="primary" @click="emitSearch">Search</BaseButton>
-      <BaseButton variant="secondary">Search by Photo 📸</BaseButton>
+      <WineLabelScanner use-label="Search with this wine" @use="onScanResult" />
       <BaseButton to="/addWine" variant="secondary">Add New Wine</BaseButton>
     </div>
   </section>
@@ -60,6 +60,7 @@
 import { reactive } from 'vue'
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
+import WineLabelScanner from '../components/WineLabelScanner.vue'
 
 const emit = defineEmits(['search'])
 defineProps({
@@ -74,7 +75,6 @@ defineProps({
   },
 })
 
-// Store all filters in a single object.
 const filters = reactive({
   query: '',
   type: '',
@@ -83,8 +83,14 @@ const filters = reactive({
   flavor: '',
 })
 
+function onScanResult(ocrResult) {
+  const parts = [ocrResult.name, ocrResult.winery, ocrResult.year].filter(Boolean)
+  filters.query = parts.join(' ')
+  if (ocrResult.type) filters.type = ocrResult.type
+  emitSearch()
+}
+
 function emitSearch() {
-  // Emit a shallow copy of the current filters to the parent component.
   emit('search', { ...filters })
 }
 </script>
