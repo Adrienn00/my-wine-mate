@@ -16,6 +16,7 @@
         <div class="flex flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
           <nav class="flex flex-wrap items-center gap-1.5 font-semibold">
             <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
+            <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
             <BaseButton
               v-if="route.path !== '/pairing-assistant'"
               to="/pairing-assistant"

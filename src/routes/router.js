@@ -11,6 +11,7 @@ import ConversationalPairing from '../pages/ConversationalPairing.vue'
 import Recipes from '../pages/Recipes.vue'
 import RecommendedWines from '../pages/RecommendedWines.vue'
 import AddNewWine from '../pages/AddNewWine.vue'
+import Wines from '../pages/Wines.vue'
 import UserProfile from '../pages/UserProfile.vue'
 import FavoriteList from '../pages/FavoriteList.vue'
 import WineCard from '../pages/WineCard.vue'
@@ -40,6 +41,7 @@ const routes = [
       { path: '/recipes', component: Recipes },
       { path: '/recipe/:id', name: 'recipe-details', component: RecipeCard },
       { path: '/addRecipe', component: AddNewRecipe },
+      { path: '/wines', component: Wines },
       { path: '/addWine', component: AddNewWine },
       {
         path: '/wine/:id',

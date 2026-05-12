@@ -23,6 +23,7 @@
         >
           Wine Search
         </button>
+        <BaseButton to="/wines" variant="secondary">Browse all wines →</BaseButton>
       </div>
     </div>
 
