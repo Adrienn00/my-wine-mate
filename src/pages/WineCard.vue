@@ -1,82 +1,86 @@
 <template>
   <div v-if="wine" class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <main class="mx-auto flex w-full max-w-6xl justify-start">
-      <div
-        class="dashboard-panel w-full max-w-2xl space-y-4 rounded-xl p-6 text-left text-[var(--text-main)]"
-      >
-        <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
-        <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
+    <main class="mx-auto flex w-full max-w-7xl justify-start">
+      <div class="grid w-full gap-6 xl:grid-cols-[minmax(0,1.1fr)_380px]">
+        <div
+          class="dashboard-panel space-y-4 rounded-xl p-6 text-left text-[var(--text-main)]"
+        >
+          <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
+          <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
 
-        <img
-          v-if="wine.imageUrl"
-          :src="wine.imageUrl"
-          alt="Wine image"
-          class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
+          <img
+            v-if="wine.imageUrl"
+            :src="wine.imageUrl"
+            alt="Wine image"
+            class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
+          />
+
+          <p><strong>Description:</strong> {{ wine.description }}</p>
+          <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
+          <p><strong>Style:</strong> {{ wine.style }}</p>
+          <p><strong>Vintage:</strong> {{ wine.year }}</p>
+          <p><strong>Alcohol:</strong> {{ wine.alcohol }}%</p>
+          <p><strong>Price range:</strong> {{ wine.priceRange }}</p>
+          <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
+          <p><strong>Origin:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}</p>
+          <p><strong>Tags:</strong> {{ wine.tags?.join(', ') }}</p>
+          <p><strong>Food pairing hints:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
+
+          <WinePurchaseOptions :wine="wine" :wine-id="wineId" :is-logged-in="isLoggedIn" />
+
+          <div class="mt-6 space-y-3">
+            <details
+              class="rounded-xl border border-[var(--line)] bg-white p-2"
+              open
+            >
+              <summary
+                class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+              >
+                Community Ratings
+              </summary>
+              <div class="px-2 pb-2 pt-3">
+                <RatingDisplay
+                  :rating="averageRating"
+                  :notes="comments"
+                  :comment-entries="commentEntries"
+                  :criteria-averages="criteriaAverages"
+                  :criteria-labels="ratingCriteriaLabels"
+                  :is-admin="isAdmin"
+                  @delete-comment="handleDeleteComment"
+                />
+              </div>
+            </details>
+
+            <details class="rounded-xl border border-[var(--line)] bg-white p-2">
+              <summary
+                class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+              >
+                Write a New Review
+              </summary>
+              <div class="px-2 pb-2 pt-3">
+                <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
+
+                <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
+                  To leave a review,
+                  <router-link to="/login" class="text-[var(--wine)] underline"> log in </router-link
+                  >.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <div class="mt-6 flex space-x-5">
+            <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
+            <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
+              {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
+            </BaseButton>
+          </div>
+        </div>
+
+        <PairingRecommendationsPanel
+          v-if="showPairings"
+          :wine-id="wineId"
         />
-
-        <p><strong>Description:</strong> {{ wine.description }}</p>
-        <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
-        <p><strong>Style:</strong> {{ wine.style }}</p>
-        <p><strong>Vintage:</strong> {{ wine.year }}</p>
-        <p><strong>Alcohol:</strong> {{ wine.alcohol }}%</p>
-        <p><strong>Price range:</strong> {{ wine.priceRange }}</p>
-        <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
-        <p><strong>Origin:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}</p>
-        <p><strong>Tags:</strong> {{ wine.tags?.join(', ') }}</p>
-        <p><strong>Food pairing hints:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
-
-        <WinePurchaseOptions :wine="wine" :wine-id="wineId" :is-logged-in="isLoggedIn" />
-
-        <div class="mt-6 space-y-3">
-          <details
-            class="rounded-xl border border-[var(--line)] bg-white p-2"
-            open
-          >
-            <summary
-              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
-            >
-              Community Ratings
-            </summary>
-            <div class="px-2 pb-2 pt-3">
-              <RatingDisplay
-                :rating="averageRating"
-                :notes="comments"
-                :comment-entries="commentEntries"
-                :criteria-averages="criteriaAverages"
-                :criteria-labels="ratingCriteriaLabels"
-                :is-admin="isAdmin"
-                @delete-comment="handleDeleteComment"
-              />
-            </div>
-          </details>
-
-          <details class="rounded-xl border border-[var(--line)] bg-white p-2">
-            <summary
-              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
-            >
-              Write a New Review
-            </summary>
-            <div class="px-2 pb-2 pt-3">
-              <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
-
-              <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
-                To leave a review,
-                <router-link to="/login" class="text-[var(--wine)] underline"> log in </router-link
-                >.
-              </p>
-            </div>
-          </details>
-        </div>
-
-        <div class="mt-6 flex space-x-5">
-          <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
-          <BaseButton :to="`/foodPairing?wineId=${wine._id}`" variant="secondary">
-            Food Pairing
-          </BaseButton>
-          <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
-            {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
-          </BaseButton>
-        </div>
       </div>
     </main>
   </div>
@@ -92,6 +96,7 @@ import BaseButton from '../components/ui/BaseButton.vue'
 import RatingDisplay from '../components/RatingDisplay.vue'
 import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
 import WinePurchaseOptions from '../components/wine/WinePurchaseOptions.vue'
+import PairingRecommendationsPanel from '../components/PairingRecommendationsPanel.vue'
 import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
 const props = defineProps({
   wine: {
@@ -114,6 +119,7 @@ const wine = computed(() => {
 const wineId = computed(() => {
   return wine.value?._id || props.wine?._id || route.params.id
 })
+const showPairings = computed(() => String(route.query.withPairings || '') === '1')
 const isLoggedIn = computed(() => Boolean(authStore.token))
 const isAdmin = computed(() => Boolean(authStore.user?.isAdmin))
 
@@ -213,6 +219,7 @@ const backLink = computed(() => {
     home: '/',
     favorites: '/favorite',
     recommended: '/recommended',
+    'pairing-browser': '/foodPairing',
   }
   return map[from]
 })

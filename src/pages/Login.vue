@@ -2,13 +2,17 @@
   <div class="flex min-h-[80vh] w-full items-center justify-center px-4 py-10">
     <div class="w-full max-w-md">
       <div class="mb-8 text-center">
-        <p class="font-['Cormorant_Garamond'] text-3xl font-semibold text-[var(--wine)]">Vinology Cook</p>
+        <p class="font-['Cormorant_Garamond'] text-3xl font-semibold text-[var(--wine)]">
+          MyWineMate
+        </p>
         <p class="mt-1 text-sm text-[var(--text-muted)]">Sign in to your account</p>
       </div>
 
-      <form
+      <BaseCard
+        as="form"
+        rounded="rounded-2xl"
+        padding="px-6 py-8 md:px-8"
         @submit.prevent="loginUser"
-        class="dashboard-panel rounded-2xl px-6 py-8 md:px-8"
       >
         <h1 class="mb-6 text-2xl font-semibold">Log In</h1>
 
@@ -31,7 +35,7 @@
           Don't have an account?
           <BaseButton to="/signup" variant="simple" class="ml-1">Sign Up</BaseButton>
         </div>
-      </form>
+      </BaseCard>
     </div>
   </div>
 </template>
@@ -41,6 +45,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 
 const email = ref('')

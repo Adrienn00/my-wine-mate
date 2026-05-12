@@ -1,30 +1,28 @@
 <template>
-  <div class="page-shell">
-    <section class="page-frame page-stack">
-      <div class="dashboard-panel hero-sheen rounded-[1.7rem] p-5 md:p-7">
-        <div class="section-intro px-1">
-          <span class="section-kicker">Kitchen</span>
-          <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-            <div>
-              <h1 class="section-title">Recipes</h1>
-              <p class="section-summary">
-                A warmer editorial look for the recipe library, with richer cards and better visual
-                hierarchy.
-              </p>
-            </div>
-            <div class="flex flex-wrap gap-3">
-              <span class="dashboard-chip">{{ confirmedRecipes.length }} curated recipes</span>
-              <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
-            </div>
+  <PageFrame>
+    <BaseCard as="section" class="hero-sheen" rounded="rounded-[1.7rem]" padding="p-5 md:p-7">
+      <div class="section-intro px-1">
+        <span class="section-kicker">Kitchen</span>
+        <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+          <div>
+            <h1 class="section-title">Recipes</h1>
+            <p class="section-summary">
+              A warmer editorial look for the recipe library, with richer cards and better visual
+              hierarchy.
+            </p>
+          </div>
+          <div class="flex flex-wrap gap-3">
+            <span class="dashboard-chip">{{ confirmedRecipes.length }} curated recipes</span>
+            <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
           </div>
         </div>
       </div>
+    </BaseCard>
 
-      <section class="dashboard-panel rounded-2xl p-5 md:p-8">
-
+    <BaseCard as="section" rounded="rounded-2xl" padding="p-5 md:p-8">
       <div
         v-if="recipesStore.loading"
-        class="py-10 text-center animate-pulse font-medium text-[var(--text-main)]"
+        class="animate-pulse py-10 text-center font-medium text-[var(--text-main)]"
       >
         Loading recipes...
       </div>
@@ -92,14 +90,15 @@
           Next
         </button>
       </div>
-      </section>
-    </section>
-  </div>
+    </BaseCard>
+  </PageFrame>
 </template>
 
 <script setup>
 import { computed, onMounted, ref, watch } from 'vue'
 import BaseButton from '../components/ui/BaseButton.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
+import PageFrame from '../components/ui/PageFrame.vue'
 import { useRecipesStore } from '../stores/recipesStore'
 
 const recipesStore = useRecipesStore()
@@ -113,7 +112,6 @@ const paginatedRecipes = computed(() => {
   return confirmedRecipes.value.slice(start, start + pageSize)
 })
 
-// Load recipes when the page opens.
 onMounted(() => {
   recipesStore.getAllRecipes()
 })
@@ -123,9 +121,7 @@ watch(confirmedRecipes, () => {
 })
 
 watch(totalPages, (nextTotal) => {
-  if (currentPage.value > nextTotal) {
-    currentPage.value = nextTotal
-  }
+  if (currentPage.value > nextTotal) currentPage.value = nextTotal
 })
 
 function recipePreview(recipe) {
@@ -149,14 +145,6 @@ function recipePreview(recipe) {
   font-size: 0.875rem;
   transition: 0.2s ease;
 }
-
-.pager-btn:hover:enabled {
-  border-color: var(--accent);
-  background: rgba(237, 215, 212, 0.52);
-}
-
-.pager-btn:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-}
+.pager-btn:hover:enabled { border-color: var(--accent); background: rgba(237, 215, 212, 0.52); }
+.pager-btn:disabled { cursor: not-allowed; opacity: 0.45; }
 </style>

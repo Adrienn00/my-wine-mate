@@ -5,7 +5,7 @@
     >
       <div>
         <p class="font-['Cormorant_Garamond'] text-2xl font-semibold tracking-wide text-[var(--wine)]">
-          Vinology Cook
+          MyWineMate
         </p>
         <p class="mt-0.5 text-sm text-[var(--text-muted)]">
           Wine discovery, recipe pairing, and a more confident tasting journey.

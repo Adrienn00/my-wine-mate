@@ -5,19 +5,13 @@
     >
       <div>
         <p class="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--wine)]">
-          My Cellar
+          Account Center
         </p>
         <h2 class="mb-8 text-3xl font-semibold">Profile</h2>
         <ul class="space-y-4">
-          <li><BaseButton to="/profile" variant="simpleRose">User</BaseButton></li>
-          <li><BaseButton to="/favorite" variant="simpleRose">Favorites</BaseButton></li>
-          <li><BaseButton to="/preferences" variant="simpleRose">Wine Preferences</BaseButton></li>
-          <li>
-            <BaseButton to="/recipe-preferences" variant="simpleRose"
-              >Recipe Preferences</BaseButton
-            >
-          </li>
-          <li><BaseButton to="/recommended" variant="simpleRose">Recommendations</BaseButton></li>
+          <li><BaseButton to="/" variant="simpleRose">Back to Dashboard</BaseButton></li>
+          <li><BaseButton to="/profile" variant="simpleRose">Account Details</BaseButton></li>
+          <li><BaseButton to="/preferences" variant="simpleRose">Preferences</BaseButton></li>
 
           <li v-if="authStore.user?.isAdmin">
             <BaseButton to="/admin" variant="simpleRose">Admin</BaseButton>

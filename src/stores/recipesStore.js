@@ -81,6 +81,17 @@ export const useRecipesStore = defineStore('recipes', () => {
     }
   }
 
+  async function deleteRating(id, ratingId) {
+    try {
+      const response = await client.delete(`recipes/${id}/rating/${ratingId}`)
+      replaceRecipeInStore(id, response)
+      return response
+    } catch (err) {
+      console.error('Error while deleting rating:', err)
+      return null
+    }
+  }
+
   async function deleteRecipe(id) {
     try {
       await client.delete(`recipes/${id}`)
@@ -105,6 +116,7 @@ export const useRecipesStore = defineStore('recipes', () => {
     addNewRecipe,
     updateRecipe,
     addRating,
+    deleteRating,
     approveRecipe,
     deleteRecipe,
   }

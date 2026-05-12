@@ -1,19 +1,12 @@
 <template>
-  <div class="page-shell">
-    <div class="page-frame page-stack">
-      <div class="page-actions">
-        <BaseButton to="/profile" variant="secondary">Back</BaseButton>
-      </div>
+  <PageFrame>
+    <div class="page-actions">
+      <BaseButton to="/profile" variant="secondary">Back</BaseButton>
+    </div>
 
-      <div class="section-intro px-1">
-        <span class="section-kicker">Collection</span>
-        <h1 class="section-title">Your Favorites</h1>
-      </div>
+    <SectionHeader class="px-1" kicker="Collection" title="Your Favorites" />
 
-      <div
-        class="dashboard-panel w-full rounded-2xl p-8 text-[var(--text-main)]"
-      >
-
+    <BaseCard rounded="rounded-2xl" padding="p-8">
       <div class="mb-6 flex justify-center gap-4">
         <BaseButton
           :variant="activeTab === 'wines' ? 'primary' : 'secondary'"
@@ -54,20 +47,21 @@
         </div>
         <p v-else class="text-center text-[var(--text-muted)]">You do not have any favorite recipes yet.</p>
       </div>
-      </div>
-    </div>
-  </div>
+    </BaseCard>
+  </PageFrame>
 </template>
 
 <script setup>
 import { ref, computed, onMounted } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import PageFrame from '../components/ui/PageFrame.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
+import SectionHeader from '../components/ui/SectionHeader.vue'
 
 const profileStore = useProfileStore()
 const activeTab = ref('wines')
 
-// Default to empty arrays before the profile finishes loading.
 const favoriteWines = computed(() => profileStore.favoriteWines || [])
 const favoriteRecipes = computed(() => profileStore.favoriteRecipes || [])
 
