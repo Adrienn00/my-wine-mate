@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
+    class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 text-[var(--text-main)]"
   >
     <p class="mb-2 text-lg font-semibold">Rating: {{ formattedRating }}/5</p>
 
@@ -25,7 +25,7 @@
         <li
           v-for="(entry, index) in commentEntries"
           :key="`${entry.id || entry.author}-${index}`"
-          class="rounded-md border border-[var(--line)] bg-[rgba(255,251,246,0.88)] p-2"
+          class="rounded-md border border-[var(--line)] bg-[var(--surface)] p-2"
         >
           <div class="flex items-center justify-between gap-2">
             <div>

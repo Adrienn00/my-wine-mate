@@ -2,7 +2,7 @@
   <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <div class="mx-auto flex max-w-6xl items-center justify-center">
       <div
-        class="glass-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
+        class="dashboard-panel flex w-full max-w-3xl flex-col gap-y-5 rounded-2xl border border-[var(--line)] p-6 md:p-8"
       >
         <div class="mb-1">
           <BaseButton to="/" variant="secondary">Back</BaseButton>
@@ -13,6 +13,28 @@
         >
           Add a New Wine
         </h1>
+
+        <!-- AI scan section -->
+        <div class="rounded-xl border border-[var(--line)] bg-[var(--rose)] p-4">
+          <p class="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--wine)]">
+            AI-assisted entry
+          </p>
+          <p class="mb-3 text-sm text-[var(--text-muted)]">
+            Scan a wine label and let AI fill in all the details automatically.
+          </p>
+          <WineLabelScanner use-label="Enrich with AI" @use="onScanResult" />
+          <div
+            v-if="enriching"
+            class="mt-3 flex items-center gap-2 text-sm text-[var(--text-muted)]"
+          >
+            <span class="animate-spin">⏳</span>
+            AI is searching for this wine…
+          </div>
+          <div v-if="enrichError" class="mt-3 text-sm text-[var(--danger)]">
+            {{ enrichError }}
+          </div>
+        </div>
+
         <form class="flex flex-col gap-y-5" @submit.prevent="submitWine">
           <BaseInput id="wineName" v-model="wine.name" placeholder="Wine name *" required />
 
@@ -106,10 +128,55 @@
 <script setup>
 import BaseInput from '../components/ui/BaseInput.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
+import WineLabelScanner from '../components/WineLabelScanner.vue'
 import { ref } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
+import client from '../components/httpService/client'
 
 const winesStore = useWinesStore()
+
+const enriching = ref(false)
+const enrichError = ref('')
+
+async function onScanResult(ocrData) {
+  enrichError.value = ''
+  enriching.value = true
+  try {
+    const enriched = await client.post('wines/ai-enrich', {
+      name: ocrData.name,
+      winery: ocrData.winery,
+      year: ocrData.year,
+      region: ocrData.region,
+      type: ocrData.type,
+    })
+    wine.value.name = enriched.name || ocrData.name || ''
+    wine.value.winery = enriched.winery || ocrData.winery || ''
+    wine.value.description = enriched.description || ''
+    wine.value.type = enriched.type || ocrData.type || ''
+    wine.value.style = enriched.style || ''
+    wine.value.origin.country = enriched.origin?.country || ocrData.country || ''
+    wine.value.origin.region = enriched.origin?.region || ocrData.region || ''
+    wine.value.year = enriched.year || ocrData.year || null
+    wine.value.alcohol = enriched.alcohol || ocrData.alcohol || null
+    wine.value.priceRange = enriched.priceRange || ''
+    flavorProfilesText.value = Array.isArray(enriched.flavorProfiles)
+      ? enriched.flavorProfiles.join(', ')
+      : ''
+    grapeVarietiesText.value = Array.isArray(enriched.grapeVarieties)
+      ? enriched.grapeVarieties.join(', ')
+      : Array.isArray(ocrData.grapeVarieties)
+        ? ocrData.grapeVarieties.join(', ')
+        : ''
+    foodPairingHintsText.value = Array.isArray(enriched.foodPairingHints)
+      ? enriched.foodPairingHints.join(', ')
+      : ''
+    tagsText.value = Array.isArray(enriched.tags) ? enriched.tags.join(', ') : ''
+  } catch (err) {
+    enrichError.value = err.message || 'AI enrichment failed. You can still fill the form manually.'
+  } finally {
+    enriching.value = false
+  }
+}
 
 const wine = ref({
   name: '',

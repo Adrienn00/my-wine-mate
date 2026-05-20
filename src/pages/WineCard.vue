@@ -1,89 +1,123 @@
 <template>
   <div v-if="wine" class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <main class="mx-auto flex w-full max-w-6xl justify-start">
-      <div
-        class="glass-panel w-full max-w-2xl space-y-4 rounded-2xl border border-[var(--line)] p-6 text-left text-[var(--text-main)]"
-      >
-        <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
-        <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
+    <main class="mx-auto flex w-full max-w-7xl justify-start">
+      <div class="grid w-full gap-6 xl:grid-cols-[minmax(0,1.1fr)_380px]">
+        <div
+          class="dashboard-panel space-y-4 rounded-xl p-6 text-left text-[var(--text-main)]"
+        >
+          <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
+          <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
 
-        <img
-          v-if="wine.imageUrl"
-          :src="wine.imageUrl"
-          alt="Wine image"
-          class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
+          <img
+            v-if="wine.imageUrl"
+            :src="wine.imageUrl"
+            alt="Wine image"
+            class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
+          />
+
+          <p><strong>Description:</strong> {{ wine.description }}</p>
+          <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
+          <p><strong>Style:</strong> {{ wine.style }}</p>
+          <p><strong>Vintage:</strong> {{ wine.year }}</p>
+          <p><strong>Alcohol:</strong> {{ wine.alcohol }}%</p>
+          <p><strong>Price range:</strong> {{ wine.priceRange }}</p>
+          <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
+          <p><strong>Origin:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}</p>
+          <p><strong>Tags:</strong> {{ wine.tags?.join(', ') }}</p>
+          <p><strong>Food pairing hints:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
+
+          <WinePurchaseOptions :wine="wine" :wine-id="wineId" :is-logged-in="isLoggedIn" />
+
+          <div class="mt-6 space-y-3">
+            <details
+              class="rounded-xl border border-[var(--line)] bg-white p-2"
+              open
+            >
+              <summary
+                class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+              >
+                Community Ratings
+              </summary>
+              <div class="px-2 pb-2 pt-3">
+                <RatingDisplay
+                  :rating="averageRating"
+                  :notes="comments"
+                  :comment-entries="commentEntries"
+                  :criteria-averages="criteriaAverages"
+                  :criteria-labels="ratingCriteriaLabels"
+                  :is-admin="isAdmin"
+                  @delete-comment="handleDeleteComment"
+                />
+              </div>
+            </details>
+
+            <details class="rounded-xl border border-[var(--line)] bg-white p-2">
+              <summary
+                class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
+              >
+                Write a New Review
+              </summary>
+              <div class="px-2 pb-2 pt-3">
+                <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
+
+                <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
+                  To leave a review,
+                  <router-link to="/login" class="text-[var(--wine)] underline"> log in </router-link
+                  >.
+                </p>
+              </div>
+            </details>
+          </div>
+
+          <div class="mt-6 flex flex-wrap gap-3">
+            <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
+            <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
+              {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
+            </BaseButton>
+            <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleShareForm">
+              Share Wine
+            </BaseButton>
+          </div>
+
+          <div v-if="showShareForm" class="mt-4">
+            <p v-if="friendsLoading" class="text-sm text-[var(--text-muted)]">Loading friends...</p>
+            <p v-else-if="!friends.length" class="text-sm text-[var(--text-muted)]">
+              You have no friends added yet. Add friends on your
+              <router-link to="/profile" class="text-[var(--wine)] underline">profile page</router-link>.
+            </p>
+            <div v-else class="flex flex-wrap gap-2">
+              <button
+                v-for="f in friends"
+                :key="f._id"
+                class="friend-chip"
+                :class="{ 'friend-chip--selected': shareTarget === f.username }"
+                @click="shareTarget = f.username"
+              >
+                {{ f.username }}
+              </button>
+            </div>
+            <div v-if="friends.length" class="mt-3 flex items-center gap-2">
+              <BaseButton variant="primary" :disabled="!shareTarget || shareLoading" @click="submitShare">
+                {{ shareLoading ? 'Sending...' : shareTarget ? `Send to ${shareTarget}` : 'Select a friend' }}
+              </BaseButton>
+              <span v-if="shareMessage" :class="shareError ? 'text-[var(--danger)]' : 'text-green-600'" class="text-sm">
+                {{ shareMessage }}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <PairingRecommendationsPanel
+          v-if="showPairings"
+          :wine-id="wineId"
         />
-
-        <p><strong>Description:</strong> {{ wine.description }}</p>
-        <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
-        <p><strong>Style:</strong> {{ wine.style }}</p>
-        <p><strong>Vintage:</strong> {{ wine.year }}</p>
-        <p><strong>Alcohol:</strong> {{ wine.alcohol }}%</p>
-        <p><strong>Price range:</strong> {{ wine.priceRange }}</p>
-        <p><strong>Flavor profile:</strong> {{ wine.flavorProfiles?.join(', ') }}</p>
-        <p><strong>Origin:</strong> {{ wine.origin?.country }}, {{ wine.origin?.region }}</p>
-        <p><strong>Tags:</strong> {{ wine.tags?.join(', ') }}</p>
-        <p><strong>Food pairing hints:</strong> {{ wine.foodPairingHints?.join(', ') }}</p>
-
-        <WinePurchaseOptions :wine="wine" :wine-id="wineId" :is-logged-in="isLoggedIn" />
-
-        <div class="mt-6 space-y-3">
-          <details
-            class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2"
-            open
-          >
-            <summary
-              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
-            >
-              Community Ratings
-            </summary>
-            <div class="px-2 pb-2 pt-3">
-              <RatingDisplay
-                :rating="averageRating"
-                :notes="comments"
-                :comment-entries="commentEntries"
-                :criteria-averages="criteriaAverages"
-                :criteria-labels="ratingCriteriaLabels"
-                :is-admin="isAdmin"
-                @delete-comment="handleDeleteComment"
-              />
-            </div>
-          </details>
-
-          <details class="rounded-xl border border-[var(--line)] bg-[rgba(255,251,246,0.5)] p-2">
-            <summary
-              class="cursor-pointer select-none px-2 py-1 text-sm font-semibold text-[var(--text-main)]"
-            >
-              Write a New Review
-            </summary>
-            <div class="px-2 pb-2 pt-3">
-              <WineDetailedRatingForm v-if="profileStore.hasProfile" @submit="handleNewRating" />
-
-              <p v-if="!profileStore.hasProfile" class="italic text-[var(--text-muted)]">
-                To leave a review,
-                <router-link to="/login" class="text-[var(--wine)] underline"> log in </router-link
-                >.
-              </p>
-            </div>
-          </details>
-        </div>
-
-        <div class="mt-6 flex space-x-5">
-          <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
-          <BaseButton :to="`/foodPairing?wineId=${wine._id}`" variant="secondary">
-            Food Pairing
-          </BaseButton>
-          <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
-            {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
-          </BaseButton>
-        </div>
       </div>
     </main>
   </div>
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
@@ -92,7 +126,9 @@ import BaseButton from '../components/ui/BaseButton.vue'
 import RatingDisplay from '../components/RatingDisplay.vue'
 import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
 import WinePurchaseOptions from '../components/wine/WinePurchaseOptions.vue'
+import PairingRecommendationsPanel from '../components/PairingRecommendationsPanel.vue'
 import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
+import client from '../components/httpService/client'
 const props = defineProps({
   wine: {
     type: Object,
@@ -114,6 +150,7 @@ const wine = computed(() => {
 const wineId = computed(() => {
   return wine.value?._id || props.wine?._id || route.params.id
 })
+const showPairings = computed(() => String(route.query.withPairings || '') === '1')
 const isLoggedIn = computed(() => Boolean(authStore.token))
 const isAdmin = computed(() => Boolean(authStore.user?.isAdmin))
 
@@ -213,7 +250,89 @@ const backLink = computed(() => {
     home: '/',
     favorites: '/favorite',
     recommended: '/recommended',
+    'pairing-browser': '/foodPairing',
   }
   return map[from]
 })
+
+const showShareForm = ref(false)
+const shareTarget = ref('')
+const shareLoading = ref(false)
+const shareMessage = ref('')
+const shareError = ref(false)
+const friends = ref([])
+const friendsLoading = ref(false)
+
+async function toggleShareForm() {
+  showShareForm.value = !showShareForm.value
+  if (showShareForm.value && !friends.value.length && !friendsLoading.value) {
+    friendsLoading.value = true
+    try {
+      friends.value = await client.get('social/friends')
+    } catch {
+      friends.value = []
+    } finally {
+      friendsLoading.value = false
+    }
+  }
+}
+
+async function submitShare() {
+  const username = shareTarget.value.trim()
+  if (!username) return
+  shareLoading.value = true
+  shareMessage.value = ''
+  try {
+    await client.post(`social/wines/${wineId.value}/share`, { toUsername: username })
+    shareMessage.value = `Shared with ${username}!`
+    shareError.value = false
+    shareTarget.value = ''
+  } catch (err) {
+    shareMessage.value = err.message || 'Could not share wine.'
+    shareError.value = true
+  } finally {
+    shareLoading.value = false
+  }
+}
 </script>
+
+<style scoped>
+.share-input {
+  border-radius: 0.65rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
+  outline: none;
+  transition: 0.2s ease;
+  min-width: 180px;
+}
+
+.share-input:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 2px rgba(93, 31, 50, 0.12);
+}
+
+.friend-chip {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.friend-chip:hover {
+  border-color: var(--wine);
+  color: var(--wine);
+}
+
+.friend-chip--selected {
+  border-color: var(--wine);
+  background: var(--wine);
+  color: white;
+}
+</style>

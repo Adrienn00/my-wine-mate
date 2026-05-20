@@ -13,7 +13,7 @@
     </div>
 
     <div class="grid gap-6 lg:grid-cols-[1.15fr_1fr]">
-      <section class="glass-panel rounded-2xl border border-[var(--line)] p-6">
+      <section class="dashboard-panel rounded-2xl border border-[var(--line)] p-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h3 class="text-xl font-semibold">Training Overview</h3>
@@ -127,7 +127,7 @@
         </div>
       </section>
 
-      <section class="glass-panel rounded-2xl border border-[var(--line)] p-6">
+      <section class="dashboard-panel rounded-2xl border border-[var(--line)] p-6">
         <div class="flex flex-wrap items-center justify-between gap-3">
           <div>
             <h3 class="text-xl font-semibold">Feedback Review Queue</h3>
@@ -169,7 +169,7 @@
                   <span
                     class="rounded-full px-2 py-0.5 text-xs font-semibold"
                     :class="item.source === 'llm'
-                      ? 'bg-[rgba(122,32,56,0.1)] text-[var(--wine)]'
+                      ? 'bg-[rgba(93,31,50,0.1)] text-[var(--wine)]'
                       : 'bg-[rgba(210,239,214,0.8)] text-[#215d31]'"
                   >
                     {{ item.source === 'llm' ? 'LLM' : 'User' }}

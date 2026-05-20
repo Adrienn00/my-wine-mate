@@ -33,7 +33,7 @@
     <div class="mt-6 flex items-center justify-center gap-4">
       <button
         :disabled="currentPage === 1"
-        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        class="rounded border border-[var(--line)] bg-[var(--surface)] px-3 py-1"
         @click="currentPage--"
       >
         ←
@@ -41,7 +41,7 @@
       <span class="text-sm text-[var(--text-muted)]"> {{ currentPage }} / {{ totalPages }} </span>
       <button
         :disabled="currentPage === totalPages || totalPages === 0"
-        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        class="rounded border border-[var(--line)] bg-[var(--surface)] px-3 py-1"
         @click="currentPage++"
       >
         →

@@ -1,41 +1,53 @@
 <template>
   <header :class="headerClass">
-    <div
-      class="mx-auto flex max-w-6xl items-center justify-between rounded-[1.6rem] px-4 py-3.5"
-    >
-      <BaseButton to="/" variant="homepage">MyWineMate</BaseButton>
-
-      <nav class="flex items-center gap-2.5 font-semibold">
-        <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Home</BaseButton>
-        <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink"
-          >Recipes</BaseButton
+    <div class="flex min-h-[82px] flex-col lg:flex-row">
+      <div
+        class="flex items-center justify-between gap-4 border-b border-[rgba(95,40,53,0.12)] bg-[rgba(250,242,230,0.98)] px-5 py-4 lg:min-w-[270px] lg:border-r lg:border-b-0"
+      >
+        <BaseButton to="/" variant="homepage">MyWineMate</BaseButton>
+        <span
+          class="hidden rounded-full border border-[var(--line)] bg-white/70 px-3 py-1 text-[0.68rem] font-semibold uppercase tracking-[0.22em] text-[var(--wine)] sm:inline-flex"
         >
-        <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink"
-          >AI Pairing</BaseButton
-        >
-        <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
+          Wine & Food
+        </span>
+      </div>
 
-        <!-- csak azon az oldalakon mutatunk auth gombokat, ahol eddig is -->
-        <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
-          <!-- ha BE van jelentkezve -->
-          <template v-if="isLoggedIn">
-            <NotificationDropdown />
-            <BaseButton to="/profile" variant="navPrimary">My Profile</BaseButton>
-            <BaseButton variant="navAccent" @click="logoutUser">Log Out</BaseButton>
-          </template>
+      <div class="flex-1 bg-[linear-gradient(180deg,#5d1f32_0%,#4a1426_100%)] text-[#f9ead7]">
+        <div class="flex flex-col gap-3 px-5 py-4 lg:flex-row lg:items-center lg:justify-between">
+          <nav class="flex flex-wrap items-center gap-1.5 font-semibold">
+            <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
+            <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
+            <BaseButton
+              v-if="route.path !== '/pairing-assistant'"
+              to="/pairing-assistant"
+              variant="navLink"
+            >
+              Sommelier
+            </BaseButton>
+            <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
+            <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
+          </nav>
 
-          <!-- ha NINCS bejelentkezve -->
-          <template v-else>
-            <BaseButton to="/login" variant="navAccent">Log In</BaseButton>
-            <BaseButton to="/signup" variant="navPrimary">Sign Up</BaseButton>
-          </template>
-        </template>
-      </nav>
+          <div class="flex flex-wrap items-center gap-2">
+            <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
+              <template v-if="isLoggedIn">
+                <NotificationDropdown />
+                <BaseButton variant="navPrimary" @click="logoutUser">Log Out</BaseButton>
+              </template>
+              <template v-else>
+                <BaseButton to="/login" variant="navAccent">Log In</BaseButton>
+                <BaseButton to="/signup" variant="navPrimary">Sign Up</BaseButton>
+              </template>
+            </template>
+          </div>
+        </div>
+      </div>
     </div>
   </header>
 </template>
+
 <script setup>
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import BaseButton from './ui/BaseButton.vue'
 import { useAuthStore } from '@/stores/authStore'
@@ -44,42 +56,11 @@ import NotificationDropdown from './NotificationDropdown.vue'
 const route = useRoute()
 const router = useRouter()
 const auth = useAuthStore()
-const isNavHidden = ref(false)
-const isAtTop = ref(true)
-let lastScrollY = 0
 
-// ha van token → bejelentkezett
 const isLoggedIn = computed(() => !!auth.token)
 
-const headerClass = computed(() => {
-  const topMood = route.path === '/' && isAtTop.value
-  return [
-    'fixed top-3 left-1/2 z-40 w-[calc(100%-1.5rem)] max-w-6xl -translate-x-1/2 border border-[var(--line)] backdrop-blur-md transition-all duration-300',
-    topMood
-      ? 'bg-[rgba(255,248,239,0.78)] shadow-[0_18px_42px_rgba(96,54,33,0.18)]'
-      : 'bg-[rgba(252,246,238,0.93)] shadow-[0_14px_30px_rgba(96,54,33,0.2)]',
-    isNavHidden.value ? '-translate-y-24 opacity-0' : 'translate-y-0 opacity-100',
-  ]
-})
+const headerClass = computed(() => 'sticky top-0 z-40 border-b border-[rgba(95,40,53,0.12)] backdrop-blur-sm')
 
-function onScroll() {
-  const currentY = window.scrollY
-  isAtTop.value = currentY < 24
-  const scrollingDown = currentY > lastScrollY
-  isNavHidden.value = currentY > 140 && scrollingDown
-  lastScrollY = currentY
-}
-
-onMounted(() => {
-  lastScrollY = window.scrollY
-  window.addEventListener('scroll', onScroll, { passive: true })
-})
-
-onBeforeUnmount(() => {
-  window.removeEventListener('scroll', onScroll)
-})
-
-// Log out and redirect to the home page.
 function logoutUser() {
   auth.logout()
   router.push('/')

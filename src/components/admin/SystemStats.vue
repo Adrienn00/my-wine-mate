@@ -14,7 +14,7 @@
     <template v-else>
 
       <!-- 1. Catalog overview -->
-      <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
+      <section class="dashboard-panel mb-6 rounded-2xl p-6">
         <h2 class="mb-5 text-xl font-semibold">Catalog overview</h2>
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           <div v-for="card in catalogCards" :key="card.label"
@@ -27,7 +27,7 @@
       </section>
 
       <!-- 2. Recommendation quality -->
-      <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
+      <section class="dashboard-panel mb-6 rounded-2xl p-6">
         <h2 class="mb-1 text-xl font-semibold">Recommendation quality</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
           Based on user "Good match / Bad match" votes — only admin-approved feedback is counted.
@@ -61,7 +61,7 @@
       </section>
 
       <!-- 3. Model performance -->
-      <section class="glass-panel mb-6 rounded-[1.8rem] p-6">
+      <section class="dashboard-panel mb-6 rounded-2xl p-6">
         <h2 class="mb-1 text-xl font-semibold">Model performance</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
           XGBoost pairing model — metrics and history from the latest training runs.
@@ -148,7 +148,7 @@
                     <span class="rounded-full px-2 py-0.5 text-xs font-semibold"
                       :class="run.triggerSource === 'auto'
                         ? 'bg-[rgba(210,239,214,0.9)] text-[#215d31]'
-                        : 'bg-[rgba(122,32,56,0.1)] text-[var(--wine)]'">
+                        : 'bg-[rgba(93,31,50,0.1)] text-[var(--wine)]'">
                       {{ run.triggerSource ?? 'admin' }}
                     </span>
                   </td>
@@ -167,7 +167,7 @@
       </section>
 
       <!-- 4. Wine ratings Top 5 -->
-      <section class="glass-panel rounded-[1.8rem] p-6">
+      <section class="dashboard-panel rounded-2xl p-6">
         <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 class="text-xl font-semibold">Wine ratings</h2>
