@@ -25,6 +25,7 @@
               Sommelier
             </BaseButton>
             <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
+            <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
           </nav>
 
           <div class="flex flex-wrap items-center gap-2">

@@ -26,6 +26,7 @@ import PendingItemsTabs from '../components/admin/PendingItemsTabs.vue'
 import UserRoleManager from '../components/admin/UserRoleManager.vue'
 import SystemStats from '../components/admin/SystemStats.vue'
 import AIManagement from '../components/admin/AIManagement.vue'
+import Social from '../pages/Social.vue'
 const routes = [
   {
     path: '',
@@ -43,6 +44,7 @@ const routes = [
       { path: '/addRecipe', component: AddNewRecipe },
       { path: '/wines', component: Wines },
       { path: '/addWine', component: AddNewWine },
+      { path: '/social', component: Social },
       {
         path: '/wine/:id',
         name: 'wine-details',

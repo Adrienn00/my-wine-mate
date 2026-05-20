@@ -53,14 +53,29 @@
       <WineLabelScanner use-label="Search with this wine" @use="onScanResult" />
       <BaseButton to="/addWine" variant="secondary">Add New Wine</BaseButton>
     </div>
+
+    <div v-if="recentQueries.length" class="mt-4">
+      <p class="mb-2 text-xs text-[var(--text-muted)]">Recent searches:</p>
+      <div class="flex flex-wrap gap-2">
+        <button
+          v-for="q in recentQueries"
+          :key="q"
+          class="recent-chip"
+          @click="applyRecentQuery(q)"
+        >
+          {{ q }}
+        </button>
+      </div>
+    </div>
   </section>
 </template>
 
 <script setup>
-import { reactive } from 'vue'
+import { reactive, computed, onMounted } from 'vue'
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 import WineLabelScanner from '../components/WineLabelScanner.vue'
+import { getSearchHistory } from '../services/searchHistory'
 
 const emit = defineEmits(['search'])
 defineProps({
@@ -82,6 +97,31 @@ const filters = reactive({
   price: '',
   flavor: '',
 })
+
+const history = reactive({ entries: [] })
+
+onMounted(() => {
+  history.entries = getSearchHistory()
+})
+
+const recentQueries = computed(() => {
+  const seen = new Set()
+  const result = []
+  for (const entry of history.entries) {
+    const q = entry.filters?.query?.trim()
+    if (q && !seen.has(q)) {
+      seen.add(q)
+      result.push(q)
+      if (result.length >= 5) break
+    }
+  }
+  return result
+})
+
+function applyRecentQuery(q) {
+  filters.query = q
+  emitSearch()
+}
 
 function onScanResult(ocrResult) {
   const parts = [ocrResult.name, ocrResult.winery, ocrResult.year].filter(Boolean)
@@ -112,5 +152,21 @@ function emitSearch() {
 .search-select:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 2px rgba(200, 154, 83, 0.25);
+}
+
+.recent-chip {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.recent-chip:hover {
+  border-color: var(--wine);
+  color: var(--wine);
 }
 </style>

@@ -69,11 +69,41 @@
             </details>
           </div>
 
-          <div class="mt-6 flex space-x-5">
+          <div class="mt-6 flex flex-wrap gap-3">
             <BaseButton :to="backLink" variant="secondary">Back</BaseButton>
             <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleFavorite">
               {{ isFavorite ? 'Remove from Favorites' : 'Add to Favorites' }}
             </BaseButton>
+            <BaseButton v-if="profileStore.hasProfile" variant="secondary" @click="toggleShareForm">
+              Share Wine
+            </BaseButton>
+          </div>
+
+          <div v-if="showShareForm" class="mt-4">
+            <p v-if="friendsLoading" class="text-sm text-[var(--text-muted)]">Loading friends...</p>
+            <p v-else-if="!friends.length" class="text-sm text-[var(--text-muted)]">
+              You have no friends added yet. Add friends on your
+              <router-link to="/profile" class="text-[var(--wine)] underline">profile page</router-link>.
+            </p>
+            <div v-else class="flex flex-wrap gap-2">
+              <button
+                v-for="f in friends"
+                :key="f._id"
+                class="friend-chip"
+                :class="{ 'friend-chip--selected': shareTarget === f.username }"
+                @click="shareTarget = f.username"
+              >
+                {{ f.username }}
+              </button>
+            </div>
+            <div v-if="friends.length" class="mt-3 flex items-center gap-2">
+              <BaseButton variant="primary" :disabled="!shareTarget || shareLoading" @click="submitShare">
+                {{ shareLoading ? 'Sending...' : shareTarget ? `Send to ${shareTarget}` : 'Select a friend' }}
+              </BaseButton>
+              <span v-if="shareMessage" :class="shareError ? 'text-[var(--danger)]' : 'text-green-600'" class="text-sm">
+                {{ shareMessage }}
+              </span>
+            </div>
           </div>
         </div>
 
@@ -87,7 +117,7 @@
 </template>
 
 <script setup>
-import { computed, onMounted } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
@@ -98,6 +128,7 @@ import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
 import WinePurchaseOptions from '../components/wine/WinePurchaseOptions.vue'
 import PairingRecommendationsPanel from '../components/PairingRecommendationsPanel.vue'
 import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
+import client from '../components/httpService/client'
 const props = defineProps({
   wine: {
     type: Object,
@@ -223,4 +254,85 @@ const backLink = computed(() => {
   }
   return map[from]
 })
+
+const showShareForm = ref(false)
+const shareTarget = ref('')
+const shareLoading = ref(false)
+const shareMessage = ref('')
+const shareError = ref(false)
+const friends = ref([])
+const friendsLoading = ref(false)
+
+async function toggleShareForm() {
+  showShareForm.value = !showShareForm.value
+  if (showShareForm.value && !friends.value.length && !friendsLoading.value) {
+    friendsLoading.value = true
+    try {
+      friends.value = await client.get('social/friends')
+    } catch {
+      friends.value = []
+    } finally {
+      friendsLoading.value = false
+    }
+  }
+}
+
+async function submitShare() {
+  const username = shareTarget.value.trim()
+  if (!username) return
+  shareLoading.value = true
+  shareMessage.value = ''
+  try {
+    await client.post(`social/wines/${wineId.value}/share`, { toUsername: username })
+    shareMessage.value = `Shared with ${username}!`
+    shareError.value = false
+    shareTarget.value = ''
+  } catch (err) {
+    shareMessage.value = err.message || 'Could not share wine.'
+    shareError.value = true
+  } finally {
+    shareLoading.value = false
+  }
+}
 </script>
+
+<style scoped>
+.share-input {
+  border-radius: 0.65rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-main);
+  font-size: 0.9rem;
+  padding: 0.5rem 0.8rem;
+  outline: none;
+  transition: 0.2s ease;
+  min-width: 180px;
+}
+
+.share-input:focus {
+  border-color: var(--wine);
+  box-shadow: 0 0 0 2px rgba(93, 31, 50, 0.12);
+}
+
+.friend-chip {
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: var(--surface);
+  color: var(--text-main);
+  font-size: 0.85rem;
+  padding: 0.3rem 0.9rem;
+  cursor: pointer;
+  transition: 0.15s ease;
+}
+
+.friend-chip:hover {
+  border-color: var(--wine);
+  color: var(--wine);
+}
+
+.friend-chip--selected {
+  border-color: var(--wine);
+  background: var(--wine);
+  color: white;
+}
+</style>

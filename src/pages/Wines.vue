@@ -17,9 +17,12 @@ import PageFrame from '../components/ui/PageFrame.vue'
 import WineSearchForm from './WineSearchForm.vue'
 import WineSearchResults from './WineSearchResults.vue'
 import { useWinesStore } from '../stores/winesStore'
+import { useAuthStore } from '../stores/authStore'
+import client from '../components/httpService/client'
 
 const router = useRouter()
 const winesStore = useWinesStore()
+const authStore = useAuthStore()
 
 const loading = ref(false)
 const searched = ref(false)
@@ -69,6 +72,12 @@ function handleSearch(filters) {
   })
 
   loading.value = false
+
+  if (authStore.token && (query || type || style || price || flavor)) {
+    const searchType = type ? 'wine' : 'general'
+    const searchQuery = [query, type, style, price, flavor].filter(Boolean).join(', ')
+    client.post('users/search-history', { query: searchQuery, type: searchType }).catch(() => {})
+  }
 }
 
 onMounted(async () => {
