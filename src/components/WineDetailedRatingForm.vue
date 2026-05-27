@@ -12,19 +12,15 @@
         class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-3"
       >
         <p class="mb-2 text-sm font-medium">{{ criterion.label }}</p>
-        <div class="flex gap-2 text-xl text-[var(--gold)]">
-          <BaseButton
+        <div class="flex gap-1">
+          <button
             v-for="i in 5"
             :key="`${criterion.key}-${i}`"
             type="button"
             @click="setRating(criterion.key, i)"
-            :class="{
-              'text-[var(--gold)]': (criteriaRatings[criterion.key] || 0) >= i,
-              'text-[rgba(122,100,91,0.45)]': (criteriaRatings[criterion.key] || 0) < i,
-            }"
-          >
-            ★
-          </BaseButton>
+            class="touch-manipulation p-1 text-2xl leading-none transition-transform active:scale-90"
+            :class="(criteriaRatings[criterion.key] || 0) >= i ? 'text-[var(--gold)]' : 'text-[rgba(122,100,91,0.3)]'"
+          >★</button>
         </div>
       </div>
     </div>
@@ -44,6 +40,7 @@
 import { reactive, ref } from 'vue'
 import BaseButton from './ui/BaseButton.vue'
 import { WINE_RATING_CRITERIA } from '../services/wineRatingCriteria'
+// BaseButton still used for Submit button
 
 const emit = defineEmits(['submit'])
 

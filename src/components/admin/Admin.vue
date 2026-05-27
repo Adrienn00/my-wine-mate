@@ -10,18 +10,59 @@
         </p>
       </div>
 
-      <div class="mx-auto grid w-full max-w-4xl gap-4 md:grid-cols-2">
-        <BaseButton variant="adminFunctions" to="/admin/pending">Approval / Editing</BaseButton>
-        <BaseButton variant="adminFunctions" to="/admin/manager">Database Management</BaseButton>
-        <BaseButton variant="adminFunctions" to="/admin/roles">Role Management</BaseButton>
-        <BaseButton variant="adminFunctions">OCR System Management</BaseButton>
-        <BaseButton variant="adminFunctions" to="/admin/ai">AI Management</BaseButton>
-        <BaseButton variant="adminFunctions" to="/admin/stats">System Statistics</BaseButton>
+      <div class="mx-auto grid w-full max-w-4xl gap-4 sm:grid-cols-2">
+        <router-link to="/admin/pending" class="admin-card">
+          <span class="admin-card-icon">✔</span>
+          <span class="admin-card-title">Approval / Editing</span>
+          <span class="admin-card-desc">Review pending wines and recipes</span>
+        </router-link>
+        <router-link to="/admin/manager" class="admin-card">
+          <span class="admin-card-icon">🗄</span>
+          <span class="admin-card-title">Database Management</span>
+          <span class="admin-card-desc">Manage wines and recipes</span>
+        </router-link>
+        <router-link to="/admin/roles" class="admin-card">
+          <span class="admin-card-icon">👤</span>
+          <span class="admin-card-title">Role Management</span>
+          <span class="admin-card-desc">Assign and revoke admin rights</span>
+        </router-link>
+        <router-link to="/admin/ai" class="admin-card">
+          <span class="admin-card-icon">🤖</span>
+          <span class="admin-card-title">AI Management</span>
+          <span class="admin-card-desc">Train models, review AI feedback</span>
+        </router-link>
+        <router-link to="/admin/stats" class="admin-card">
+          <span class="admin-card-icon">📊</span>
+          <span class="admin-card-title">System Statistics</span>
+          <span class="admin-card-desc">Ratings, wines, users overview</span>
+        </router-link>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import BaseButton from '@/components/ui/BaseButton.vue'
 </script>
+
+<style scoped>
+.admin-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  padding: 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--line);
+  background: white;
+  text-decoration: none;
+  color: var(--text-main);
+  transition: all 0.2s;
+}
+.admin-card:hover {
+  border-color: rgba(107, 45, 62, 0.35);
+  color: var(--wine);
+  transform: translateY(-1px);
+}
+.admin-card-icon { font-size: 1.5rem; }
+.admin-card-title { font-weight: 600; font-size: 1rem; }
+.admin-card-desc { font-size: 0.8rem; color: var(--text-muted); }
+</style>

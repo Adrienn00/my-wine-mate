@@ -1,7 +1,7 @@
 <template>
-  <div class="flex justify-center p-8">
+  <div class="flex justify-center p-4 md:p-8">
     <div
-      class="dashboard-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-8 text-[var(--text-main)]"
+      class="dashboard-panel w-full max-w-5xl rounded-2xl border border-[var(--line)] p-4 text-[var(--text-main)] md:p-8"
     >
       <div class="mb-4">
         <BaseButton to="/admin" variant="secondary">Back</BaseButton>
