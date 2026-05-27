@@ -265,6 +265,14 @@ a {
   }
 }
 
+/* ──────────────── PANEL VARIANTS ──────────────── */
+
+/* Use on full-page dashboard-panels (admin pages, etc.) to suppress the hover lift */
+.dashboard-panel.panel-static:hover {
+  transform: none;
+  box-shadow: var(--shadow-panel);
+}
+
 /* ──────────────── ANIMATIONS ──────────────── */
 
 @keyframes fadeUp {

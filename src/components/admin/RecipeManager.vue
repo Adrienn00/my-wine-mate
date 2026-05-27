@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-xl border border-[var(--line)] bg-white p-8 text-[var(--text-main)] shadow-sm"
+    class="rounded-xl border border-[var(--line)] bg-white p-4 text-[var(--text-main)] shadow-sm md:p-6"
   >
     <h2 class="mb-6 text-2xl font-semibold">Recipe Management</h2>
 

@@ -14,7 +14,7 @@
     <template v-else>
 
       <!-- 1. Catalog overview -->
-      <section class="dashboard-panel mb-6 rounded-2xl p-6">
+      <section class="dashboard-panel panel-static mb-6 rounded-2xl p-4 md:p-6">
         <h2 class="mb-5 text-xl font-semibold">Catalog overview</h2>
         <div class="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
           <div v-for="card in catalogCards" :key="card.label"
@@ -27,7 +27,7 @@
       </section>
 
       <!-- 2. Recommendation quality -->
-      <section class="dashboard-panel mb-6 rounded-2xl p-6">
+      <section class="dashboard-panel panel-static mb-6 rounded-2xl p-4 md:p-6">
         <h2 class="mb-1 text-xl font-semibold">Recommendation quality</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
           Based on user "Good match / Bad match" votes — only admin-approved feedback is counted.
@@ -61,7 +61,7 @@
       </section>
 
       <!-- 3. Model performance -->
-      <section class="dashboard-panel mb-6 rounded-2xl p-6">
+      <section class="dashboard-panel panel-static mb-6 rounded-2xl p-4 md:p-6">
         <h2 class="mb-1 text-xl font-semibold">Model performance</h2>
         <p class="mb-5 text-sm text-[var(--text-muted)]">
           XGBoost pairing model — metrics and history from the latest training runs.
@@ -167,7 +167,7 @@
       </section>
 
       <!-- 4. Wine ratings Top 5 -->
-      <section class="dashboard-panel rounded-2xl p-6">
+      <section class="dashboard-panel panel-static rounded-2xl p-4 md:p-6">
         <div class="mb-5 flex flex-wrap items-end justify-between gap-3">
           <div>
             <h2 class="text-xl font-semibold">Wine ratings</h2>
