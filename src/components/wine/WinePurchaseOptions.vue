@@ -167,11 +167,14 @@ async function fetchLiveOffers() {
 .shop-strip {
   display: grid;
   grid-auto-flow: column;
-  grid-auto-columns: minmax(205px, 240px);
+  grid-auto-columns: minmax(160px, 220px);
   gap: 0.65rem;
   overflow-x: auto;
-  padding-bottom: 0.3rem;
-  scroll-snap-type: x proximity;
+  max-width: 100%;
+  padding-bottom: 0.5rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .shop-card {

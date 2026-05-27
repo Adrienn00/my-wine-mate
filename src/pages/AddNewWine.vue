@@ -15,25 +15,27 @@
         </h1>
 
         <!-- AI scan section -->
-        <div class="rounded-xl border border-[var(--line)] bg-[var(--rose)] p-4">
-          <p class="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--wine)]">
-            AI-assisted entry
-          </p>
-          <p class="mb-3 text-sm text-[var(--text-muted)]">
-            Scan a wine label and let AI fill in all the details automatically.
-          </p>
-          <WineLabelScanner use-label="Enrich with AI" @use="onScanResult" />
-          <div
-            v-if="enriching"
-            class="mt-3 flex items-center gap-2 text-sm text-[var(--text-muted)]"
-          >
-            <span class="animate-spin">⏳</span>
-            AI is searching for this wine…
+        <ApiKeyGate>
+          <div class="rounded-xl border border-[var(--line)] bg-[var(--rose)] p-4">
+            <p class="mb-1 text-xs font-semibold uppercase tracking-[0.18em] text-[var(--wine)]">
+              AI-assisted entry
+            </p>
+            <p class="mb-3 text-sm text-[var(--text-muted)]">
+              Scan a wine label and let AI fill in all the details automatically.
+            </p>
+            <WineLabelScanner use-label="Enrich with AI" @use="onScanResult" />
+            <div
+              v-if="enriching"
+              class="mt-3 flex items-center gap-2 text-sm text-[var(--text-muted)]"
+            >
+              <span class="animate-spin">⏳</span>
+              AI is searching for this wine…
+            </div>
+            <div v-if="enrichError" class="mt-3 text-sm text-[var(--danger)]">
+              {{ enrichError }}
+            </div>
           </div>
-          <div v-if="enrichError" class="mt-3 text-sm text-[var(--danger)]">
-            {{ enrichError }}
-          </div>
-        </div>
+        </ApiKeyGate>
 
         <form class="flex flex-col gap-y-5" @submit.prevent="submitWine">
           <BaseInput id="wineName" v-model="wine.name" placeholder="Wine name *" required />
@@ -129,6 +131,7 @@
 import BaseInput from '../components/ui/BaseInput.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
 import WineLabelScanner from '../components/WineLabelScanner.vue'
+import ApiKeyGate from '../components/ApiKeyGate.vue'
 import { ref } from 'vue'
 import { useWinesStore } from '../stores/winesStore'
 import client from '../components/httpService/client'

@@ -264,3 +264,100 @@ a {
     gap: 2.5rem;
   }
 }
+
+/* ──────────────── ANIMATIONS ──────────────── */
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(28px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes floatY {
+  0%, 100% { transform: translateY(0);    }
+  50%      { transform: translateY(-18px); }
+}
+
+@keyframes floatYSlow {
+  0%, 100% { transform: translateY(0);   }
+  50%      { transform: translateY(13px); }
+}
+
+@keyframes shimmerGold {
+  from { background-position: -300% center; }
+  to   { background-position:  300% center; }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(199, 163, 103, 0); }
+  50%      { box-shadow: 0 0 32px 6px rgba(199, 163, 103, 0.18); }
+}
+
+/* Entrance animations */
+.anim-fade-up {
+  opacity: 0;
+  animation: fadeUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.anim-fade-in {
+  opacity: 0;
+  animation: fadeIn 0.65s ease both;
+}
+
+/* Stagger delays */
+.anim-d1 { animation-delay: 0.1s;  }
+.anim-d2 { animation-delay: 0.24s; }
+.anim-d3 { animation-delay: 0.4s;  }
+.anim-d4 { animation-delay: 0.58s; }
+.anim-d5 { animation-delay: 0.76s; }
+.anim-d6 { animation-delay: 0.95s; }
+
+/* Floating decorative elements */
+.anim-float      { animation: floatY     7s ease-in-out infinite; }
+.anim-float-slow { animation: floatYSlow 9s ease-in-out infinite; animation-delay: -3.5s; }
+
+/* Card hover lift */
+.dashboard-panel,
+.soft-card {
+  transition:
+    box-shadow 0.32s ease,
+    transform  0.32s ease;
+}
+
+.dashboard-panel:hover {
+  transform:  translateY(-3px);
+  box-shadow:
+    0 30px 70px rgba(55, 27, 33, 0.15),
+    0 4px  16px rgba(55, 27, 33, 0.08);
+}
+
+.soft-card:hover {
+  transform:  translateY(-2px);
+  box-shadow: 0 12px 32px rgba(28, 15, 19, 0.1);
+}
+
+/* Gold shimmer text */
+.text-gold-shimmer {
+  background: linear-gradient(
+    90deg,
+    #c7a367 0%,
+    #e8d09a 30%,
+    #f5e4b5 50%,
+    #c7a367 70%,
+    #a07840 100%
+  );
+  background-size: 250% auto;
+  -webkit-background-clip: text;
+          background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmerGold 5s linear infinite;
+}
+
+/* Hero section gold border pulse */
+.hero-gold-pulse {
+  animation: pulseGlow 4s ease-in-out infinite;
+}

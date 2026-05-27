@@ -13,11 +13,26 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const loading = ref(false)
   const error = ref(null)
+  const groqApiKey = ref(localStorage.getItem('groqApiKey') || '')
+
+  function setGroqApiKey(key) {
+    const trimmed = (key || '').trim()
+    groqApiKey.value = trimmed
+    if (trimmed) {
+      localStorage.setItem('groqApiKey', trimmed)
+    } else {
+      localStorage.removeItem('groqApiKey')
+    }
+  }
 
   async function fetchWithAuth(url, options = {}) {
     const headers = options.headers || {}
     if (token.value) headers.Authorization = `Bearer ${token.value}`
     const res = await fetch(url, { ...options, headers })
+    if (res.status === 401) {
+      logout()
+      throw new Error('Session expired')
+    }
     if (res.status === 204) return null
     const data = await res.json()
     if (!res.ok) throw new Error(data.message || 'Request failed')
@@ -131,6 +146,8 @@ export const useAuthStore = defineStore('auth', () => {
     user,
     loading,
     error,
+    groqApiKey,
+    setGroqApiKey,
     login,
     register,
     loadProfile,

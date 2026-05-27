@@ -20,9 +20,10 @@
     <div v-else-if="paginatedResults.length" class="space-y-4">
       <div class="grid grid-cols-1 gap-3 md:grid-cols-2">
         <div
-          v-for="wine in paginatedResults"
+          v-for="(wine, index) in paginatedResults"
           :key="wine._id"
-          class="group cursor-pointer rounded-xl border border-[var(--line)] bg-white p-4 transition-all duration-200 hover:-translate-y-0.5 hover:border-[rgba(107,45,62,0.4)] hover:shadow-[0_8px_24px_rgba(28,15,19,0.1)]"
+          class="anim-fade-up group cursor-pointer rounded-xl border border-[var(--line)] bg-white p-4 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(107,45,62,0.4)] hover:shadow-[0_12px_32px_rgba(28,15,19,0.12)]"
+          :style="{ animationDelay: `${index * 0.06}s` }"
           @click="emitSelect(wine._id)"
         >
           <div class="mb-3 overflow-hidden rounded-lg border border-[var(--line)]">
@@ -30,7 +31,7 @@
               v-if="wine.imageUrl"
               :src="wine.imageUrl"
               :alt="`${wine.name} image`"
-              class="h-32 w-full object-cover transition duration-300 group-hover:scale-[1.03]"
+              class="h-32 w-full object-cover transition duration-500 group-hover:scale-[1.06]"
             />
             <div
               v-else

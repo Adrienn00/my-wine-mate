@@ -1,19 +1,20 @@
 <template>
   <PageFrame>
-      <section class="sommelier-hero overflow-hidden rounded-[1.8rem] p-6 md:p-8">
+    <ApiKeyGate>
+      <section class="sommelier-hero overflow-hidden rounded-[1.8rem] p-5 md:p-8">
         <div class="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_340px] xl:items-end">
           <div class="max-w-4xl">
             <span class="section-kicker !text-[#f0d8ad]">AI Sommelier</span>
             <h1 class="sommelier-title">
-              A more cinematic chat for wine moods, dinner plans, and instant pairing ideas.
+              Chat for wine moods, dinner plans, and pairing ideas.
             </h1>
-            <p class="sommelier-summary mt-4">
+            <p class="sommelier-summary mt-3 hidden md:block">
               Ask naturally, describe a bottle, an ingredient, or a vibe, and the assistant will
               search your own catalog while keeping the answers conversational.
             </p>
           </div>
 
-          <div class="sommelier-tip-card">
+          <div class="sommelier-tip-card hidden xl:block">
             <div class="text-xs font-semibold uppercase tracking-[0.22em] text-[#f0d8ad]">Tips</div>
             <div class="mt-3 space-y-2 text-sm leading-6 text-[#fff2e3]">
               <p>Mention a wine style, dish type, ingredient, or occasion.</p>
@@ -112,7 +113,6 @@
               ref="photoInput"
               type="file"
               accept="image/*"
-              capture="environment"
               class="hidden"
               @change="onPhotoSelected"
             />
@@ -264,6 +264,7 @@
           </section>
         </div>
       </section>
+    </ApiKeyGate>
   </PageFrame>
 </template>
 
@@ -273,6 +274,7 @@ import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 import BaseButton from '../components/ui/BaseButton.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
+import ApiKeyGate from '../components/ApiKeyGate.vue'
 import { useProfileStore } from '../stores/profileStore'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
@@ -284,6 +286,10 @@ const INITIAL_AI_TEXT =
 
 const MAX_HISTORY = 10
 
+function genId() {
+  return crypto.randomUUID?.() ?? `${Date.now().toString(36)}-${Math.random().toString(36).slice(2)}`
+}
+
 const draft = ref('')
 const loading = ref(false)
 const errorMessage = ref('')
@@ -291,7 +297,7 @@ const chatContainer = ref(null)
 const photoInput = ref(null)
 const pendingImage = ref(null)
 const messages = ref([
-  { id: crypto.randomUUID(), role: 'ai', text: INITIAL_AI_TEXT, isTyping: false },
+  { id: genId(), role: 'ai', text: INITIAL_AI_TEXT, isTyping: false },
 ])
 const history = ref([])
 const latestResult = ref(null)
@@ -377,7 +383,7 @@ async function sendMessage() {
   errorMessage.value = ''
 
   // Add user bubble
-  messages.value.push({ id: crypto.randomUUID(), role: 'user', text: message, isTyping: false })
+  messages.value.push({ id: genId(), role: 'user', text: message, isTyping: false })
 
   // Trim and update history
   const trimmedHistory = history.value.slice(-(MAX_HISTORY - 1))
@@ -389,7 +395,7 @@ async function sendMessage() {
   loading.value = true
 
   // Add typing indicator bubble
-  const aiMsgId = crypto.randomUUID()
+  const aiMsgId = genId()
   messages.value.push({ id: aiMsgId, role: 'ai', text: '', isTyping: true })
   await scrollToBottom()
 
@@ -397,11 +403,13 @@ async function sendMessage() {
 
   try {
     const token = localStorage.getItem('token')
+    const groqApiKey = localStorage.getItem('groqApiKey')
     const response = await fetch(`${API_BASE}/pairings/chat-stream`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(groqApiKey ? { 'X-Groq-Api-Key': groqApiKey } : {}),
       },
       body: JSON.stringify({
         messages: history.value,
@@ -479,7 +487,7 @@ function resetConversation() {
   errorMessage.value = ''
   latestResult.value = null
   history.value = []
-  messages.value = [{ id: crypto.randomUUID(), role: 'ai', text: INITIAL_AI_TEXT, isTyping: false }]
+  messages.value = [{ id: genId(), role: 'ai', text: INITIAL_AI_TEXT, isTyping: false }]
 }
 </script>
 
@@ -495,8 +503,8 @@ function resetConversation() {
 
 .sommelier-title {
   margin: 0;
-  font-size: clamp(2.6rem, 4.6vw, 4.8rem);
-  line-height: 0.96;
+  font-size: clamp(1.6rem, 4.6vw, 4.8rem);
+  line-height: 1.1;
   color: #fff3e7;
 }
 
@@ -730,7 +738,7 @@ function resetConversation() {
 
 @media (max-width: 768px) {
   .chat-scroll-shell {
-    min-height: 24rem;
+    min-height: 16rem;
     max-height: none;
   }
 
@@ -739,6 +747,10 @@ function resetConversation() {
   .chat-composer {
     padding-left: 1rem;
     padding-right: 1rem;
+  }
+
+  .chat-panel-prompts {
+    display: none;
   }
 }
 </style>

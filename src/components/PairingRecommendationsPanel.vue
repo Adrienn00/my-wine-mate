@@ -85,7 +85,6 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import BaseButton from './ui/BaseButton.vue'
 import client from './httpService/client'
-import { useAuthStore } from '../stores/authStore'
 
 const props = defineProps({
   recipeId: {
@@ -98,7 +97,6 @@ const props = defineProps({
   },
 })
 
-const authStore = useAuthStore()
 const loading = ref(false)
 const errorMessage = ref('')
 const recommendations = ref([])
@@ -117,7 +115,7 @@ async function loadRecommendations() {
 
   try {
     const response = await client.get(
-      `pairings/recommend-bundle?${sourceQuery.value}&topK=6&includePreferences=${Boolean(authStore.token)}`
+      `pairings/recommend-bundle?${sourceQuery.value}&topK=6&includePreferences=false`
     )
     recommendations.value = response.general?.results || []
     preferenceRecommendations.value = response.preference?.results || []

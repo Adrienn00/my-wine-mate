@@ -5,7 +5,7 @@
     >
       <aside
         v-if="authStore.user"
-        class="dashboard-panel paper-grid h-fit rounded-[1.7rem] p-5 md:p-6"
+        class="anim-fade-up dashboard-panel paper-grid h-fit rounded-[1.7rem] p-5 md:p-6"
       >
         <router-link
           to="/profile"
@@ -45,11 +45,11 @@
           <div class="grid gap-3">
             <div class="rounded-2xl border border-[var(--line)] bg-white/80 p-4">
               <p class="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Wines</p>
-              <p class="mt-2 text-3xl font-semibold">{{ confirmedWineCount }}</p>
+              <p class="text-gold-shimmer mt-2 text-3xl font-semibold">{{ confirmedWineCount }}</p>
             </div>
             <div class="rounded-2xl border border-[var(--line)] bg-white/80 p-4">
               <p class="text-xs uppercase tracking-[0.18em] text-[var(--text-muted)]">Recipes</p>
-              <p class="mt-2 text-3xl font-semibold">{{ confirmedRecipeCount }}</p>
+              <p class="text-gold-shimmer mt-2 text-3xl font-semibold">{{ confirmedRecipeCount }}</p>
             </div>
           </div>
         </section>
@@ -83,31 +83,39 @@
         </section>
       </aside>
 
-      <div class="page-stack">
+      <div class="anim-fade-up anim-d1 page-stack">
         <section
           class="relative overflow-hidden rounded-[1.7rem] bg-[linear-gradient(135deg,#5d1f32_0%,#7a3048_52%,#c7a367_130%)] p-6 text-[#fff3e7] shadow-[0_24px_48px_rgba(93,31,50,0.24)] md:p-8"
         >
           <div
-            class="absolute right-[-3rem] top-[-2rem] h-40 w-40 rounded-full bg-[rgba(255,245,229,0.16)] blur-2xl"
+            class="anim-float absolute right-[-3rem] top-[-2rem] h-40 w-40 rounded-full bg-[rgba(255,245,229,0.16)] blur-2xl"
           ></div>
           <div
-            class="absolute bottom-[-3rem] right-[18%] h-32 w-32 rounded-full bg-[rgba(255,214,145,0.18)] blur-2xl"
+            class="anim-float-slow absolute bottom-[-3rem] right-[18%] h-32 w-32 rounded-full bg-[rgba(255,214,145,0.18)] blur-2xl"
           ></div>
+
+          <!-- Dekoratív tipográfiai elem -->
+          <span
+            aria-hidden="true"
+            class="pointer-events-none absolute bottom-0 right-4 top-0 hidden select-none items-center overflow-hidden text-[9rem] font-semibold italic leading-none tracking-[0.04em] text-white opacity-[0.05] lg:flex"
+            style="font-family:'Cormorant Garamond',Georgia,serif"
+          >VINUM</span>
+
           <div
             class="relative grid gap-6 lg:grid-cols-[minmax(0,1.2fr)_minmax(280px,0.8fr)] lg:items-center"
           >
             <div>
-              <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[#f4dcb6]">
+              <p class="anim-fade-in text-xs font-semibold uppercase tracking-[0.24em] text-[#f4dcb6]">
                 AI Sommelier
               </p>
-              <h1 class="mt-3 max-w-3xl text-4xl font-semibold leading-[0.95] md:text-5xl">
+              <h1 class="anim-fade-up anim-d1 mt-3 max-w-3xl text-4xl font-semibold leading-[0.95] md:text-5xl">
                 Ask for pairings like you are texting a sommelier.
               </h1>
-              <p class="mt-4 max-w-2xl text-sm leading-7 text-[#fff1e2] md:text-base">
+              <p class="anim-fade-up anim-d2 mt-4 max-w-2xl text-sm leading-7 text-[#fff1e2] md:text-base">
                 Describe a bottle, a dinner plan, or just a craving, and get a faster wine-food
                 direction without digging through filters first.
               </p>
-              <div class="mt-6 flex flex-wrap gap-3">
+              <div class="anim-fade-up anim-d3 mt-6 flex flex-wrap gap-3">
                 <BaseButton
                   to="/pairing-assistant"
                   variant="secondary"
@@ -122,7 +130,7 @@
             </div>
 
             <div
-              class="rounded-[1.5rem] border border-[rgba(255,255,255,0.16)] bg-[rgba(255,248,239,0.12)] p-4 backdrop-blur-sm"
+              class="anim-fade-up anim-d4 hero-gold-pulse rounded-[1.5rem] border border-[rgba(255,255,255,0.16)] bg-[rgba(255,248,239,0.12)] p-4 backdrop-blur-sm"
             >
               <div
                 class="rounded-[1.2rem] bg-[rgba(255,252,246,0.94)] p-4 text-[var(--text-main)] shadow-[0_12px_28px_rgba(45,20,27,0.18)]"

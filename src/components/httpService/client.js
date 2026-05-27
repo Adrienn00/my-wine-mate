@@ -9,6 +9,11 @@ const client = {
       headers.Authorization = `Bearer ${token}`
     }
 
+    const groqApiKey = localStorage.getItem('groqApiKey')
+    if (groqApiKey) {
+      headers['X-Groq-Api-Key'] = groqApiKey
+    }
+
     if (!headers['Content-Type'] && options.body) {
       headers['Content-Type'] = 'application/json'
     }

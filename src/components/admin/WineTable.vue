@@ -1,6 +1,7 @@
 <template>
   <div>
-    <table class="w-full table-auto border-collapse text-left">
+    <div class="overflow-x-auto">
+    <table class="w-full min-w-[640px] table-auto border-collapse text-left">
       <thead>
         <tr class="border-b border-[var(--line)] text-[var(--text-main)]">
           <th class="pb-2">Name</th>
@@ -29,6 +30,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="mt-6 flex items-center justify-center gap-4">
       <button

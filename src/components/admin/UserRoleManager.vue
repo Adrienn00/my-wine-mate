@@ -6,7 +6,8 @@
 
     <h2 class="mb-6 text-2xl">Role Management</h2>
 
-    <table class="w-full text-left">
+    <div class="overflow-x-auto">
+    <table class="w-full min-w-[480px] text-left">
       <thead>
         <tr class="border-b border-[var(--line)]">
           <th>Name</th>
@@ -33,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 

@@ -1,9 +1,9 @@
 <template>
-  <div v-if="wine" class="min-h-screen px-4 py-8 md:px-8 md:py-12">
-    <main class="mx-auto flex w-full max-w-7xl justify-start">
-      <div class="grid w-full gap-6 xl:grid-cols-[minmax(0,1.1fr)_380px]">
+  <div v-if="wine" class="min-h-screen px-4 py-6 md:px-8 md:py-10">
+    <main class="mx-auto w-full max-w-7xl">
+      <div class="grid w-full min-w-0 gap-6 xl:grid-cols-[minmax(0,1.1fr)_380px]">
         <div
-          class="dashboard-panel space-y-4 rounded-xl p-6 text-left text-[var(--text-main)]"
+          class="dashboard-panel min-w-0 space-y-4 overflow-hidden rounded-xl p-6 text-left text-[var(--text-main)]"
         >
           <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
           <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
@@ -82,8 +82,9 @@
           <div v-if="showShareForm" class="mt-4">
             <p v-if="friendsLoading" class="text-sm text-[var(--text-muted)]">Loading friends...</p>
             <p v-else-if="!friends.length" class="text-sm text-[var(--text-muted)]">
-              You have no friends added yet. Add friends on your
-              <router-link to="/profile" class="text-[var(--wine)] underline">profile page</router-link>.
+              You have no friends added yet. Go to your
+              <router-link to="/social" class="text-[var(--wine)] underline">Social page</router-link>
+              to send a friend request.
             </p>
             <div v-else class="flex flex-wrap gap-2">
               <button
@@ -96,7 +97,15 @@
                 {{ f.username }}
               </button>
             </div>
-            <div v-if="friends.length" class="mt-3 flex items-center gap-2">
+            <div v-if="shareTarget" class="mt-3">
+              <textarea
+                v-model="shareNote"
+                class="share-input w-full resize-none"
+                rows="2"
+                placeholder="Add a note... (optional)"
+              />
+            </div>
+            <div v-if="friends.length" class="mt-2 flex items-center gap-2">
               <BaseButton variant="primary" :disabled="!shareTarget || shareLoading" @click="submitShare">
                 {{ shareLoading ? 'Sending...' : shareTarget ? `Send to ${shareTarget}` : 'Select a friend' }}
               </BaseButton>
@@ -107,10 +116,7 @@
           </div>
         </div>
 
-        <PairingRecommendationsPanel
-          v-if="showPairings"
-          :wine-id="wineId"
-        />
+        <PairingRecommendationsPanel :wine-id="wineId" />
       </div>
     </main>
   </div>
@@ -150,7 +156,7 @@ const wine = computed(() => {
 const wineId = computed(() => {
   return wine.value?._id || props.wine?._id || route.params.id
 })
-const showPairings = computed(() => String(route.query.withPairings || '') === '1')
+
 const isLoggedIn = computed(() => Boolean(authStore.token))
 const isAdmin = computed(() => Boolean(authStore.user?.isAdmin))
 
