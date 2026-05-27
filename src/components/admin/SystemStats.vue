@@ -1,5 +1,5 @@
 <template>
-  <div class="max-w-6xl mx-auto px-4 py-6 text-[var(--text-main)]">
+  <div class="p-4 text-[var(--text-main)] md:p-6">
     <div class="mb-4">
       <BaseButton to="/admin" variant="secondary">Back</BaseButton>
     </div>

@@ -1,6 +1,6 @@
 <template>
   <div
-    class="rounded-xl border border-[var(--line)] bg-white p-4 text-[var(--text-main)] shadow-sm md:p-6"
+    class="text-[var(--text-main)]"
   >
     <div class="mb-6 flex items-center justify-between">
       <h2 class="text-2xl font-semibold">Wine Management</h2>

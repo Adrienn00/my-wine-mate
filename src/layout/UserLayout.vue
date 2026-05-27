@@ -21,7 +21,7 @@
       <BaseButton variant="secondary" @click="logoutUser">Log Out</BaseButton>
     </aside>
 
-    <main class="min-h-screen flex-1 pb-6 lg:pt-4">
+    <main class="min-h-screen min-w-0 flex-1 overflow-x-hidden pb-6 lg:pt-4">
       <!-- Mobile nav strip -->
       <nav class="mb-4 flex flex-wrap gap-2 lg:hidden">
         <BaseButton to="/" variant="secondary">← Dashboard</BaseButton>
