@@ -1,6 +1,7 @@
 <template>
   <div>
-    <table class="w-full table-auto border-collapse text-left">
+    <div class="overflow-x-auto">
+    <table class="w-full min-w-[640px] table-auto border-collapse text-left">
       <thead>
         <tr class="border-b border-[var(--line)] text-[var(--text-main)]">
           <th class="pb-2">Name</th>
@@ -29,11 +30,12 @@
         </tr>
       </tbody>
     </table>
+    </div>
 
     <div class="mt-6 flex items-center justify-center gap-4">
       <button
         :disabled="currentPage === 1"
-        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        class="rounded border border-[var(--line)] bg-[var(--surface)] px-3 py-1"
         @click="currentPage--"
       >
         ←
@@ -41,7 +43,7 @@
       <span class="text-sm text-[var(--text-muted)]"> {{ currentPage }} / {{ totalPages }} </span>
       <button
         :disabled="currentPage === totalPages || totalPages === 0"
-        class="rounded border border-[var(--line)] bg-[rgba(255,251,246,0.95)] px-3 py-1"
+        class="rounded border border-[var(--line)] bg-[var(--surface)] px-3 py-1"
         @click="currentPage++"
       >
         →

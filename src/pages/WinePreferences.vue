@@ -1,21 +1,27 @@
 <template>
-  <section class="page-shell">
-    <div class="page-frame page-stack max-w-4xl">
+  <PageFrame max-width="max-w-4xl">
       <div class="page-actions">
         <BaseButton to="/profile" variant="secondary">Back</BaseButton>
       </div>
 
-      <div class="section-intro text-center">
-        <div class="section-kicker">Profile Settings</div>
-        <h1 class="section-title">Wine Preferences</h1>
-        <p class="section-summary mx-auto">
-          Keep your wine profile in one place so search results and future recommendations stay
-          aligned with your taste.
-        </p>
+      <SectionHeader
+        align="center"
+        kicker="Preferences"
+        title="Wine Preferences"
+        description="Keep your wine profile in one place so search results and future recommendations stay aligned with your taste."
+      />
+
+      <div class="flex justify-center">
+        <div class="flex flex-wrap gap-2 rounded-full border border-[var(--line)] bg-white/70 p-1.5">
+          <BaseButton to="/preferences" variant="primary">Wine</BaseButton>
+          <BaseButton to="/recipe-preferences" variant="secondary">Recipe</BaseButton>
+        </div>
       </div>
 
-      <div
-        class="glass-panel mx-auto flex max-h-150 w-full max-w-3xl flex-col justify-start gap-6 overflow-auto rounded-[2rem] p-8 text-[var(--text-main)]"
+      <BaseCard
+        class="mx-auto flex max-h-150 w-full max-w-3xl flex-col justify-start gap-6 overflow-auto"
+        rounded="rounded-2xl"
+        padding="p-8"
       >
         <template v-if="!isEditing">
           <div class="section-intro mb-0 text-center">
@@ -132,17 +138,19 @@
             </BaseButton>
           </div>
         </template>
-      </div>
-    </div>
-  </section>
+      </BaseCard>
+  </PageFrame>
 </template>
 
 <script setup>
 import { computed, onMounted, reactive, ref } from 'vue'
 import { useProfileStore } from '../stores/profileStore'
 import { useWinesStore } from '../stores/winesStore'
-import BaseMultiselect from '../components/ui/BaseMultiselect.vue'
 import BaseButton from '../components/ui/BaseButton.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
+import BaseMultiselect from '../components/ui/BaseMultiselect.vue'
+import PageFrame from '../components/ui/PageFrame.vue'
+import SectionHeader from '../components/ui/SectionHeader.vue'
 import { buildPreferenceOptionsFromWines } from '../services/preferenceOptions'
 
 const profileStore = useProfileStore()

@@ -1,12 +1,13 @@
 <template>
-  <div class="glass-panel rounded-xl border border-[var(--line)] p-6 text-[var(--text-main)]">
+  <div class="p-4 text-[var(--text-main)] md:p-6">
     <div class="mb-4">
       <BaseButton to="/admin" variant="secondary">Back</BaseButton>
     </div>
 
     <h2 class="mb-6 text-2xl">Role Management</h2>
 
-    <table class="w-full text-left">
+    <div class="overflow-x-auto">
+    <table class="w-full min-w-[480px] text-left">
       <thead>
         <tr class="border-b border-[var(--line)]">
           <th>Name</th>
@@ -33,6 +34,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 

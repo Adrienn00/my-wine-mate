@@ -9,6 +9,11 @@ const client = {
       headers.Authorization = `Bearer ${token}`
     }
 
+    const groqApiKey = localStorage.getItem('groqApiKey')
+    if (groqApiKey) {
+      headers['X-Groq-Api-Key'] = groqApiKey
+    }
+
     if (!headers['Content-Type'] && options.body) {
       headers['Content-Type'] = 'application/json'
     }
@@ -22,7 +27,11 @@ const client = {
       let message = `HTTP error: ${response.status}`
       try {
         const errData = await response.json()
-        if (errData.message) message = errData.message
+        if (errData.error) {
+          message = errData.error
+        } else if (errData.message) {
+          message = errData.message
+        }
       } catch {
         // Keep default message when the backend error body is not JSON.
       }

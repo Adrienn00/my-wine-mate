@@ -1,14 +1,10 @@
 <template>
-  <div class="page-shell">
-    <div class="page-frame">
-      <div class="glass-panel hero-sheen rounded-[1.9rem] p-6 md:p-10">
-        <div class="section-intro">
-          <span class="section-kicker">Project Story</span>
-          <h1 class="section-title">About</h1>
-        </div>
-        <div class="space-y-4 text-[var(--text-muted)]">
+  <PageFrame>
+    <BaseCard class="hero-sheen" rounded="rounded-2xl" padding="p-6 md:p-10">
+      <SectionHeader kicker="Project Story" title="About" />
+      <div class="space-y-4 text-[var(--text-muted)]">
         <p>
-          <strong class="text-[var(--text-main)]">My Wine Mate</strong> is a final-year project
+          <strong class="text-[var(--text-main)]">Vinology Cook</strong> is a final-year project
           created to make choosing wine feel enjoyable instead of stressful.
         </p>
         <p>
@@ -24,8 +20,13 @@
           decision-making process, with future plans for photo-based search and richer wine profiles.
         </p>
         <p class="pt-2 text-sm italic">Thanks for visiting!</p>
-        </div>
       </div>
-    </div>
-  </div>
+    </BaseCard>
+  </PageFrame>
 </template>
+
+<script setup>
+import PageFrame from '../components/ui/PageFrame.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
+import SectionHeader from '../components/ui/SectionHeader.vue'
+</script>

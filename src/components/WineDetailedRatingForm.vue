@@ -1,7 +1,7 @@
 <template>
   <form
     @submit.prevent="submit"
-    class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
+    class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 text-[var(--text-main)]"
   >
     <p class="mb-3 text-lg font-semibold">Community Review 🍷</p>
 
@@ -9,22 +9,18 @@
       <div
         v-for="criterion in WINE_RATING_CRITERIA"
         :key="criterion.key"
-        class="rounded-lg border border-[var(--line)] bg-[rgba(255,251,246,0.92)] p-3"
+        class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-3"
       >
         <p class="mb-2 text-sm font-medium">{{ criterion.label }}</p>
-        <div class="flex gap-2 text-xl text-[var(--gold)]">
-          <BaseButton
+        <div class="flex gap-1">
+          <button
             v-for="i in 5"
             :key="`${criterion.key}-${i}`"
             type="button"
             @click="setRating(criterion.key, i)"
-            :class="{
-              'text-[var(--gold)]': (criteriaRatings[criterion.key] || 0) >= i,
-              'text-[rgba(122,100,91,0.45)]': (criteriaRatings[criterion.key] || 0) < i,
-            }"
-          >
-            ★
-          </BaseButton>
+            class="touch-manipulation p-1 text-2xl leading-none transition-transform active:scale-90"
+            :class="(criteriaRatings[criterion.key] || 0) >= i ? 'text-[var(--gold)]' : 'text-[rgba(122,100,91,0.3)]'"
+          >★</button>
         </div>
       </div>
     </div>
@@ -32,7 +28,7 @@
     <textarea
       v-model="comment"
       placeholder="Share your experience here..."
-      class="mb-4 mt-4 w-full rounded border border-[var(--line)] bg-[rgba(255,251,246,0.94)] px-4 py-2 text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[rgba(202,163,103,0.22)]"
+      class="mb-4 mt-4 w-full rounded-lg border border-[var(--line)] bg-white px-4 py-2.5 text-[var(--text-main)] outline-none transition focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(93,31,50,0.12)]"
       rows="3"
     ></textarea>
 
@@ -44,6 +40,7 @@
 import { reactive, ref } from 'vue'
 import BaseButton from './ui/BaseButton.vue'
 import { WINE_RATING_CRITERIA } from '../services/wineRatingCriteria'
+// BaseButton still used for Submit button
 
 const emit = defineEmits(['submit'])
 

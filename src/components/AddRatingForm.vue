@@ -1,7 +1,7 @@
 <template>
   <form
     @submit.prevent="submit"
-    class="rounded-lg border border-[var(--line)] bg-[rgba(255,248,239,0.86)] p-4 text-[var(--text-main)]"
+    class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 text-[var(--text-main)]"
   >
     <p class="mb-2 text-lg font-semibold">Rate this item 🍇</p>
     <div class="mb-4 flex gap-2 text-xl text-[var(--gold)]">
@@ -21,7 +21,7 @@
     <textarea
       v-model="comment"
       placeholder="Write your comment here..."
-      class="mb-6 w-full rounded border border-[var(--line)] bg-[rgba(255,251,246,0.94)] px-4 py-2 text-[var(--text-main)] focus:border-[var(--accent)] focus:outline-none focus:ring-2 focus:ring-[rgba(202,163,103,0.22)]"
+      class="mb-6 w-full rounded-lg border border-[var(--line)] bg-white px-4 py-2.5 text-[var(--text-main)] outline-none transition focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(93,31,50,0.12)]"
       rows="3"
     ></textarea>
     <BaseButton type="submit" variant="secondary"> Submit </BaseButton>

@@ -1,7 +1,7 @@
 <template>
   <div class="min-h-screen px-4 py-8 md:px-8 md:py-12">
     <section
-      class="glass-panel mx-auto max-w-3xl rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)] shadow-lg md:p-8"
+      class="dashboard-panel mx-auto max-w-3xl rounded-2xl border border-[var(--line)] p-6 text-[var(--text-main)] shadow-lg md:p-8"
     >
       <div class="mb-6 flex items-center justify-between gap-4">
         <h1 class="text-3xl font-semibold md:text-4xl">Submit a New Recipe</h1>

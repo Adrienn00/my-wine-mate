@@ -1,31 +1,42 @@
 <template>
-  <div class="flex min-h-screen w-full items-center justify-center px-4 py-10">
-    <form
-      @submit.prevent="loginUser"
-      class="glass-panel w-full max-w-md rounded-2xl px-6 py-10 shadow-xl md:px-8"
-    >
-      <h1 class="mb-5 text-center text-3xl font-semibold">Log In</h1>
-
-      <BaseInput id="email" label="E-mail" type="email" v-model="email" :error="emailError" />
-
-      <BaseInput
-        id="password"
-        label="Password"
-        type="password"
-        v-model="password"
-        :error="passwordError"
-      />
-
-      <div class="w-full text-right text-sm">
-        <BaseButton to="/forgotPassword" variant="simple"> Forgot your password? </BaseButton>
+  <div class="flex min-h-[80vh] w-full items-center justify-center px-4 py-10">
+    <div class="w-full max-w-md">
+      <div class="mb-8 text-center">
+        <p class="font-['Cormorant_Garamond'] text-3xl font-semibold text-[var(--wine)]">
+          MyWineMate
+        </p>
+        <p class="mt-1 text-sm text-[var(--text-muted)]">Sign in to your account</p>
       </div>
 
-      <BaseButton variant="primary" type="submit" class="mt-2 w-full">Log In</BaseButton>
+      <BaseCard
+        as="form"
+        rounded="rounded-2xl"
+        padding="px-6 py-8 md:px-8"
+        @submit.prevent="loginUser"
+      >
+        <h1 class="mb-6 text-2xl font-semibold">Log In</h1>
 
-      <BaseButton to="/signup" variant="simple" class="mt-3 text-center text-sm">
-        Sign Up
-      </BaseButton>
-    </form>
+        <BaseInput id="email" label="E-mail" type="email" v-model="email" :error="emailError" />
+        <BaseInput
+          id="password"
+          label="Password"
+          type="password"
+          v-model="password"
+          :error="passwordError"
+        />
+
+        <div class="mb-4 w-full text-right text-sm">
+          <BaseButton to="/forgotPassword" variant="simple">Forgot your password?</BaseButton>
+        </div>
+
+        <BaseButton variant="primary" type="submit" class="w-full">Log In</BaseButton>
+
+        <div class="mt-4 text-center text-sm text-[var(--text-muted)]">
+          Don't have an account?
+          <BaseButton to="/signup" variant="simple" class="ml-1">Sign Up</BaseButton>
+        </div>
+      </BaseCard>
+    </div>
   </div>
 </template>
 
@@ -34,6 +45,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import BaseButton from '../components/ui/BaseButton.vue'
+import BaseCard from '../components/ui/BaseCard.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 
 const email = ref('')
@@ -49,14 +61,10 @@ async function loginUser() {
   if (emailError.value || passwordError.value) return
 
   try {
-    await auth.login({
-      email: email.value,
-      password: password.value,
-    })
-
+    await auth.login({ email: email.value, password: password.value })
     router.push('/')
   } catch (err) {
-    console.error('❌ [login] Login failed:', err.message)
+    console.error('Login failed:', err.message)
     passwordError.value = 'Incorrect email or password.'
   }
 }
