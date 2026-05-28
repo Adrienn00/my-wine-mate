@@ -15,7 +15,7 @@
 
     <div
       v-if="showNotifications"
-      class="dashboard-panel absolute right-0 z-50 mt-2 w-80 rounded-xl p-3 shadow-lg"
+      class="dashboard-panel absolute right-0 z-50 mt-2 w-72 rounded-xl p-3 shadow-lg sm:w-80"
     >
       <div class="mb-2 font-semibold text-[var(--text-main)]">Notifications</div>
 
@@ -28,7 +28,7 @@
         :key="n._id"
         class="border-b border-[var(--line)] py-2 text-sm text-[var(--text-main)]"
       >
-        <p>{{ n.message }}</p>
+        <p class="text-[var(--text-main)]">{{ n.message }}</p>
         <div class="mt-1 flex items-center justify-end gap-3">
           <button
             v-if="n.link"

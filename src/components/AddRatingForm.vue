@@ -4,19 +4,15 @@
     class="rounded-lg border border-[var(--line)] bg-[var(--surface)] p-4 text-[var(--text-main)]"
   >
     <p class="mb-2 text-lg font-semibold">Rate this item 🍇</p>
-    <div class="mb-4 flex gap-2 text-xl text-[var(--gold)]">
-      <BaseButton
+    <div class="mb-4 flex gap-1">
+      <button
         v-for="i in 5"
         :key="i"
         type="button"
         @click="selectedRating = i"
-        :class="{
-          'text-[var(--gold)]': selectedRating >= i,
-          'text-[rgba(122,100,91,0.5)]': selectedRating < i,
-        }"
-      >
-        ★
-      </BaseButton>
+        class="touch-manipulation p-1 text-2xl leading-none transition-transform active:scale-90"
+        :class="selectedRating >= i ? 'text-[var(--gold)]' : 'text-[rgba(122,100,91,0.3)]'"
+      >★</button>
     </div>
     <textarea
       v-model="comment"
