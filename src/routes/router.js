@@ -27,6 +27,8 @@ import UserRoleManager from '../components/admin/UserRoleManager.vue'
 import SystemStats from '../components/admin/SystemStats.vue'
 import AIManagement from '../components/admin/AIManagement.vue'
 import Social from '../pages/Social.vue'
+import CheckEmail from '../pages/CheckEmail.vue'
+import VerifyEmail from '../pages/VerifyEmail.vue'
 const routes = [
   {
     path: '',
@@ -37,6 +39,8 @@ const routes = [
       { path: '/login', component: Login },
       { path: '/signup', component: SignUp },
       { path: '/forgotPassword', component: ForgotPassword },
+      { path: '/check-email', component: CheckEmail },
+      { path: '/verify/:token', component: VerifyEmail },
       { path: '/foodPairing', component: FoodPairing },
       { path: '/pairing-assistant', component: ConversationalPairing },
       { path: '/recipes', component: Recipes },

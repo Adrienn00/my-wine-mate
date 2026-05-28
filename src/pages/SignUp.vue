@@ -87,7 +87,7 @@ async function signup() {
       email: email.value,
       password: password.value,
     })
-    router.push('/login')
+    router.push('/check-email')
   } catch (err) {
     usernameError.value = err.message?.includes('username') ? 'This username is already taken.' : ''
     emailError.value = err.message?.includes('email') ? 'This email is already registered.' : ''
