@@ -95,8 +95,6 @@
       </BaseCard>
     </template>
 
-    <!-- Browse mode (no source item) -->
-    <PairingBrowser v-else />
   </PageFrame>
 </template>
 
@@ -108,7 +106,6 @@ import BaseCard from '../components/ui/BaseCard.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
 import SectionHeader from '../components/ui/SectionHeader.vue'
 import PairingRecommendationCard from '../components/PairingRecommendationCard.vue'
-import PairingBrowser from '../components/PairingBrowser.vue'
 import client from '../components/httpService/client'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'

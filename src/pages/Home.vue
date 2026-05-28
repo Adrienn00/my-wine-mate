@@ -30,7 +30,6 @@
           </p>
           <div class="space-y-2">
             <BaseButton to="/favorite" variant="simpleRose">Favorites</BaseButton>
-            <BaseButton to="/foodPairing" variant="simpleRose">Past Pairings</BaseButton>
             <BaseButton to="/preferences" variant="simpleRose">Preferences</BaseButton>
             <BaseButton to="/recommended" variant="simpleRose">Recommendations</BaseButton>
           </div>
@@ -122,9 +121,6 @@
                   class="!border-[rgba(255,255,255,0.32)] !bg-[#fff7ef] !text-[#5d1f32] shadow-[0_10px_24px_rgba(35,11,16,0.2)] hover:!bg-white"
                 >
                   Open Sommelier Chat
-                </BaseButton>
-                <BaseButton to="/foodPairing" variant="navAccent">
-                  Browse Classic Pairing
                 </BaseButton>
               </div>
             </div>
