@@ -6,13 +6,13 @@
     >
       <div>
         <p class="mb-2 text-xs font-semibold uppercase tracking-[0.22em] text-[var(--wine)]">
-          Account Center
+          My Wine Cellar
         </p>
         <h2 class="mb-8 text-3xl font-semibold">Profile</h2>
         <ul class="space-y-4">
-          <li><BaseButton to="/" variant="simpleRose">Back to Dashboard</BaseButton></li>
-          <li><BaseButton to="/profile" variant="simpleRose">Account Details</BaseButton></li>
+          <li><BaseButton to="/favorite" variant="simpleRose">Favorites</BaseButton></li>
           <li><BaseButton to="/preferences" variant="simpleRose">Preferences</BaseButton></li>
+          <li><BaseButton to="/recommended" variant="simpleRose">Recommendations</BaseButton></li>
           <li v-if="authStore.user?.isAdmin">
             <BaseButton to="/admin" variant="simpleRose">Admin</BaseButton>
           </li>
@@ -24,9 +24,9 @@
     <main class="min-h-screen min-w-0 flex-1 overflow-x-hidden pb-6 lg:pt-4">
       <!-- Mobile nav strip -->
       <nav class="mb-4 flex flex-wrap gap-2 lg:hidden">
-        <BaseButton to="/" variant="secondary">← Dashboard</BaseButton>
-        <BaseButton to="/profile" variant="secondary">Account</BaseButton>
+        <BaseButton to="/favorite" variant="secondary">Favorites</BaseButton>
         <BaseButton to="/preferences" variant="secondary">Preferences</BaseButton>
+        <BaseButton to="/recommended" variant="secondary">Recommendations</BaseButton>
         <BaseButton v-if="authStore.user?.isAdmin" to="/admin" variant="secondary">Admin</BaseButton>
         <BaseButton variant="secondary" @click="logoutUser">Log Out</BaseButton>
       </nav>

@@ -14,9 +14,10 @@
         <nav class="flex flex-wrap items-center gap-1.5 font-semibold">
           <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
           <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
+          <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink">Recipes</BaseButton>
           <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink">Sommelier</BaseButton>
-          <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
           <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
+          <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
         </nav>
         <div class="flex items-center gap-2">
           <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
@@ -53,9 +54,10 @@
       <nav class="mobile-nav-strip">
         <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
         <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
+        <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink">Recipes</BaseButton>
         <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink">Sommelier</BaseButton>
-        <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
         <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
+        <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
       </nav>
     </div>
   </header>

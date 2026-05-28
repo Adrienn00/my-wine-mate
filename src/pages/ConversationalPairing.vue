@@ -120,7 +120,7 @@
             <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
               <div class="flex gap-2">
                 <BaseButton variant="secondary" :disabled="loading" @click="photoInput.click()">
-                  📸 Scan label
+                  📸 Scan Label
                 </BaseButton>
                 <p class="self-center text-sm text-[var(--text-muted)]">
                   or type your request
