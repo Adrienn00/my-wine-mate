@@ -20,12 +20,31 @@
     </BaseCard>
 
     <BaseCard as="section" rounded="rounded-2xl" padding="p-5 md:p-8">
+      <div class="mb-5 flex flex-col gap-3 sm:flex-row">
+        <input
+          v-model.trim="searchQuery"
+          placeholder="Search by name, category, or ingredient..."
+          class="w-full rounded-full border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition placeholder:text-[var(--text-muted)]/60 focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(93,31,50,0.14)]"
+        />
+        <select
+          v-model="selectedCategory"
+          class="rounded-full border border-[var(--line)] bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition focus:border-[var(--wine)] sm:w-52"
+        >
+          <option value="">All categories</option>
+          <option v-for="cat in categoryOptions" :key="cat" :value="cat">{{ cat }}</option>
+        </select>
+      </div>
+
       <div
         v-if="recipesStore.loading"
         class="animate-pulse py-10 text-center font-medium text-[var(--text-main)]"
       >
         Loading recipes...
       </div>
+
+      <p v-else-if="!filteredRecipes.length" class="py-10 text-center text-sm text-[var(--text-muted)]">
+        No recipes found.
+      </p>
 
       <ul v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         <li
@@ -104,19 +123,41 @@ import { useRecipesStore } from '../stores/recipesStore'
 const recipesStore = useRecipesStore()
 const currentPage = ref(1)
 const pageSize = 10
+const searchQuery = ref('')
+const selectedCategory = ref('')
 
 const confirmedRecipes = computed(() => recipesStore.confirmedRecipes || [])
-const totalPages = computed(() => Math.max(1, Math.ceil(confirmedRecipes.value.length / pageSize)))
+
+const categoryOptions = computed(() => {
+  const cats = new Set()
+  confirmedRecipes.value.forEach(r =>
+    (r.recipeCategories || []).forEach(c => { if (c) cats.add(c) })
+  )
+  return [...cats].sort()
+})
+
+const filteredRecipes = computed(() => {
+  const q = searchQuery.value.toLowerCase()
+  return confirmedRecipes.value.filter(recipe => {
+    if (selectedCategory.value && !(recipe.recipeCategories || []).includes(selectedCategory.value)) return false
+    if (!q) return true
+    return [recipe.name, ...(recipe.recipeCategories || []), ...(recipe.ingredients || [])]
+      .filter(Boolean)
+      .some(v => String(v).toLowerCase().includes(q))
+  })
+})
+
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredRecipes.value.length / pageSize)))
 const paginatedRecipes = computed(() => {
   const start = (currentPage.value - 1) * pageSize
-  return confirmedRecipes.value.slice(start, start + pageSize)
+  return filteredRecipes.value.slice(start, start + pageSize)
 })
 
 onMounted(() => {
   recipesStore.getAllRecipes()
 })
 
-watch(confirmedRecipes, () => {
+watch([searchQuery, selectedCategory, confirmedRecipes], () => {
   currentPage.value = 1
 })
 
