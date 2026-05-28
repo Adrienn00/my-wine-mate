@@ -16,6 +16,13 @@
       >
         <h1 class="mb-6 text-2xl font-semibold">Sign Up</h1>
 
+        <BaseInput
+          id="username"
+          v-model="username"
+          label="Username"
+          type="text"
+          :error="usernameError"
+        />
         <BaseInput id="email" label="Email" type="email" v-model="email" :error="emailError" />
         <BaseInput
           id="password"
@@ -54,14 +61,17 @@ import BaseInput from '../components/ui/BaseInput.vue'
 const router = useRouter()
 const auth = useAuthStore()
 
+const username = ref('')
 const email = ref('')
 const password = ref('')
 const repeatedPassword = ref('')
+const usernameError = ref('')
 const emailError = ref('')
 const passwordError = ref('')
 const repeatedPasswordError = ref('')
 
 async function signup() {
+  usernameError.value = !username.value.trim() ? 'Please enter a username.' : ''
   emailError.value = !email.value ? 'Please enter your email.' : ''
   passwordError.value = !password.value ? 'Please enter your password.' : ''
   repeatedPasswordError.value =
@@ -69,17 +79,19 @@ async function signup() {
       ? 'The two passwords do not match.'
       : ''
 
-  if (emailError.value || passwordError.value || repeatedPasswordError.value) return
+  if (usernameError.value || emailError.value || passwordError.value || repeatedPasswordError.value) return
 
   try {
     await auth.register({
-      username: email.value.split('@')[0],
+      username: username.value.trim(),
       email: email.value,
       password: password.value,
     })
     router.push('/login')
   } catch (err) {
-    console.error('Sign-up error:', err.message)
+    usernameError.value = err.message?.includes('username') ? 'This username is already taken.' : ''
+    emailError.value = err.message?.includes('email') ? 'This email is already registered.' : ''
+    if (!usernameError.value && !emailError.value) console.error('Sign-up error:', err.message)
   }
 }
 </script>
