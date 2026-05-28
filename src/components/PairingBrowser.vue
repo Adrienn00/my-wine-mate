@@ -92,7 +92,7 @@
         <h4 class="mt-2 text-xl font-semibold">{{ item.name }}</h4>
         <p class="mt-2 text-sm text-[var(--text-muted)]">{{ browseDescription(item) }}</p>
         <div class="mt-4">
-          <BaseButton :to="detailsLink(item)">See Details and Pairing</BaseButton>
+          <BaseButton :to="detailsLink(item)" class="!text-white">See Details and Pairing</BaseButton>
         </div>
       </article>
     </div>

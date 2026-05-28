@@ -88,6 +88,7 @@ function logoutUser() {
   overflow-x: auto;
   padding: 0.5rem 1rem;
   background: linear-gradient(180deg, #5d1f32 0%, #4a1426 100%);
+  color: #f9ead7;
   scrollbar-width: none;
   -webkit-overflow-scrolling: touch;
 }
