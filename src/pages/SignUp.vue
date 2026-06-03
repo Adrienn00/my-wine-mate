@@ -89,9 +89,12 @@ async function signup() {
     })
     router.push('/check-email')
   } catch (err) {
-    usernameError.value = err.message?.includes('username') ? 'This username is already taken.' : ''
-    emailError.value = err.message?.includes('email') ? 'This email is already registered.' : ''
-    if (!usernameError.value && !emailError.value) console.error('Sign-up error:', err.message)
+    const msg = err.message || ''
+    usernameError.value = msg === 'This username is already in use' ? 'This username is already taken.' : ''
+    emailError.value = msg === 'This email is already in use' ? 'This email is already registered.' : ''
+    if (!usernameError.value && !emailError.value) {
+      emailError.value = msg
+    }
   }
 }
 </script>
