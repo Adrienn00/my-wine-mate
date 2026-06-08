@@ -73,10 +73,7 @@
           </div>
         </BaseCard>
 
-        <PairingRecommendationsPanel
-          v-if="showPairings"
-          :recipe-id="currentRecipe._id"
-        />
+        <PairingRecommendationsPanel :recipe-id="currentRecipe._id" />
       </div>
 
       <div
@@ -117,8 +114,6 @@ const profileStore = useProfileStore()
 
 const fetchedRecipe = ref(null)
 const loading = ref(false)
-const showPairings = computed(() => String(route.query.withPairings || '') === '1')
-
 // Use either the passed recipe prop or the recipe fetched by id.
 const currentRecipe = computed(() => props.recipe || fetchedRecipe.value)
 
