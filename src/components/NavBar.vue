@@ -41,12 +41,12 @@
         <div class="flex items-center gap-2">
           <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
             <template v-if="isLoggedIn">
+              <BaseButton variant="login" @click="logoutUser">Log Out</BaseButton>
               <NotificationDropdown />
-              <BaseButton variant="navPrimary" @click="logoutUser">Log Out</BaseButton>
             </template>
             <template v-else>
-              <BaseButton to="/login" variant="navAccent">Log In</BaseButton>
-              <BaseButton to="/signup" variant="navPrimary">Sign Up</BaseButton>
+              <BaseButton to="/login" variant="simple">Log In</BaseButton>
+              <BaseButton to="/signup" variant="login">Sign Up</BaseButton>
             </template>
           </template>
         </div>

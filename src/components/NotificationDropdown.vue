@@ -15,7 +15,7 @@
 
     <div
       v-if="showNotifications"
-      class="dashboard-panel absolute right-0 z-50 mt-2 w-72 rounded-xl p-3 shadow-lg sm:w-80"
+      class="dashboard-panel absolute right-0 z-50 mt-2 w-72 max-w-[calc(100vw-1rem)] rounded-xl p-3 shadow-lg sm:w-80"
     >
       <div class="mb-2 font-semibold text-[var(--text-main)]">Notifications</div>
 

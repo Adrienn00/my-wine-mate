@@ -5,9 +5,7 @@
     <p class="mb-2 text-lg font-semibold">Rating: {{ formattedRating }}/5</p>
 
     <div class="mb-3 flex gap-1 text-[var(--gold)]">
-      <span v-for="i in 5" :key="i">
-        <i :class="i <= Math.round(formattedRating) ? 'fas fa-star' : 'far fa-star'"></i>
-      </span>
+      <span v-for="i in 5" :key="i">{{ i <= Math.round(formattedRating) ? '★' : '☆' }}</span>
     </div>
 
     <div v-if="criteriaItems.length" class="mb-3">

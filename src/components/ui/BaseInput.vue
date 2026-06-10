@@ -7,7 +7,8 @@
       v-if="textarea"
       :id="id"
       v-model="model"
-      :class="[inputClasses, 'min-h-28 resize-y']"
+      rows="4"
+      :class="[inputClasses, 'min-h-[8rem] resize-y']"
       :placeholder="placeholder"
     />
     <input
@@ -49,7 +50,9 @@ const props = defineProps({
 
 const inputClasses = computed(() => {
   const base =
-    'mb-4 w-full rounded-full border bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(107,45,62,0.14)]'
-  return `${base} ${props.error ? 'border-[var(--danger)]' : 'border-[var(--line)]'}`
+    'mb-4 w-full border bg-[var(--surface)] px-4 py-3 text-sm text-[var(--text-main)] outline-none transition-all shadow-[inset_0_1px_0_rgba(255,255,255,0.7)] placeholder:text-[var(--text-muted)]/60 focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(107,45,62,0.14)]'
+  const shape = props.textarea ? 'rounded-xl' : 'rounded-full'
+  const borderColor = props.error ? 'border-[var(--danger)]' : 'border-[var(--line)]'
+  return `${base} ${shape} ${borderColor}`
 })
 </script>
