@@ -23,17 +23,17 @@ const baseClasses =
 
 const variantMap = {
   primary:
-    'border border-[rgba(93,31,50,0.22)] bg-[linear-gradient(180deg,#6f2941_0%,#5d1f32_100%)] text-white shadow-[0_10px_22px_rgba(93,31,50,0.24)] hover:-translate-y-px hover:brightness-105 active:translate-y-0',
+    'border border-[rgba(93,31,50,0.22)] bg-[linear-gradient(180deg,#6f2941_0%,#5d1f32_100%)] text-[#ffffff] shadow-[0_10px_22px_rgba(93,31,50,0.24)] hover:-translate-y-px hover:brightness-105 active:translate-y-0',
   secondary:
     'border border-[var(--line)] bg-[rgba(255,250,243,0.96)] text-[var(--text-main)] shadow-[0_6px_18px_rgba(42,19,24,0.06)] hover:border-[rgba(93,31,50,0.4)] hover:bg-white hover:text-[var(--wine)] hover:-translate-y-px active:translate-y-0',
   danger:
     'border border-[rgba(176,48,64,0.22)] bg-[rgba(255,246,247,0.9)] text-[var(--danger)] hover:bg-[rgba(255,234,236,0.9)] hover:border-[rgba(176,48,64,0.38)] hover:-translate-y-px',
   login:
-    'rounded-full bg-[var(--wine)] px-4 py-2 text-white shadow-[0_4px_16px_rgba(107,45,62,0.26)] hover:bg-[var(--wine-soft)] hover:-translate-y-px',
+    'rounded-full bg-[var(--wine)] px-4 py-2 text-[#ffffff] shadow-[0_4px_16px_rgba(107,45,62,0.26)] hover:bg-[var(--wine-soft)] hover:-translate-y-px',
   simple:
     'rounded-lg px-2.5 py-1.5 text-[var(--text-main)] hover:text-[var(--wine)] hover:bg-[rgba(93,31,50,0.06)]',
   navLink:
-    'rounded-full border border-transparent px-3.5 py-2 text-[0.9rem] font-medium text-[#f9ead7] hover:border-[rgba(255,255,255,0.16)] hover:bg-[rgba(255,247,239,0.12)] hover:text-white',
+    'rounded-full border border-transparent px-3.5 py-2 text-[0.9rem] font-medium text-[#f9ead7] hover:border-[rgba(255,255,255,0.16)] hover:bg-[rgba(255,247,239,0.12)] hover:text-[#ffffff]',
   navAccent:
     'rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(255,247,239,0.08)] px-4 py-2 text-[0.9rem] font-semibold text-[#fff3e7] hover:bg-[rgba(255,247,239,0.18)] hover:-translate-y-px',
   navPrimary:
