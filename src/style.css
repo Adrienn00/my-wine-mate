@@ -247,8 +247,10 @@ select {
   background-size: 30px 30px;
 }
 
-a {
-  color: inherit;
+@layer base {
+  a {
+    color: inherit;
+  }
 }
 
 ::selection {
