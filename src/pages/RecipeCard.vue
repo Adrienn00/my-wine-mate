@@ -136,8 +136,8 @@ const commentEntries = computed(() => {
   const ratings = currentRecipe.value?.ratings || []
   return ratings
     .filter((r) => String(r?.comment || '').trim())
-    .map((r) => ({
-      id: String(r?.ratingId || r?._id || '').trim(),
+    .map((r, index) => ({
+      id: String(r?.ratingId || r?._id || `idx-${index}`).trim(),
       text: String(r.comment || '').trim(),
       author: String(r?.userName || '').trim() || 'Anonymous',
     }))
