@@ -67,13 +67,33 @@
     </div>
 
     <!-- Empty state -->
-    <p v-else-if="showEmptyState" class="mb-4 text-sm text-[var(--text-muted)]">No results found.</p>
+    <div
+      v-else-if="showEmptyState"
+      class="anim-fade-up mb-4 overflow-hidden rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface)] text-center shadow-[0_12px_32px_rgba(66,31,32,0.08)]"
+    >
+      <img
+        :src="HERO_IMAGES.empty"
+        alt=""
+        class="h-44 w-full object-cover opacity-85"
+        loading="lazy"
+      />
+      <div class="p-6">
+        <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--wine)]">
+          No wine match
+        </p>
+        <h3 class="mt-2 text-2xl font-semibold">Try a broader search</h3>
+        <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-[var(--text-muted)]">
+          Remove one filter or search by style, region, winery, or flavor profile to reopen the
+          cellar.
+        </p>
+      </div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { ref, computed, watch } from 'vue'
-import { wineImageFor } from '../services/imageFallbacks'
+import { HERO_IMAGES, wineImageFor } from '../services/imageFallbacks'
 
 const props = defineProps({
   results: {

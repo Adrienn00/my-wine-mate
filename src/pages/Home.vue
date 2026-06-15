@@ -86,6 +86,13 @@
         <section
           class="relative overflow-hidden rounded-[1.7rem] bg-[linear-gradient(135deg,#5d1f32_0%,#7a3048_52%,#c7a367_130%)] p-6 text-[#fff3e7] shadow-[0_24px_48px_rgba(93,31,50,0.24)] md:p-8"
         >
+          <img
+            :src="HERO_IMAGES.home"
+            alt=""
+            class="absolute inset-0 h-full w-full object-cover opacity-25 mix-blend-screen"
+            loading="eager"
+          />
+          <div class="absolute inset-0 bg-[linear-gradient(110deg,rgba(93,31,50,0.94),rgba(93,31,50,0.78)_48%,rgba(199,163,103,0.38))]"></div>
           <div
             class="anim-float absolute right-[-3rem] top-[-2rem] h-40 w-40 rounded-full bg-[rgba(255,245,229,0.16)] blur-2xl"
           ></div>
@@ -126,8 +133,14 @@
             </div>
 
             <div
-              class="anim-fade-up anim-d4 hero-gold-pulse rounded-[1.5rem] border border-[rgba(255,255,255,0.16)] bg-[rgba(255,248,239,0.12)] p-4 backdrop-blur-sm"
+              class="anim-fade-up anim-d4 hero-gold-pulse overflow-hidden rounded-[1.5rem] border border-[rgba(255,255,255,0.16)] bg-[rgba(255,248,239,0.12)] p-4 backdrop-blur-sm"
             >
+              <img
+                :src="HERO_IMAGES.chat"
+                alt="Wine table"
+                class="mb-3 h-40 w-full rounded-[1.2rem] object-cover shadow-[0_12px_28px_rgba(45,20,27,0.18)]"
+                loading="lazy"
+              />
               <div
                 class="rounded-[1.2rem] bg-[rgba(255,252,246,0.94)] p-4 text-[var(--text-main)] shadow-[0_12px_28px_rgba(45,20,27,0.18)]"
               >
@@ -202,8 +215,14 @@
           as="section"
           rounded="rounded-[1.6rem]"
           padding="p-6 md:p-8"
-          class="text-center"
+          class="overflow-hidden text-center"
         >
+          <img
+            :src="HERO_IMAGES.wines"
+            alt="Wine and dinner table"
+            class="mx-auto mb-6 h-48 w-full max-w-3xl rounded-[1.4rem] object-cover shadow-[0_18px_40px_rgba(66,31,32,0.16)]"
+            loading="lazy"
+          />
           <SectionHeader
             variant="card"
             title-tag="h2"
@@ -233,6 +252,7 @@ import { useWinesStore } from '../stores/winesStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseCard from '../components/ui/BaseCard.vue'
 import SectionHeader from '../components/ui/SectionHeader.vue'
+import { HERO_IMAGES } from '../services/imageFallbacks'
 
 const winesStore = useWinesStore()
 const recipesStore = useRecipesStore()

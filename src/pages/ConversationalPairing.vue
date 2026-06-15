@@ -2,6 +2,13 @@
   <PageFrame>
     <ApiKeyGate>
       <section class="sommelier-hero overflow-hidden rounded-[1.8rem] p-5 md:p-8">
+        <img
+          :src="HERO_IMAGES.chat"
+          alt=""
+          class="absolute inset-0 h-full w-full object-cover opacity-20"
+          loading="lazy"
+        />
+        <div class="absolute inset-0 bg-[linear-gradient(110deg,rgba(93,31,50,0.94),rgba(93,31,50,0.76)_55%,rgba(199,163,103,0.2))]"></div>
         <div class="relative z-10 grid gap-6 xl:grid-cols-[minmax(0,1.15fr)_340px] xl:items-end">
           <div class="max-w-4xl">
             <span class="section-kicker !text-[#f0d8ad]">AI Sommelier</span>
@@ -277,7 +284,7 @@ import PageFrame from '../components/ui/PageFrame.vue'
 import ApiKeyGate from '../components/ApiKeyGate.vue'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
-import { recipeImageFor, wineImageFor } from '../services/imageFallbacks'
+import { HERO_IMAGES, recipeImageFor, wineImageFor } from '../services/imageFallbacks'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 

@@ -1,5 +1,34 @@
 <template>
   <PageFrame max-width="max-w-6xl">
+    <section class="anim-fade-up relative mb-6 overflow-hidden rounded-[1.8rem] p-6 text-white shadow-[0_24px_48px_rgba(93,31,50,0.2)] md:p-8">
+      <img
+        :src="HERO_IMAGES.wines"
+        alt="Wine cellar"
+        class="absolute inset-0 h-full w-full object-cover"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-[linear-gradient(105deg,rgba(38,21,20,0.82),rgba(93,31,50,0.62)_56%,rgba(199,163,103,0.25))]"></div>
+      <div class="anim-float absolute -right-10 -top-10 h-40 w-40 rounded-full bg-white/15 blur-2xl"></div>
+
+      <div class="relative max-w-3xl">
+        <p class="text-xs font-semibold uppercase tracking-[0.24em] text-[#f4dcb6]">Wine Library</p>
+        <h1 class="mt-3 text-4xl font-semibold leading-none md:text-5xl">
+          Browse bottles with a little more atmosphere.
+        </h1>
+        <p class="mt-4 max-w-2xl text-sm leading-7 text-[#fff1e2] md:text-base">
+          Search by style, flavor, origin, price range, or simply explore the cellar visually.
+        </p>
+        <div class="mt-5 flex flex-wrap gap-2">
+          <span class="dashboard-chip !border-white/20 !bg-white/15 !text-white">
+            {{ winesStore.confirmedWines.length }} wines
+          </span>
+          <span class="dashboard-chip !border-white/20 !bg-white/15 !text-white">
+            AI pairing ready
+          </span>
+        </div>
+      </div>
+    </section>
+
     <WineSearchForm :filter-options="filterOptions" @search="handleSearch" />
     <WineSearchResults
       :results="searchResults"
@@ -18,6 +47,7 @@ import WineSearchForm from './WineSearchForm.vue'
 import WineSearchResults from './WineSearchResults.vue'
 import { useWinesStore } from '../stores/winesStore'
 import { useAuthStore } from '../stores/authStore'
+import { HERO_IMAGES } from '../services/imageFallbacks'
 import client from '../components/httpService/client'
 
 const router = useRouter()

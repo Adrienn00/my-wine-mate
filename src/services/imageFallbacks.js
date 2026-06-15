@@ -19,6 +19,15 @@ const RECIPE_IMAGES = {
   default: 'https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80',
 }
 
+export const HERO_IMAGES = {
+  home: 'https://images.unsplash.com/photo-1528823872057-9c018a7a7553?auto=format&fit=crop&w=1400&q=82',
+  wines: 'https://images.unsplash.com/photo-1516594915697-87eb3b1c14ea?auto=format&fit=crop&w=1400&q=82',
+  recipes: 'https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=82',
+  about: 'https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=1400&q=82',
+  chat: 'https://images.unsplash.com/photo-1504279577054-acfeccf8fc52?auto=format&fit=crop&w=1400&q=82',
+  empty: 'https://images.unsplash.com/photo-1510812431401-41d2bd2722f3?auto=format&fit=crop&w=900&q=78',
+}
+
 function includesAny(source, terms) {
   const value = String(source || '').toLowerCase()
   return terms.some((term) => value.includes(term))

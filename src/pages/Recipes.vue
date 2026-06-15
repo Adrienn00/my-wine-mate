@@ -1,14 +1,21 @@
 <template>
   <PageFrame>
     <BaseCard as="section" class="hero-sheen" rounded="rounded-[1.7rem]" padding="p-5 md:p-7">
-      <div class="section-intro px-1">
+      <img
+        :src="HERO_IMAGES.recipes"
+        alt=""
+        class="absolute inset-0 h-full w-full object-cover opacity-20"
+        loading="lazy"
+      />
+      <div class="absolute inset-0 bg-[linear-gradient(105deg,rgba(255,250,243,0.96),rgba(255,250,243,0.84)_55%,rgba(93,31,50,0.18))]"></div>
+      <div class="relative section-intro px-1">
         <span class="section-kicker">Kitchen</span>
         <div class="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 class="section-title">Recipes</h1>
             <p class="section-summary">
-              A warmer editorial look for the recipe library, with richer cards and better visual
-              hierarchy.
+              A warmer editorial look for the recipe library, with richer cards, visual previews,
+              and pairings that feel closer to a dinner table than a database.
             </p>
           </div>
           <div class="flex flex-wrap gap-3">
@@ -42,15 +49,34 @@
         Loading recipes...
       </div>
 
-      <p v-else-if="!filteredRecipes.length" class="py-10 text-center text-sm text-[var(--text-muted)]">
-        No recipes found.
-      </p>
+      <div
+        v-else-if="!filteredRecipes.length"
+        class="anim-fade-up overflow-hidden rounded-[1.5rem] border border-[var(--line)] bg-[var(--surface)] text-center shadow-[0_12px_32px_rgba(66,31,32,0.08)]"
+      >
+        <img
+          :src="HERO_IMAGES.empty"
+          alt=""
+          class="h-44 w-full object-cover opacity-85"
+          loading="lazy"
+        />
+        <div class="p-6">
+          <p class="text-xs font-semibold uppercase tracking-[0.22em] text-[var(--wine)]">
+            No recipe match
+          </p>
+          <h3 class="mt-2 text-2xl font-semibold">Try another ingredient or category</h3>
+          <p class="mx-auto mt-2 max-w-xl text-sm leading-6 text-[var(--text-muted)]">
+            The recipe library is filtered live, so even a small wording change can reveal a new
+            dinner idea.
+          </p>
+        </div>
+      </div>
 
       <ul v-else class="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
         <li
-          v-for="recipe in paginatedRecipes"
+          v-for="(recipe, index) in paginatedRecipes"
           :key="recipe._id"
-          class="group overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--surface)] transition hover:-translate-y-0.5 hover:border-[rgba(93,31,50,0.4)] hover:shadow-[0_12px_28px_rgba(66,31,32,0.12)]"
+          class="anim-fade-up group overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--surface)] transition hover:-translate-y-0.5 hover:border-[rgba(93,31,50,0.4)] hover:shadow-[0_12px_28px_rgba(66,31,32,0.12)]"
+          :style="{ animationDelay: `${index * 0.06}s` }"
         >
           <div
             class="relative flex h-52 items-end overflow-hidden bg-[var(--wine)] p-5 text-white"
@@ -127,7 +153,7 @@ import BaseCard from '../components/ui/BaseCard.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
 import { useRecipesStore } from '../stores/recipesStore'
 import { useAuthStore } from '../stores/authStore'
-import { recipeImageFor } from '../services/imageFallbacks'
+import { HERO_IMAGES, recipeImageFor } from '../services/imageFallbacks'
 
 const recipesStore = useRecipesStore()
 const authStore = useAuthStore()
