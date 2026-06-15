@@ -16,6 +16,7 @@
 
       <div class="space-y-4">
         <BaseInput v-model="editRecipe.name" label="Name" />
+        <BaseInput v-model="editRecipe.imageUrl" label="Image URL" type="url" />
         <BaseInput
           v-model="editRecipe.ingredientsInput"
           label="Ingredients"
@@ -54,6 +55,7 @@
             class="border-b border-[var(--line)] bg-[var(--surface)] text-[var(--text-main)]"
           >
             <th class="p-3">Name</th>
+            <th class="p-3">Image</th>
             <th class="p-3">Ingredients</th>
             <th class="p-3">Instructions</th>
             <th class="p-3">Categories</th>
@@ -67,6 +69,14 @@
             class="border-b border-[var(--line)] hover:bg-[rgba(237,215,212,0.28)]"
           >
             <td class="p-3 font-semibold">{{ recipe.name }}</td>
+            <td class="p-3">
+              <img
+                :src="recipeImageFor(recipe)"
+                :alt="recipe.name"
+                class="h-14 w-20 rounded-lg object-cover"
+                loading="lazy"
+              />
+            </td>
             <td class="p-3 text-sm text-[var(--text-muted)]">
               {{ formatArray(recipe.ingredients) }}
             </td>
@@ -108,6 +118,7 @@ import { RECIPE_DIET_CATEGORIES, asRecipeCategoryArray } from '../../services/re
 import BaseInput from '../ui/BaseInput.vue'
 import BaseButton from '../ui/BaseButton.vue'
 import BaseMultiselect from '../ui/BaseMultiselect.vue'
+import { recipeImageFor } from '../../services/imageFallbacks'
 
 const recipesStore = useRecipesStore()
 const recipeDietCategories = RECIPE_DIET_CATEGORIES
@@ -117,6 +128,7 @@ const currentPage = ref(1)
 const pageSize = 10
 const editRecipe = ref({
   name: '',
+  imageUrl: '',
   ingredientsInput: '',
   instructionsInput: '',
   recipeCategories: [],
@@ -147,6 +159,7 @@ function startAdd() {
   isEditing.value = true
   editRecipe.value = {
     name: '',
+    imageUrl: '',
     ingredientsInput: '',
     instructionsInput: '',
     recipeCategories: [],
@@ -157,6 +170,7 @@ function startEdit(recipe) {
   isEditing.value = true
   editRecipe.value = {
     ...recipe,
+    imageUrl: recipe.imageUrl || '',
     ingredientsInput: Array.isArray(recipe.ingredients)
       ? recipe.ingredients.join(', ')
       : (recipe.ingredients ?? ''),

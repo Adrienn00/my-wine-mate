@@ -22,6 +22,13 @@
             placeholder="Recipe name"
           />
           <BaseInput
+            id="imageUrl"
+            v-model="editRecipe.imageUrl"
+            label="Image URL"
+            type="url"
+            placeholder="Optional photo URL"
+          />
+          <BaseInput
             id="ingredients"
             v-model="editRecipe.ingredientsInput"
             label="Ingredients"
@@ -54,12 +61,20 @@
           </div>
         </div>
 
-        <div v-else class="flex justify-between items-start">
-          <div>
-            <h3 class="text-xl font-bold mb-2">{{ recipe.name }}</h3>
-            <p><strong>Ingredients:</strong> {{ formatArray(recipe.ingredients) }}</p>
-            <p><strong>Instructions:</strong> {{ formatArray(recipe.instructions) }}</p>
-            <p><strong>Categories:</strong> {{ formatArray(recipe.recipeCategories) }}</p>
+        <div v-else class="flex items-start justify-between gap-4">
+          <div class="flex gap-4">
+            <img
+              :src="recipeImageFor(recipe)"
+              :alt="recipe.name"
+              class="hidden h-24 w-32 rounded-xl object-cover sm:block"
+              loading="lazy"
+            />
+            <div>
+              <h3 class="text-xl font-bold mb-2">{{ recipe.name }}</h3>
+              <p><strong>Ingredients:</strong> {{ formatArray(recipe.ingredients) }}</p>
+              <p><strong>Instructions:</strong> {{ formatArray(recipe.instructions) }}</p>
+              <p><strong>Categories:</strong> {{ formatArray(recipe.recipeCategories) }}</p>
+            </div>
           </div>
 
           <div class="flex flex-col space-y-3">
@@ -81,6 +96,7 @@ import BaseButton from '../ui/BaseButton.vue'
 import BaseMultiselect from '../ui/BaseMultiselect.vue'
 import { useRecipesStore } from '../../stores/recipesStore'
 import { RECIPE_DIET_CATEGORIES, asRecipeCategoryArray } from '../../services/recipeCategories'
+import { recipeImageFor } from '../../services/imageFallbacks'
 const recipesStore = useRecipesStore()
 const pendingRecipes = computed(() => recipesStore.pendingRecipes)
 const recipeDietCategories = RECIPE_DIET_CATEGORIES
@@ -88,6 +104,7 @@ const recipeDietCategories = RECIPE_DIET_CATEGORIES
 const editId = ref(null)
 const editRecipe = ref({
   name: '',
+  imageUrl: '',
   ingredientsInput: '',
   instructionsInput: '',
   recipeCategories: [],
@@ -101,6 +118,7 @@ function startEdit(recipe) {
   editId.value = recipe._id || recipe.id
   editRecipe.value = {
     ...recipe,
+    imageUrl: recipe.imageUrl || '',
     ingredientsInput: Array.isArray(recipe.ingredients)
       ? recipe.ingredients.join(', ')
       : (recipe.ingredients ?? ''),
@@ -114,6 +132,7 @@ function startEdit(recipe) {
 async function saveEdit(id) {
   const payload = {
     name: editRecipe.value.name,
+    imageUrl: editRecipe.value.imageUrl,
     ingredients: editRecipe.value.ingredientsInput
       .split(',')
       .map((item) => item.trim())

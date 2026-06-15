@@ -155,10 +155,10 @@
               >
                 <div class="flex items-start gap-3">
                   <img
-                    v-if="wine.imageUrl"
-                    :src="wine.imageUrl"
+                    :src="wineImageFor(wine)"
                     :alt="wine.wine_name"
                     class="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
+                    loading="lazy"
                   />
                   <div class="min-w-0 flex-1">
                     <div class="flex items-start justify-between gap-2">
@@ -210,10 +210,10 @@
               >
                 <div class="flex items-start gap-3">
                   <img
-                    v-if="recipe.imageUrl"
-                    :src="recipe.imageUrl"
+                    :src="recipeImageFor(recipe)"
                     :alt="recipe.recipe_name"
                     class="h-14 w-14 flex-shrink-0 rounded-xl object-cover"
+                    loading="lazy"
                   />
                   <div class="min-w-0 flex-1">
                     <div class="flex items-start justify-between gap-2">
@@ -277,6 +277,7 @@ import PageFrame from '../components/ui/PageFrame.vue'
 import ApiKeyGate from '../components/ApiKeyGate.vue'
 import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
+import { recipeImageFor, wineImageFor } from '../services/imageFallbacks'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 

@@ -12,6 +12,13 @@
         <BaseInput v-model="recipe.name" label="Recipe name" placeholder="E.g. Mushroom risotto" />
 
         <BaseInput
+          v-model="recipe.imageUrl"
+          label="Image URL"
+          type="url"
+          placeholder="Optional photo URL for this recipe"
+        />
+
+        <BaseInput
           v-model="ingredientsInput"
           label="Ingredients"
           placeholder="E.g. rice, mushrooms, butter, parmesan"

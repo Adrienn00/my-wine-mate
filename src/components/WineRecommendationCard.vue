@@ -10,10 +10,10 @@
 
     <!-- Image -->
     <img
-      v-if="wine.imageUrl"
-      :src="wine.imageUrl"
+      :src="wineImageFor(wine)"
       :alt="wine.name"
       class="mb-3 h-32 w-full rounded-xl object-cover"
+      loading="lazy"
     />
 
     <BaseButton :to="`/wine/${wine._id}?from=recommended`" variant="simple" class="px-0 text-lg font-semibold">
@@ -47,6 +47,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseButton from './ui/BaseButton.vue'
+import { wineImageFor } from '../services/imageFallbacks'
 
 const props = defineProps({
   wine: { type: Object, required: true },

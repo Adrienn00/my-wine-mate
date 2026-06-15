@@ -8,12 +8,13 @@
           <h3 class="text-3xl font-bold">{{ wine.name }}</h3>
           <p class="italic text-[var(--text-muted)]">{{ wine.winery }}</p>
 
-          <img
-            v-if="wine.imageUrl"
-            :src="wine.imageUrl"
-            alt="Wine image"
-            class="my-4 w-full max-w-sm rounded-lg border border-[var(--line)] shadow-md"
-          />
+          <div class="my-4 overflow-hidden rounded-2xl border border-[var(--line)] shadow-md">
+            <img
+              :src="wineImageFor(wine)"
+              alt="Wine image"
+              class="h-72 w-full object-cover"
+            />
+          </div>
 
           <p><strong>Description:</strong> {{ wine.description }}</p>
           <p><strong>Grape varieties:</strong> {{ wine.grapeVarieties?.join(', ') }}</p>
@@ -134,6 +135,7 @@ import WineDetailedRatingForm from '../components/WineDetailedRatingForm.vue'
 import WinePurchaseOptions from '../components/wine/WinePurchaseOptions.vue'
 import PairingRecommendationsPanel from '../components/PairingRecommendationsPanel.vue'
 import { WINE_RATING_CRITERIA, getOverallRatingValue } from '../services/wineRatingCriteria'
+import { wineImageFor } from '../services/imageFallbacks'
 import client from '../components/httpService/client'
 const props = defineProps({
   wine: {

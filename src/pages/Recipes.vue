@@ -53,9 +53,16 @@
           class="group overflow-hidden rounded-xl border border-[var(--line)] bg-[var(--surface)] transition hover:-translate-y-0.5 hover:border-[rgba(93,31,50,0.4)] hover:shadow-[0_12px_28px_rgba(66,31,32,0.12)]"
         >
           <div
-            class="flex h-48 items-end bg-[linear-gradient(135deg,rgba(93,31,50,0.92),rgba(199,163,103,0.58))] p-5 text-white"
+            class="relative flex h-52 items-end overflow-hidden bg-[var(--wine)] p-5 text-white"
           >
-            <div class="w-full rounded-xl bg-black/20 p-4 backdrop-blur-sm">
+            <img
+              :src="recipeImageFor(recipe)"
+              :alt="`${recipe.name} image`"
+              class="absolute inset-0 h-full w-full object-cover transition duration-500 group-hover:scale-[1.05]"
+              loading="lazy"
+            />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/75 via-black/25 to-transparent"></div>
+            <div class="relative w-full rounded-xl bg-black/25 p-4 backdrop-blur-sm">
               <p class="text-xs uppercase tracking-[0.2em] text-[#f4dcb6]">
                 {{ recipe.recipeCategories?.[0] || 'Chef Selection' }}
               </p>
@@ -120,6 +127,7 @@ import BaseCard from '../components/ui/BaseCard.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
 import { useRecipesStore } from '../stores/recipesStore'
 import { useAuthStore } from '../stores/authStore'
+import { recipeImageFor } from '../services/imageFallbacks'
 
 const recipesStore = useRecipesStore()
 const authStore = useAuthStore()

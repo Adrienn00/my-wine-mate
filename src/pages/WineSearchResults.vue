@@ -28,17 +28,11 @@
         >
           <div class="mb-3 overflow-hidden rounded-lg border border-[var(--line)]">
             <img
-              v-if="wine.imageUrl"
-              :src="wine.imageUrl"
+              :src="wineImageFor(wine)"
               :alt="`${wine.name} image`"
-              class="h-32 w-full object-cover transition duration-500 group-hover:scale-[1.06]"
+              class="h-36 w-full object-cover transition duration-500 group-hover:scale-[1.06]"
+              loading="lazy"
             />
-            <div
-              v-else
-              class="flex h-20 items-center justify-center bg-[rgba(107,45,62,0.05)] text-sm font-medium text-[var(--text-muted)]"
-            >
-              Click to view details
-            </div>
           </div>
 
           <div class="flex items-start justify-between gap-3">
@@ -79,6 +73,7 @@
 
 <script setup>
 import { ref, computed, watch } from 'vue'
+import { wineImageFor } from '../services/imageFallbacks'
 
 const props = defineProps({
   results: {

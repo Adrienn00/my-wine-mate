@@ -7,6 +7,14 @@
 
       <div v-else-if="currentRecipe" class="grid w-full gap-6 xl:grid-cols-[minmax(0,1.1fr)_380px]">
         <BaseCard padding="p-6" class="text-left">
+          <div class="mb-6 overflow-hidden rounded-2xl border border-[var(--line)] shadow-md">
+            <img
+              :src="recipeImageFor(currentRecipe)"
+              :alt="`${currentRecipe.name} image`"
+              class="h-72 w-full object-cover"
+            />
+          </div>
+
           <h3 class="mb-4 text-3xl font-bold text-[var(--wine)]">{{ currentRecipe.name }}</h3>
 
           <div
@@ -99,6 +107,7 @@ import BaseCard from '../components/ui/BaseCard.vue'
 import RatingDisplay from '../components/RatingDisplay.vue'
 import AddRatingForm from '../components/AddRatingForm.vue'
 import PairingRecommendationsPanel from '../components/PairingRecommendationsPanel.vue'
+import { recipeImageFor } from '../services/imageFallbacks'
 
 const props = defineProps({
   recipe: {

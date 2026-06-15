@@ -1,5 +1,12 @@
 <template>
   <article :class="cardClass">
+    <img
+      :src="cardImage"
+      :alt="itemName"
+      class="mb-3 h-36 w-full rounded-xl object-cover"
+      loading="lazy"
+    />
+
     <div
       v-if="showTopBadge"
       class="mb-3 inline-flex rounded-full bg-[var(--gold)] px-2.5 py-1 text-xs font-semibold text-[#2d1f1c]"
@@ -53,6 +60,7 @@
 <script setup>
 import { computed } from 'vue'
 import BaseButton from './ui/BaseButton.vue'
+import { recipeImageFor, wineImageFor } from '../services/imageFallbacks'
 
 const props = defineProps({
   item: { type: Object, required: true },
@@ -82,6 +90,10 @@ const itemLink = computed(() =>
   props.isWineMode
     ? `/recipe/${props.item.recipe_id || props.item._id}`
     : `/wine/${props.item.wine_id || props.item._id}`
+)
+
+const cardImage = computed(() =>
+  props.isWineMode ? recipeImageFor(props.item) : wineImageFor(props.item)
 )
 
 function toPercent(probability) {
