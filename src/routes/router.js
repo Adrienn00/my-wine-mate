@@ -26,6 +26,7 @@ import PendingItemsTabs from '../components/admin/PendingItemsTabs.vue'
 import UserRoleManager from '../components/admin/UserRoleManager.vue'
 import SystemStats from '../components/admin/SystemStats.vue'
 import AIManagement from '../components/admin/AIManagement.vue'
+import CommentManager from '../components/admin/CommentManager.vue'
 import Social from '../pages/Social.vue'
 import CheckEmail from '../pages/CheckEmail.vue'
 import VerifyEmail from '../pages/VerifyEmail.vue'
@@ -70,6 +71,7 @@ const routes = [
           { path: '/admin/roles', component: UserRoleManager, meta: { requiresAuth: true, requiresAdmin: true } },
           { path: '/admin/stats', component: SystemStats, meta: { requiresAuth: true, requiresAdmin: true } },
           { path: '/admin/ai', component: AIManagement, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/comments', component: CommentManager, meta: { requiresAuth: true, requiresAdmin: true } },
         ],
       },
     ],

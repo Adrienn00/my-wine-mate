@@ -31,6 +31,11 @@
           <span class="admin-card-title">AI Management</span>
           <span class="admin-card-desc">Train models, review AI feedback</span>
         </router-link>
+        <router-link to="/admin/comments" class="admin-card">
+          <span class="admin-card-icon">💬</span>
+          <span class="admin-card-title">Review Management</span>
+          <span class="admin-card-desc">Moderate wine and recipe comments</span>
+        </router-link>
         <router-link to="/admin/stats" class="admin-card">
           <span class="admin-card-icon">📊</span>
           <span class="admin-card-title">System Statistics</span>

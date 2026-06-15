@@ -8,6 +8,7 @@ export const useAdminStore = defineStore('admin', () => {
   const pairingFeedback = ref([])
   const pairingTrainingSummary = ref(null)
   const trainingRun = ref(null)
+  const ratingComments = ref([])
 
   async function fetchUsers() {
     users.value = await client.get('users/all')
@@ -58,6 +59,36 @@ export const useAdminStore = defineStore('admin', () => {
     return trainingRun.value
   }
 
+  async function fetchRatingComments() {
+    const [wineRatings, recipeRatings] = await Promise.all([
+      client.get('wines/admin/ratings'),
+      client.get('recipes/admin/ratings'),
+    ])
+    ratingComments.value = [...wineRatings, ...recipeRatings].sort((a, b) => {
+      const dateA = a.createdAt ? new Date(a.createdAt).getTime() : 0
+      const dateB = b.createdAt ? new Date(b.createdAt).getTime() : 0
+      return dateB - dateA
+    })
+    return ratingComments.value
+  }
+
+  async function deleteRatingComment(item) {
+    const endpoint =
+      item.itemType === 'wine'
+        ? `wines/${item.itemId}/rating/${item.ratingId}`
+        : `recipes/${item.itemId}/rating/${item.ratingId}`
+
+    await client.delete(endpoint)
+    ratingComments.value = ratingComments.value.filter(
+      (comment) =>
+        !(
+          comment.itemType === item.itemType &&
+          comment.itemId === item.itemId &&
+          comment.ratingId === item.ratingId
+        )
+    )
+  }
+
   return {
     users,
     fetchUsers,
@@ -67,10 +98,13 @@ export const useAdminStore = defineStore('admin', () => {
     pairingFeedback,
     pairingTrainingSummary,
     trainingRun,
+    ratingComments,
     fetchPairingFeedback,
     reviewPairingFeedback,
     approvePendingPairingFeedback,
     fetchPairingTrainingSummary,
     trainPairingModel,
+    fetchRatingComments,
+    deleteRatingComment,
   }
 })
