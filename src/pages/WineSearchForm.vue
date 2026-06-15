@@ -51,7 +51,7 @@
     <div class="mt-6 flex flex-wrap gap-3">
       <BaseButton variant="primary" @click="emitSearch">Search</BaseButton>
       <WineLabelScanner use-label="Search with this wine" @use="onScanResult" />
-      <BaseButton to="/addWine" variant="secondary">Add New Wine</BaseButton>
+      <BaseButton v-if="isLoggedIn" to="/addWine" variant="secondary">Add New Wine</BaseButton>
     </div>
 
     <div v-if="recentQueries.length" class="mt-4">
@@ -76,6 +76,7 @@ import BaseButton from '../components/ui/BaseButton.vue'
 import BaseInput from '../components/ui/BaseInput.vue'
 import WineLabelScanner from '../components/WineLabelScanner.vue'
 import { getSearchHistory } from '../services/searchHistory'
+import { useAuthStore } from '../stores/authStore'
 
 const emit = defineEmits(['search'])
 defineProps({
@@ -90,6 +91,7 @@ defineProps({
   },
 })
 
+const authStore = useAuthStore()
 const filters = reactive({
   query: '',
   type: '',
@@ -99,6 +101,7 @@ const filters = reactive({
 })
 
 const history = reactive({ entries: [] })
+const isLoggedIn = computed(() => !!authStore.token)
 
 onMounted(() => {
   history.entries = getSearchHistory()

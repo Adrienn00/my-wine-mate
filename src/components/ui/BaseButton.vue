@@ -34,6 +34,8 @@ const variantMap = {
     'rounded-lg px-2.5 py-1.5 text-[var(--text-main)] hover:text-[var(--wine)] hover:bg-[rgba(93,31,50,0.06)]',
   navLink:
     'rounded-full border border-transparent px-3.5 py-2 text-[0.9rem] font-medium text-[#f9ead7] hover:border-[rgba(255,255,255,0.16)] hover:bg-[rgba(255,247,239,0.12)] hover:text-[#ffffff]',
+  navLinkActive:
+    'rounded-full border border-[rgba(255,255,255,0.22)] bg-[rgba(255,247,239,0.18)] px-3.5 py-2 text-[0.9rem] font-semibold text-[#ffffff] shadow-[inset_0_0_0_1px_rgba(255,255,255,0.08)]',
   navAccent:
     'rounded-full border border-[rgba(255,255,255,0.2)] bg-[rgba(255,247,239,0.08)] px-4 py-2 text-[0.9rem] font-semibold text-[#fff3e7] hover:bg-[rgba(255,247,239,0.18)] hover:-translate-y-px',
   navPrimary:

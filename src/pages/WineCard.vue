@@ -312,6 +312,7 @@ async function submitShare() {
   padding: 0.5rem 0.8rem;
   outline: none;
   transition: 0.2s ease;
+  min-height: 4.5rem;
   min-width: 180px;
 }
 

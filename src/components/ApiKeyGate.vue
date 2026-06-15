@@ -9,7 +9,9 @@
     <p class="max-w-xs text-sm text-[var(--text-muted)]">
       This feature needs your own Groq API key. It's free — set it up in 30 seconds.
     </p>
-    <BaseButton to="/profile" variant="primary">Add API Key</BaseButton>
+    <BaseButton :to="auth.token ? '/profile' : '/login'" variant="primary">
+      {{ auth.token ? 'Add API Key' : 'Log in to add API Key' }}
+    </BaseButton>
   </div>
 </template>
 
@@ -19,5 +21,5 @@ import { useAuthStore } from '@/stores/authStore'
 import BaseButton from './ui/BaseButton.vue'
 
 const auth = useAuthStore()
-const hasKey = computed(() => !!auth.groqApiKey)
+const hasKey = computed(() => !!auth.token && !!auth.groqApiKey)
 </script>

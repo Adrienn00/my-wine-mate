@@ -28,7 +28,7 @@
     <textarea
       v-model="comment"
       placeholder="Share your experience here..."
-      class="mb-4 mt-4 w-full rounded-lg border border-[var(--line)] bg-white px-4 py-2.5 text-[var(--text-main)] outline-none transition focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(93,31,50,0.12)]"
+      class="mb-4 mt-4 min-h-[6rem] w-full resize-y rounded-lg border border-[var(--line)] bg-white px-4 py-2.5 text-[var(--text-main)] outline-none transition focus:border-[var(--wine)] focus:ring-2 focus:ring-[rgba(93,31,50,0.12)]"
       rows="3"
     ></textarea>
 

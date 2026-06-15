@@ -13,9 +13,19 @@ export const useAuthStore = defineStore('auth', () => {
   const user = ref(null)
   const loading = ref(false)
   const error = ref(null)
-  const groqApiKey = ref(localStorage.getItem('groqApiKey') || '')
+  const groqApiKey = ref(token.value ? localStorage.getItem('groqApiKey') || '' : '')
+
+  if (!token.value) {
+    localStorage.removeItem('groqApiKey')
+  }
 
   function setGroqApiKey(key) {
+    if (!token.value) {
+      groqApiKey.value = ''
+      localStorage.removeItem('groqApiKey')
+      return
+    }
+
     const trimmed = (key || '').trim()
     groqApiKey.value = trimmed
     if (trimmed) {
@@ -136,7 +146,9 @@ export const useAuthStore = defineStore('auth', () => {
   function logout() {
     user.value = null
     token.value = null
+    groqApiKey.value = ''
     localStorage.removeItem('token')
+    localStorage.removeItem('groqApiKey')
   }
 
   if (token.value) loadProfile()

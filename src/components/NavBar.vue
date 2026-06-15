@@ -12,12 +12,14 @@
       </div>
       <div class="flex flex-1 items-center justify-between bg-[linear-gradient(180deg,#5d1f32_0%,#4a1426_100%)] px-5 text-[#f9ead7]">
         <nav class="flex flex-wrap items-center gap-1.5 font-semibold">
-          <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
-          <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
-          <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink">Recipes</BaseButton>
-          <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink">Sommelier</BaseButton>
-          <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
-          <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
+          <BaseButton
+            v-for="item in navItems"
+            :key="item.to"
+            :to="item.to"
+            :variant="isActiveNavItem(item) ? 'navLinkActive' : 'navLink'"
+          >
+            {{ item.label }}
+          </BaseButton>
         </nav>
         <div class="flex items-center gap-2">
           <template v-if="!['/login', '/signup', '/user'].includes(route.path)">
@@ -52,12 +54,14 @@
         </div>
       </div>
       <nav class="mobile-nav-strip">
-        <BaseButton v-if="route.path !== '/'" to="/" variant="navLink">Explore</BaseButton>
-        <BaseButton v-if="route.path !== '/wines'" to="/wines" variant="navLink">Wines</BaseButton>
-        <BaseButton v-if="route.path !== '/recipes'" to="/recipes" variant="navLink">Recipes</BaseButton>
-        <BaseButton v-if="route.path !== '/pairing-assistant'" to="/pairing-assistant" variant="navLink">Sommelier</BaseButton>
-        <BaseButton v-if="isLoggedIn && route.path !== '/social'" to="/social" variant="navLink">Social</BaseButton>
-        <BaseButton v-if="route.path !== '/about'" to="/about" variant="navLink">About</BaseButton>
+        <BaseButton
+          v-for="item in navItems"
+          :key="item.to"
+          :to="item.to"
+          :variant="isActiveNavItem(item) ? 'navLinkActive' : 'navLink'"
+        >
+          {{ item.label }}
+        </BaseButton>
       </nav>
     </div>
   </header>
@@ -76,6 +80,22 @@ const auth = useAuthStore()
 
 const isLoggedIn = computed(() => !!auth.token)
 const headerClass = computed(() => 'sticky top-0 z-40 border-b border-[rgba(95,40,53,0.12)] backdrop-blur-sm')
+const navItems = computed(() => [
+  { label: 'Explore', to: '/', activePaths: ['/'] },
+  { label: 'Wines', to: '/wines', activePrefixes: ['/wine'] },
+  { label: 'Recipes', to: '/recipes', activePrefixes: ['/recipe'] },
+  { label: 'Sommelier', to: '/pairing-assistant', activePaths: ['/pairing-assistant', '/foodPairing'] },
+  ...(isLoggedIn.value ? [{ label: 'Social', to: '/social', activePaths: ['/social'] }] : []),
+  { label: 'About', to: '/about', activePaths: ['/about'] },
+])
+
+function isActiveNavItem(item) {
+  const path = route.path
+  return (
+    item.activePaths?.includes(path) ||
+    item.activePrefixes?.some((prefix) => path === prefix || path.startsWith(`${prefix}/`))
+  )
+}
 
 function logoutUser() {
   auth.logout()

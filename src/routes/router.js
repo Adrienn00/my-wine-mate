@@ -45,10 +45,10 @@ const routes = [
       { path: '/pairing-assistant', component: ConversationalPairing },
       { path: '/recipes', component: Recipes },
       { path: '/recipe/:id', name: 'recipe-details', component: RecipeCard },
-      { path: '/addRecipe', component: AddNewRecipe },
+      { path: '/addRecipe', component: AddNewRecipe, meta: { requiresAuth: true } },
       { path: '/wines', component: Wines },
-      { path: '/addWine', component: AddNewWine },
-      { path: '/social', component: Social },
+      { path: '/addWine', component: AddNewWine, meta: { requiresAuth: true } },
+      { path: '/social', component: Social, meta: { requiresAuth: true } },
       {
         path: '/wine/:id',
         name: 'wine-details',
@@ -57,18 +57,19 @@ const routes = [
       {
         path: '/profile',
         component: UserLayout,
+        meta: { requiresAuth: true },
         children: [
-          { path: '/profile', component: UserProfile },
-          { path: '/favorite', component: FavoriteList },
-          { path: '/preferences', component: WinePreferences },
-          { path: '/recipe-preferences', component: RecipePreferences },
-          { path: '/recommended', component: RecommendedWines },
-          { path: '/admin', component: Admin },
-          { path: '/admin/pending', component: PendingItemsTabs },
-          { path: '/admin/manager', component: AdminDatabaseManager },
-          { path: '/admin/roles', component: UserRoleManager },
-          { path: '/admin/stats', component: SystemStats },
-          { path: '/admin/ai', component: AIManagement },
+          { path: '/profile', component: UserProfile, meta: { requiresAuth: true } },
+          { path: '/favorite', component: FavoriteList, meta: { requiresAuth: true } },
+          { path: '/preferences', component: WinePreferences, meta: { requiresAuth: true } },
+          { path: '/recipe-preferences', component: RecipePreferences, meta: { requiresAuth: true } },
+          { path: '/recommended', component: RecommendedWines, meta: { requiresAuth: true } },
+          { path: '/admin', component: Admin, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/pending', component: PendingItemsTabs, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/manager', component: AdminDatabaseManager, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/roles', component: UserRoleManager, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/stats', component: SystemStats, meta: { requiresAuth: true, requiresAdmin: true } },
+          { path: '/admin/ai', component: AIManagement, meta: { requiresAuth: true, requiresAdmin: true } },
         ],
       },
     ],
@@ -79,10 +80,25 @@ const router = createRouter({
   history: createWebHistory(),
   routes,
 })
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const authStore = useAuthStore()
 
-  if (to.path.startsWith('/admin') && !authStore.user?.isAdmin) {
+  const requiresAuth = to.matched.some((record) => record.meta.requiresAuth)
+  const requiresAdmin = to.matched.some((record) => record.meta.requiresAdmin)
+
+  if (requiresAuth && !authStore.token) {
+    return next({ path: '/login', query: { redirect: to.fullPath } })
+  }
+
+  if (authStore.token && !authStore.user) {
+    try {
+      await authStore.loadProfile()
+    } catch {
+      return next({ path: '/login', query: { redirect: to.fullPath } })
+    }
+  }
+
+  if (requiresAdmin && !authStore.user?.isAdmin) {
     return next('/')
   }
 

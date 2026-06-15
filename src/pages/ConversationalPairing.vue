@@ -275,10 +275,12 @@ import DOMPurify from 'dompurify'
 import BaseButton from '../components/ui/BaseButton.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
 import ApiKeyGate from '../components/ApiKeyGate.vue'
+import { useAuthStore } from '../stores/authStore'
 import { useProfileStore } from '../stores/profileStore'
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL
 
+const authStore = useAuthStore()
 const profileStore = useProfileStore()
 
 const INITIAL_AI_TEXT =
@@ -402,14 +404,16 @@ async function sendMessage() {
   let fullReply = ''
 
   try {
-    const token = localStorage.getItem('token')
-    const groqApiKey = localStorage.getItem('groqApiKey')
+    if (!authStore.token || !authStore.groqApiKey) {
+      throw new Error('Please log in and add your Groq API key before using the chat.')
+    }
+
     const response = await fetch(`${API_BASE}/pairings/chat-stream`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-        ...(groqApiKey ? { 'X-Groq-Api-Key': groqApiKey } : {}),
+        Authorization: `Bearer ${authStore.token}`,
+        'X-Groq-Api-Key': authStore.groqApiKey,
       },
       body: JSON.stringify({
         messages: history.value,

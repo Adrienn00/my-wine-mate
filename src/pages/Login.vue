@@ -42,7 +42,7 @@
 
 <script setup>
 import { ref } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/authStore'
 import BaseButton from '../components/ui/BaseButton.vue'
 import BaseCard from '../components/ui/BaseCard.vue'
@@ -53,6 +53,7 @@ const password = ref('')
 const emailError = ref('')
 const passwordError = ref('')
 const router = useRouter()
+const route = useRoute()
 const auth = useAuthStore()
 
 async function loginUser() {
@@ -62,7 +63,7 @@ async function loginUser() {
 
   try {
     await auth.login({ email: email.value, password: password.value })
-    router.push('/')
+    router.push(route.query.redirect || '/')
   } catch (err) {
     console.error('Login failed:', err.message)
     passwordError.value = 'Incorrect email or password.'

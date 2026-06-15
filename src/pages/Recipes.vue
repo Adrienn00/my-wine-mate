@@ -13,7 +13,7 @@
           </div>
           <div class="flex flex-wrap gap-3">
             <span class="dashboard-chip">{{ confirmedRecipes.length }} curated recipes</span>
-            <BaseButton variant="primary" to="/addRecipe">New Recipe</BaseButton>
+            <BaseButton v-if="isLoggedIn" variant="primary" to="/addRecipe">New Recipe</BaseButton>
           </div>
         </div>
       </div>
@@ -119,14 +119,17 @@ import BaseButton from '../components/ui/BaseButton.vue'
 import BaseCard from '../components/ui/BaseCard.vue'
 import PageFrame from '../components/ui/PageFrame.vue'
 import { useRecipesStore } from '../stores/recipesStore'
+import { useAuthStore } from '../stores/authStore'
 
 const recipesStore = useRecipesStore()
+const authStore = useAuthStore()
 const currentPage = ref(1)
 const pageSize = 10
 const searchQuery = ref('')
 const selectedCategory = ref('')
 
 const confirmedRecipes = computed(() => recipesStore.confirmedRecipes || [])
+const isLoggedIn = computed(() => !!authStore.token)
 
 const categoryOptions = computed(() => {
   const cats = new Set()
